@@ -11,10 +11,19 @@
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let opener;
   let animation;
+  let currentIndex = -1;
+  const previous = dialog.querySelector('.item-previous');
+  const next = dialog.querySelector('.item-next');
 
   function openItem(item, button) {
-    opener = button;
-    const origin = button.getBoundingClientRect();
+    const opening = !dialog.open;
+    if (opening) opener = button;
+    const origin = opening ? button.getBoundingClientRect() : null;
+    animation?.cancel();
+    currentIndex = window.portfolioItems.findIndex(candidate => candidate.id === item.id);
+    previous.disabled = currentIndex <= 0;
+    next.disabled = currentIndex >= window.portfolioItems.length - 1;
+    dialog.querySelector('.item-position').textContent = `${item.title}, ${currentIndex + 1} de ${window.portfolioItems.length}`;
     const isShop = item.kind === 'product' || item.type === 'tee';
     image.src = item.src;
     image.alt = item.alt || item.title;
@@ -36,10 +45,10 @@
       download.href = item.download;
       download.setAttribute('download', item.download.split('/').pop());
     }
-    dialog.showModal();
+    if (opening) dialog.showModal();
     document.documentElement.classList.add('item-open');
     dialog.scrollTop = 0;
-    if (!reducedMotion.matches) {
+    if (opening && !reducedMotion.matches) {
       const destination = imageWrap.getBoundingClientRect();
       animation = imageWrap.animate([
         { transform:`translate(${origin.left + origin.width / 2 - destination.left - destination.width / 2}px, ${origin.top + origin.height / 2 - destination.top - destination.height / 2}px) scale(${Math.min(origin.width / destination.width, origin.height / destination.height)})`, opacity:.65 },
@@ -48,6 +57,19 @@
     }
   }
 
+  function move(offset) {
+    const item = window.portfolioItems[currentIndex + offset];
+    if (dialog.open && item) openItem(item);
+  }
+  previous.addEventListener('click', () => move(-1));
+  next.addEventListener('click', () => move(1));
+  dialog.addEventListener('keydown', event => {
+    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      move(event.key === 'ArrowLeft' ? -1 : 1);
+    }
+  });
   document.querySelector('.grid').addEventListener('click', event => {
     const button = event.target.closest('[data-item-id]');
     if (!button) return;

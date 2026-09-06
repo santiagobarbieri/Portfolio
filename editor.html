@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Editor de colección — Santiago Barbieri</title>
+  <link rel="stylesheet" href="style/editor.css">
+  <script src="js/catalog.js" defer></script><script src="js/editor.js" defer></script>
+</head>
+<body>
+  <header><a href="index.html">← Portfolio</a><span>Editor de colección</span></header>
+  <main>
+    <section class="intro"><h1>Tu colección, en un archivo.</h1><p>Agregá piezas, editá sus datos y descargá el JSON. Las imágenes y los archivos siguen en <code>assets/</code>; el JSON guarda sus rutas.</p></section>
+    <div class="toolbar"><label class="button">Importar JSON<input id="import-json" type="file" accept=".json,application/json"></label><button id="new-item" type="button">Nuevo elemento</button><button id="export-json" class="primary" type="button">Descargar .json</button></div>
+    <p id="editor-status" role="status" aria-live="polite"></p>
+    <div class="workspace">
+      <section class="collection"><div class="collection-heading"><h2>Elementos</h2><span id="item-count">0</span></div><div id="item-list"></div></section>
+      <form id="item-form">
+        <h2 id="form-title">Nuevo elemento</h2>
+        <div class="fields">
+          <label>ID<input name="id" required placeholder="01"></label>
+          <label>Categoría<select name="type"><option value="posters">Posters</option><option value="fonts">Fonts</option><option value="logos">Logos</option><option value="prints">Prints</option><option value="mockups">Mockups</option><option value="tee">Tee</option></select></label>
+          <label class="wide">Título<input name="title" required placeholder="Nombre del proyecto"></label>
+          <label class="wide">Ruta de imagen<input name="src" required placeholder="assets/previews/mi-poster.png"></label>
+          <label class="wide">Descripción de la imagen<input name="alt" placeholder="Descripción accesible"></label>
+          <label>Fecha de creación<input name="createdAt" type="date"><small>Opcional. Vacía = sin informar.</small></label>
+          <label>Fondo<input name="color" type="color" value="#ffffff"></label>
+          <label class="wide checkbox"><input name="product" type="checkbox"> Producto de Shop — muestra “shop in work”</label>
+          <label class="wide" id="download-field">Ruta del archivo descargable<input name="download" placeholder="assets/mi-tipografia.zip"><small>Opcional. Solo aparece el botón de descarga si agregás una ruta.</small></label>
+        </div>
+        <div class="form-actions"><button type="submit" class="primary">Guardar elemento</button><button id="cancel-edit" type="button">Limpiar formulario</button></div>
+        <p class="hint">Guardá el elemento antes de exportar. Para publicarlo, reemplazá <code>data/items.json</code> con el archivo descargado.</p>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

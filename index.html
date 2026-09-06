@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
+  <title>Santiago Barbieri — Portfolio</title>
+  <link rel="stylesheet" href="style/main.css">
+  <script src="js/catalog.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/viewer.js" defer></script>
+</head>
+<body>
+  <header class="hero" id="home">
+    <div class="header-controls">
+      <button type="button" class="menu-toggle" aria-label="Abrir navegación" aria-haspopup="dialog" aria-controls="navigation-dialog" aria-expanded="false"><span></span><span></span></button>
+      <button type="button" class="filter-toggle icon-button" aria-label="Abrir filtros" aria-haspopup="dialog" aria-controls="navigation-dialog" aria-expanded="false"><img class="icon" src="assets/icons/filter.svg" alt="" aria-hidden="true"></button>
+    </div>
+  </header>
+  <dialog class="menu-dialog" id="navigation-dialog" aria-label="Navegación principal">
+    <div class="menu-top"></div>
+    <nav class="navigation" aria-label="Navegación principal">
+      <a href="#home"><small>01</small><span>Home</span><span aria-hidden="true">↗</span></a>
+      <a href="#collection" data-nav-filter="all"><small>02</small><span>Featured</span><span aria-hidden="true">↗</span></a>
+      <a href="#collection" data-nav-filter="tee"><small>03</small><span>Shop</span><span aria-hidden="true">↗</span></a>
+    </nav>
+    <section class="filter-panel" aria-label="Filtros y grilla" hidden>
+    <nav class="filters" aria-label="Filtrar contenido">
+      <button type="button" data-filter="all" aria-pressed="true">All</button>
+      <button type="button" data-filter="posters" aria-pressed="false">Posters</button>
+      <button type="button" data-filter="fonts" aria-pressed="false">Fonts</button>
+      <button type="button" data-filter="logos" aria-pressed="false">Logos</button>
+      <button type="button" data-filter="prints" aria-pressed="false">Prints</button>
+      <button type="button" data-filter="mockups" aria-pressed="false">Mockups</button>
+      <button type="button" data-filter="tee" aria-pressed="false">Tee</button>
+    </nav>
+      <div class="view-control" role="group" aria-label="Columnas de la grilla"><span>Grilla</span><div class="grid-options">
+        <button type="button" data-columns="2" aria-label="2 columnas" aria-pressed="false">2</button>
+        <button type="button" data-columns="3" aria-label="3 columnas" aria-pressed="false">3</button>
+        <button type="button" data-columns="4" aria-label="4 columnas" aria-pressed="false">4</button>
+        <button type="button" data-columns="5" aria-label="5 columnas" aria-pressed="true">5</button>
+      </div></div>
+    </section>
+  </dialog>
+  <main id="collection">
+    <p class="sr-only" id="filter-status" role="status" aria-live="polite">16 elementos · todos</p>
+    <section class="catalog-load" hidden>
+      <p class="catalog-message" role="status"></p>
+      <label>Seleccionar JSON <input class="catalog-file" type="file" accept=".json,application/json"></label>
+    </section>
+    <section class="grid" aria-label="Proyectos del portfolio"></section>
+    <noscript><p>Activá JavaScript para ver la colección y cambiar su distribución.</p></noscript>
+  </main>
+  <dialog class="item-dialog" id="item-dialog" aria-label="Detalle del elemento">
+    <button class="item-close" type="button" aria-label="Cerrar detalle" autofocus><span></span><span></span></button>
+    <div class="item-layout">
+      <div class="item-image-wrap"><img class="item-image" alt=""></div>
+      <div class="item-information">
+        <div class="item-details">
+          <p class="item-category"></p>
+          <h2 class="item-title"></h2>
+          <p class="item-date-label">Fecha de creación <time class="item-date"></time></p>
+          <a class="item-download" download hidden>Descargar <span aria-hidden="true">↓</span></a>
+        </div>
+        <p class="item-shop" hidden>shop in work</p>
+      </div>
+    </div>
+  </dialog>
+</body>
+</html>

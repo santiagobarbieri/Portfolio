@@ -1,0 +1,151 @@
+[
+  {
+    "id": "01",
+    "type": "posters",
+    "title": "Ghost tale",
+    "src": "assets/previews/Ghost tale Poster.png",
+    "alt": "Ghost tale — posters",
+    "color": "#fff",
+    "createdAt": null
+  },
+  {
+    "id": "02",
+    "type": "fonts",
+    "title": "Cinek Display",
+    "src": "assets/previews/cinek.svg",
+    "alt": "Letra A de la tipografía Cinek Display",
+    "color": "#fff",
+    "createdAt": null,
+    "download": "assets/Cinek Display Font.zip"
+  },
+  {
+    "id": "03",
+    "type": "logos",
+    "title": "Monk",
+    "src": "assets/previews/Monk Logo.png",
+    "alt": "Monk — logos",
+    "color": "#fff",
+    "createdAt": null
+  },
+  {
+    "id": "04",
+    "type": "prints",
+    "title": "Fallen",
+    "src": "assets/previews/Fallen Print.png",
+    "alt": "Fallen — prints",
+    "color": "#fff",
+    "createdAt": null
+  },
+  {
+    "id": "05",
+    "type": "mockups",
+    "title": "Folder Icon",
+    "src": "assets/previews/folder-icon.jpg",
+    "alt": "Folder Icon — mockups",
+    "color": "#fff",
+    "createdAt": null,
+    "download": "assets/Folder Icon Mockup.psd"
+  },
+  {
+    "id": "06",
+    "type": "posters",
+    "title": "Chromakopia",
+    "src": "assets/previews/Chromakopia Poster.png",
+    "alt": "Chromakopia — posters",
+    "color": "#fff",
+    "createdAt": null
+  },
+  {
+    "id": "07",
+    "type": "prints",
+    "title": "Wild Horse",
+    "src": "assets/previews/Wild Horse Print.png",
+    "alt": "Wild Horse — prints",
+    "color": "#fff",
+    "createdAt": null
+  },
+  {
+    "id": "08",
+    "type": "fonts",
+    "title": "Nutshell Display",
+    "src": "assets/previews/nutshell.svg",
+    "alt": "Letra A de la tipografía Nutshell Display",
+    "color": "#282828",
+    "createdAt": null,
+    "download": "assets/Nutshell Display Font .zip"
+  },
+  {
+    "id": "09",
+    "type": "logos",
+    "title": "Crusade",
+    "src": "assets/previews/Crusade Logo.png",
+    "alt": "Crusade — logos",
+    "color": "#fff",
+    "createdAt": null
+  },
+  {
+    "id": "10",
+    "type": "posters",
+    "title": "Hawaii",
+    "src": "assets/previews/Hawaii Poster.png",
+    "alt": "Hawaii — posters",
+    "color": "#fff",
+    "createdAt": null
+  },
+  {
+    "id": "11",
+    "type": "tee",
+    "title": "Jackboyz Tee",
+    "src": "assets/previews/Jackboyz Tee.png",
+    "alt": "Jackboyz Tee — remera",
+    "color": "#fff",
+    "kind": "product",
+    "createdAt": null
+  },
+  {
+    "id": "12",
+    "type": "prints",
+    "title": "Embossed 5",
+    "src": "assets/previews/Embossed 5 Print.png",
+    "alt": "Embossed 5 — prints",
+    "color": "#fff",
+    "createdAt": null
+  },
+  {
+    "id": "13",
+    "type": "posters",
+    "title": "Wish you where here",
+    "src": "assets/previews/Wish you where here Poster.png",
+    "alt": "Wish you where here — posters",
+    "color": "#fff",
+    "createdAt": null
+  },
+  {
+    "id": "14",
+    "type": "tee",
+    "title": "Quasimoto Tee",
+    "src": "assets/previews/Quasimoto Tee.png",
+    "alt": "Quasimoto Tee — remera",
+    "color": "#fff",
+    "kind": "product",
+    "createdAt": null
+  },
+  {
+    "id": "15",
+    "type": "posters",
+    "title": "Platform",
+    "src": "assets/previews/Platform Poster.png",
+    "alt": "Platform — posters",
+    "color": "#fff",
+    "createdAt": null
+  },
+  {
+    "id": "16",
+    "type": "prints",
+    "title": "Cuban Girl",
+    "src": "assets/previews/Cuban Girl Print.png",
+    "alt": "Cuban Girl — prints",
+    "color": "#fff",
+    "createdAt": null
+  }
+]

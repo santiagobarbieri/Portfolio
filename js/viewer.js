@@ -70,7 +70,7 @@
       move(event.key === 'ArrowLeft' ? -1 : 1);
     }
   });
-  document.querySelector('.grid').addEventListener('click', event => {
+  document.body.addEventListener('click', event => {
     const button = event.target.closest('[data-item-id]');
     if (!button) return;
     const item = window.portfolioItems.find(item => item.id === button.dataset.itemId);

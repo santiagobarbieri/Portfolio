@@ -106,6 +106,43 @@
   });
   grid.append(fragment);
 
+  const featuredList = document.querySelector('.featured-list');
+  const featuredFragment = document.createDocumentFragment();
+  items.filter(item => item.featured).forEach(item => {
+    const entry = document.createElement('li');
+    entry.className = 'featured-item';
+    const box = document.createElement('button');
+    box.type = 'button';
+    box.className = 'featured-box';
+    box.dataset.itemId = item.id;
+    box.setAttribute('aria-haspopup', 'dialog');
+    box.setAttribute('aria-controls', 'item-dialog');
+    box.setAttribute('aria-label', `Ver ${item.title}`);
+    const media = document.createElement('div');
+    media.className = 'featured-media';
+    media.style.setProperty('--placeholder', item.color);
+    if (item.src) {
+      const asset = document.createElement('img');
+      asset.src = item.src;
+      asset.alt = item.alt || item.title;
+      asset.loading = 'lazy';
+      asset.decoding = 'async';
+      media.append(asset);
+    }
+    const caption = document.createElement('span');
+    caption.className = 'featured-caption';
+    const title = document.createElement('span');
+    title.className = 'featured-caption-title';
+    title.textContent = item.title;
+    const kind = document.createElement('small');
+    kind.textContent = labels[item.type];
+    caption.append(title, kind);
+    box.append(media, caption);
+    entry.append(box);
+    featuredFragment.append(entry);
+  });
+  if (featuredList) featuredList.append(featuredFragment);
+
   function setFilter(selected) {
     filters.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === selected)));
     [...grid.children].forEach(card => card.classList.toggle('is-muted', selected !== 'all' && card.dataset.type !== selected));

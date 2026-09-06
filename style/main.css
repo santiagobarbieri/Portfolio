@@ -109,3 +109,49 @@ html.item-open,html.item-open body { overflow:hidden; }
 .item-next { right:12px; }
 .item-arrow:disabled { opacity:.2; cursor:default; }
 @media(max-width:700px) { .item-arrow { top:22px; transform:none; } .item-previous { left:16px; } .item-next { left:68px; right:auto; } }
+
+/* ---------------------------------------------------------------- */
+/* Rediseño: Home / Gallery / Featured como paneles con scroll-snap */
+/* ---------------------------------------------------------------- */
+html, body { height: 100%; }
+.app { height: 100dvh; overflow-y: auto; scroll-snap-type: y mandatory; }
+.panel { min-height: 100dvh; scroll-snap-align: start; scroll-snap-stop: always; position: relative; }
+
+/* El rail (menú/filtro) y las flechas solo tienen sentido dentro de la Gallery o el Featured. */
+.hero { display: none; }
+body[data-panel="panel-gallery"] .hero { display: flex; }
+.panel-arrows { display: none; }
+body[data-panel="panel-gallery"] .panel-gallery .panel-arrows { display: flex; }
+body[data-panel="panel-featured"] .panel-featured .panel-arrows { display: flex; }
+
+/* Home */
+.panel-home { display: flex; flex-direction: column; justify-content: center; padding: clamp(24px,3vw,48px) calc(var(--rail-width) + var(--page-padding)); }
+.home-content { max-width: 780px; }
+.home-statement { margin: 0 0 28px; font-family: "Playfair Display", Georgia, serif; font-weight: 500; font-size: clamp(34px, 5.6vw, 68px); line-height: 1.08; letter-spacing: -.01em; }
+.home-name { margin: 0; font-size: 13px; color: #888; }
+.scroll-hint { position: absolute; left: 50%; bottom: clamp(28px,5vh,64px); transform: translateX(-50%); width: 44px; height: 44px; padding: 0; border: 0; background: transparent; cursor: pointer; display: grid; place-items: center; }
+.scroll-hint span { position: relative; display: block; width: 1px; height: 26px; background: var(--ink); }
+.scroll-hint span::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 7px; height: 7px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); transform: translate(-50%, 4px) rotate(45deg); }
+.scroll-hint:hover span,.scroll-hint:hover span::after { opacity: .6; }
+@media (max-width: 600px) { .panel-home { padding: 24px; } }
+
+/* Flechas fijas para saltar entre paneles sin scrollear manualmente */
+.panel-arrows { position: fixed; right: var(--page-padding); bottom: 32px; z-index: 5; flex-direction: column; gap: 8px; }
+.panel-arrow { width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: var(--ink); cursor: pointer; display: grid; place-items: center; }
+.panel-arrow svg { width: 22px; height: 22px; }
+.panel-arrow:hover { color: #777; }
+
+/* Featured */
+.panel-featured { padding: 110px calc(var(--rail-width) + var(--page-padding)) 140px; }
+.featured-title { margin: 0 0 48px; font-family: "Playfair Display", Georgia, serif; font-weight: 500; font-size: clamp(28px, 4vw, 44px); letter-spacing: -.02em; }
+.featured-list { list-style: none; margin: 0; padding: 0; max-width: 960px; }
+.featured-item { border-top: 1px solid #eee; }
+.featured-item:last-child { border-bottom: 1px solid #eee; }
+.featured-box { display: flex; align-items: center; gap: clamp(24px, 4vw, 64px); width: 100%; padding: 24px 0; border: 0; background: transparent; text-align: left; cursor: pointer; }
+.featured-media { width: 120px; height: 120px; flex-shrink: 0; background: var(--placeholder, #eee); display: grid; place-items: center; overflow: hidden; }
+.featured-media img { width: 100%; height: 100%; object-fit: contain; }
+.featured-caption { display: flex; flex-direction: column; gap: 6px; }
+.featured-caption-title { font-size: clamp(20px, 2.4vw, 32px); font-weight: 500; letter-spacing: -.03em; transition: color .2s; }
+.featured-caption small { font-size: 11px; color: #999; }
+.featured-box:hover .featured-caption-title { color: #777; }
+@media (max-width: 700px) { .panel-featured { padding: 96px 24px 120px; } .featured-media { width: 84px; height: 84px; } }

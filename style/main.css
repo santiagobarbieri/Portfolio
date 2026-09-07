@@ -24,7 +24,7 @@ a { color:inherit; text-decoration:none; }
 .featured-load { padding:40px; }
 .featured-load input { display:block; max-width:100%; margin-top:12px; }
 .portal { position:relative; z-index:6; height:300svh; }
-.portal-sticky { position:sticky; top:0; height:100svh; overflow:hidden; background:#fff; color:var(--background); border-radius:24px 24px 0 0; display:grid; place-items:center; }
+.portal-sticky { position:sticky; top:0; height:100svh; overflow:hidden; background:#25241F; color:var(--ink); border-radius:24px 24px 0 0; display:grid; place-items:center; }
 .portal-entry { position:relative; z-index:1; display:grid; place-items:center; width:80px; height:80px; padding:0; border:0; background:transparent; cursor:pointer; }
 .diamond { width:56px; height:56px; background:var(--background); transform:rotate(45deg); pointer-events:none; will-change:transform; }
 .portal-caption { position:absolute; bottom:40px; left:0; right:0; display:flex; justify-content:center; gap:28px; font-size:12px; pointer-events:none; }
@@ -38,9 +38,6 @@ html.gallery-open,html.gallery-open body { overflow:hidden; }
 .cross { position:relative; width:44px; height:44px; padding:0; border:0; background:transparent; cursor:pointer; }
 .cross span { position:absolute; top:21px; left:10px; width:24px; height:2px; background:currentColor; transform:rotate(45deg); }
 .cross span:last-child { transform:rotate(-45deg); }
-.grid-options { display:flex; flex-direction:column; align-items:center; gap:12px; }
-.grid-options button { min-width:36px; height:44px; border:0; padding:8px; background:transparent; color:var(--ink); cursor:pointer; font-size:13px; }
-.grid-options button[aria-pressed="true"] { color:#777; }
 .infinite-viewport { position:absolute; inset:var(--gallery-vertical) var(--gallery-margin); overflow:hidden; touch-action:none; cursor:grab; outline:none; }
 .infinite-viewport.is-dragging,.is-dragging .box { cursor:grabbing; }
 .grid { position:absolute; inset:0; }

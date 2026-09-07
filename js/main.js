@@ -3,12 +3,12 @@
   const viewport = document.querySelector('.infinite-viewport');
   const grid = document.querySelector('.grid');
   const gallery = document.getElementById('gallery');
-  const sizes = [...document.querySelectorAll('[data-columns]')];
   const labels = { posters:'Posters', fonts:'Fonts', logos:'Logos', prints:'Prints', mockups:'Mockups', tee:'Tee · Shop' };
   let columns = 4;
   let cell = 1;
   let x = 0, y = 0, targetX = 0, targetY = 0;
   let frame = 0, lastTime = 0;
+  let zoomFrame = 0, zoomAnchor = null, gestureColumns = null;
   let pool = [];
   let rows = 0, cols = 0;
   let items = [];
@@ -37,17 +37,20 @@
       tile.button.tabIndex = left >= 0 && top >= 0 && left + cell <= viewport.clientWidth && top + cell <= viewport.clientHeight ? 0 : -1;
     }
   }
-  function rebuild() {
+  function rebuild(anchorX, anchorY) {
     if (!gallery.open || !items.length) return;
     const oldCell = cell;
     cell = viewport.clientWidth / columns;
-    x = x / oldCell * cell; y = y / oldCell * cell;
+    const ax = typeof anchorX === 'number' ? anchorX : viewport.clientWidth / 2;
+    const ay = typeof anchorY === 'number' ? anchorY : viewport.clientHeight / 2;
+    if (oldCell > 1) { x = (x + ax) / oldCell * cell - ax; y = (y + ay) / oldCell * cell - ay; }
     targetX = x; targetY = y;
-    cols = columns + 4;
+    cols = Math.ceil(columns) + 4;
     rows = Math.ceil(viewport.clientHeight / cell) + 4;
     const fragment = document.createDocumentFragment();
-    pool = [];
+    while (pool.length > rows * cols) pool.pop().card.remove();
     for (let i = 0; i < rows * cols; i++) {
+      if (pool[i]) { pool[i].card.style.width = `${cell}px`; pool[i].card.style.height = `${cell}px`; continue; }
       const card = document.createElement('figure'); card.className = 'card'; card.style.width = `${cell}px`; card.style.height = `${cell}px`;
       const button = document.createElement('button'); button.className = 'box'; button.type = 'button'; button.setAttribute('aria-haspopup','dialog'); button.setAttribute('aria-controls','item-dialog');
       const media = document.createElement('span'); media.className = 'media';
@@ -57,7 +60,7 @@
       media.append(image); button.append(media); caption.append(title,kind); card.append(button,caption); fragment.append(card);
       pool.push({card,button,media,image,title,kind});
     }
-    grid.replaceChildren(fragment);
+    grid.append(fragment);
     paint();
   }
   function tick(time) {
@@ -74,8 +77,22 @@
     if (Math.abs(targetX - x) + Math.abs(targetY - y) > .1) requestPaint();
   }
   function requestPaint() { if (!frame) frame = requestAnimationFrame(tick); }
+  function zoomTo(value, clientX, clientY) {
+    columns = Math.max(2, Math.min(12, value));
+    const rect = viewport.getBoundingClientRect();
+    zoomAnchor = [Number.isFinite(clientX) ? clientX - rect.left : rect.width / 2, Number.isFinite(clientY) ? clientY - rect.top : rect.height / 2];
+    if (!zoomFrame) zoomFrame = requestAnimationFrame(() => {
+      zoomFrame = 0;
+      rebuild(...zoomAnchor);
+    });
+  }
   viewport.addEventListener('wheel', event => {
-    if (event.ctrlKey || event.metaKey || !items.length) return;
+    if (!items.length || event.metaKey) return;
+    if (event.ctrlKey) {
+      event.preventDefault();
+      if (gestureColumns === null) zoomTo(columns * Math.exp(Math.max(-100, Math.min(100, event.deltaY)) * .008), event.clientX, event.clientY);
+      return;
+    }
     event.preventDefault();
     const multiplier = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? viewport.clientHeight : 1;
     targetX += (event.shiftKey && !event.deltaX ? event.deltaY : event.deltaX) * multiplier;
@@ -109,13 +126,15 @@
     if (!movement) return;
     event.preventDefault(); viewport.focus({preventScroll:true}); targetX += movement[0]; targetY += movement[1]; requestPaint();
   });
-  sizes.forEach(button => button.addEventListener('click', () => {
-    columns = Number(button.dataset.columns);
-    sizes.forEach(size => size.setAttribute('aria-pressed', String(size === button)));
-    rebuild();
-  }));
+  // Safari entrega el pellizco como GestureEvent; Chrome como wheel + ctrlKey.
+  viewport.addEventListener('gesturestart', event => { event.preventDefault(); gestureColumns = columns; }, { passive:false });
+  viewport.addEventListener('gesturechange', event => {
+    event.preventDefault();
+    if (gestureColumns !== null && event.scale > 0) zoomTo(gestureColumns / event.scale, event.clientX, event.clientY);
+  }, { passive:false });
+  viewport.addEventListener('gestureend', event => { event.preventDefault(); gestureColumns = null; }, { passive:false });
   window.addEventListener('gallery-open', rebuild);
-  window.addEventListener('gallery-close', () => { cancelAnimationFrame(frame); frame=0; targetX=x; targetY=y; drag=null; });
+  window.addEventListener('gallery-close', () => { cancelAnimationFrame(frame); cancelAnimationFrame(zoomFrame); frame=0; zoomFrame=0; gestureColumns=null; targetX=x; targetY=y; drag=null; });
   new ResizeObserver(rebuild).observe(viewport);
   items = await window.Catalog.loadPortfolio();
   window.portfolioItems = items;

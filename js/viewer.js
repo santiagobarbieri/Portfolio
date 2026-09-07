@@ -27,7 +27,7 @@
     const isShop = item.kind === 'product' || item.type === 'tee';
     image.src = item.src;
     image.alt = item.alt || item.title;
-    imageWrap.style.background = item.color || '#1B1A16';
+    imageWrap.style.background = 'transparent';
     dialog.setAttribute('aria-label', item.title);
     details.hidden = isShop;
     shop.hidden = !isShop;

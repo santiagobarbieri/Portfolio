@@ -29,7 +29,6 @@
         tile.button.setAttribute('aria-label', `Ver ${item.title}`);
         tile.image.src = item.src;
         tile.image.alt = item.alt || item.title;
-        tile.media.style.background = item.color || '#1B1A16';
         tile.title.textContent = item.title;
         tile.kind.textContent = labels[item.type];
       }

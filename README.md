@@ -1,67 +1,41 @@
 # Portfolio
 
-La colección se carga desde `data/items.json`. No requiere compilación.
+Sitio estático, sin compilación. Ejecutar `python3 -m http.server 8000` y abrir `http://localhost:8000`.
 
-## Ver el sitio
+## Recorrido
 
-Para cargar automáticamente el JSON, iniciar un servidor local desde esta carpeta:
+- Home: introducción básica.
+- Featured: cinco tarjetas que se apilan con scroll nativo; cada una tiene su fondo y color de texto.
+- Al final, una solapa blanca cubre la última tarjeta. Su rombo negro gira y crece con el scroll hasta cubrir la pantalla y abrir la grilla. El rombo también es un botón accesible por teclado.
+- La grilla se cierra exclusivamente con su X y vuelve al final de Featured. No se abandona al llegar a un borde ni al pulsar Escape.
 
-```sh
-python3 -m http.server 8000
-```
+## Grilla infinita
 
-Abrir `http://localhost:8000`. Al abrir `index.html` directamente con doble clic, seleccionar `data/items.json` en el selector que aparece: el navegador no permite leerlo automáticamente mediante `fetch` desde `file://`.
+Los botones 4, 6, 8 y 10 cambian el tamaño. Se puede desplazar con trackpad en ambos ejes, rueda vertical, Shift + rueda horizontal, arrastre con mouse/tacto y teclas de flecha al enfocar la colección. Las piezas se repiten y reciclan en un conjunto limitado de nodos, sin agregar elementos al DOM indefinidamente. Los márgenes proyectan una sombra sobre la grilla.
 
-## Crear o editar la colección
+Un clic abre el detalle; arrastrar no lo abre. El detalle conserva las flechas anterior/siguiente, descarga para los archivos disponibles y «shop in work» para productos. Escape cierra el detalle y deja la grilla abierta.
 
-Abrir `editor.html` (o `http://localhost:8000/editor.html`). El editor permite crear, editar, eliminar e importar elementos y descargar `items.json`. Con servidor carga la colección actual automáticamente; con doble clic, importarla desde el botón correspondiente.
+## Datos
 
-1. Completar un elemento y pulsar **Guardar elemento**.
-2. Repetir con las otras piezas.
-3. Pulsar **Descargar .json**.
-4. Reemplazar `data/items.json` con el archivo descargado.
+- `data/items.json`: piezas de la grilla.
+- `data/featured.json`: exactamente cinco proyectos independientes. Campos: `id`, `title`, `description`, `backgroundColor`, `textColor`, `src` opcional y `alt`.
+- Los archivos gráficos y descargables siguen en `assets/`; el JSON guarda rutas relativas a `index.html` o URLs HTTP/HTTPS.
 
-El editor no sobrescribe archivos del disco. Las imágenes, ZIP y PSD no se incluyen en el JSON: deben estar en las rutas indicadas, relativas a `index.html` (por ejemplo `assets/previews/Fallen Print.png`). También se admiten URLs HTTP/HTTPS.
+Con doble clic en `index.html`, el navegador impide cargar JSON automáticamente; cada colección ofrece su selector de archivo. Con servidor local o despliegue web, ambos JSON se cargan automáticamente.
 
-## Formato
+## Editor
 
-El archivo es una lista JSON. Cada elemento admite:
+`editor.html` permite crear, editar, eliminar e importar piezas de la grilla y descargar `items.json`. Guardar cada elemento antes de exportar y reemplazar `data/items.json` con el archivo descargado. El editor no modifica el disco directamente ni incluye los assets dentro del JSON. Featured se edita por separado en `data/featured.json`.
 
-- `id`: texto único obligatorio.
-- `type`: `posters`, `fonts`, `logos`, `prints`, `mockups` o `tee`.
-- `title` y `src`: título y ruta de imagen obligatorios.
-- `alt`: descripción accesible.
-- `color`: color hexadecimal del fondo.
-- `createdAt`: fecha confirmada `YYYY-MM-DD` o `null` (muestra «Sin informar»).
-- `download`: ruta opcional al archivo descargable.
-- `kind`: `product` para productos Shop. Las Tee siempre son productos y muestran «shop in work» sin descarga.
+Campos de las piezas: `id` único, `type` (posters/fonts/logos/prints/mockups/tee), `title`, `src`, `alt`, `color`, `createdAt` (YYYY-MM-DD o null), `download` opcional, `kind: product` para Shop. Sin fecha confirmada se muestra «Sin informar».
 
-## Archivos
+## Archivos principales
 
-- `index.html`: portfolio.
-- `editor.html`, `style/editor.css`, `js/editor.js`: editor de JSON.
-- `data/items.json`: colección; única fuente de datos.
-- `js/catalog.js`: carga, importación y validación compartida.
-- `js/main.js`, `style/main.css`: grilla, menús y filtros.
-- `js/viewer.js`: ampliación, detalles y descargas.
-- `assets/`: originales, vistas previas e íconos (licencia en `assets/icons/LICENSE`).
+- `js/main.js`: grilla infinita, gestos y tamaños.
+- `js/panels.js`: transición por scroll y apertura/cierre de la grilla.
+- `js/featured.js`: carga y renderizado de proyectos.
+- `js/viewer.js`: ampliación y detalles.
+- `js/catalog.js`: carga y validación compartida con el editor.
+- `style/main.css`: presentación, tarjetas sticky, transición y grilla.
 
-La grilla permite 2–5 columnas en computadora y 2–3 en teléfono. Los filtros mantienen las piezas visibles en escala de grises. Los menús y detalles admiten teclado y Escape. El scroll usa el comportamiento nativo del navegador.
-
-## Navegación y presentación
-
-Home, Grilla y Featured se presentan como capas negras superpuestas con tipografía sans serif. Cada capa tiene scroll independiente; la Grilla se abre sobre Home y Featured sobre la Grilla. Solo las flechas de la Grilla permiten salir a otra sección, conservando la posición de scroll al regresar.
-
-El control de tamaño ofrece 4, 6, 8 y 10 columnas en todas las pantallas. El botón activo aparece gris. El filtrado por categoría se retiró; la búsqueda queda para una próxima etapa. Featured tiene su propia colección en `data/featured.json`, independiente de la grilla.
-
-## Proyectos Featured
-
-`data/featured.json` contiene exactamente cinco proyectos independientes de `data/items.json`. Los placeholders Proyecto 01–05 se reemplazan con los datos reales. Campos:
-
-- `id`: identificador único.
-- `title`, `description`: título y texto del proyecto.
-- `backgroundColor`, `textColor`: colores hexadecimales propios de cada proyecto.
-- `src`: imagen opcional; `null` muestra únicamente el texto.
-- `alt`: descripción accesible de la imagen.
-
-`js/featured.js` carga y valida esta colección por separado. No depende de que la grilla termine de cargar y sus proyectos no abren el visor de elementos de la grilla. Con doble clic en el HTML, Featured ofrece su propio selector de JSON. El editor actual sigue editando únicamente `data/items.json`.
+Las animaciones respetan movimiento reducido. Los íconos descargados conservan su licencia en `assets/icons/LICENSE`.

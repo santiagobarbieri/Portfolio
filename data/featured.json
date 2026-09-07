@@ -3,8 +3,8 @@
     "id": "project-01",
     "title": "Proyecto 01",
     "description": "Información del proyecto por definir.",
-    "backgroundColor": "#E3E8D3",
-    "textColor": "#283A20",
+    "backgroundColor": "#1D5727",
+    "textColor": "#D7D5AF",
     "src": null,
     "alt": ""
   },
@@ -12,8 +12,8 @@
     "id": "project-02",
     "title": "Proyecto 02",
     "description": "Información del proyecto por definir.",
-    "backgroundColor": "#272E4A",
-    "textColor": "#E1E6FA",
+    "backgroundColor": "#34201F",
+    "textColor": "#D7D5AF",
     "src": null,
     "alt": ""
   },
@@ -21,8 +21,8 @@
     "id": "project-03",
     "title": "Proyecto 03",
     "description": "Información del proyecto por definir.",
-    "backgroundColor": "#F1C4AC",
-    "textColor": "#642B22",
+    "backgroundColor": "#435988",
+    "textColor": "#D7D5AF",
     "src": null,
     "alt": ""
   },
@@ -30,8 +30,8 @@
     "id": "project-04",
     "title": "Proyecto 04",
     "description": "Información del proyecto por definir.",
-    "backgroundColor": "#4C304E",
-    "textColor": "#F6DCDF",
+    "backgroundColor": "#DC2B2B",
+    "textColor": "#D7D5AF",
     "src": null,
     "alt": ""
   },
@@ -39,8 +39,8 @@
     "id": "project-05",
     "title": "Proyecto 05",
     "description": "Información del proyecto por definir.",
-    "backgroundColor": "#E8D67F",
-    "textColor": "#423719",
+    "backgroundColor": "#FD6F1D",
+    "textColor": "#D7D5AF",
     "src": null,
     "alt": ""
   }

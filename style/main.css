@@ -47,7 +47,7 @@ html.gallery-open,html.gallery-open body { overflow:hidden; }
 .card { position:absolute; top:0; left:0; margin:0; padding:clamp(6px,1.7vw,30px); will-change:transform; }
 .box { position:relative; width:100%; height:100%; border:0; padding:0; background:transparent; cursor:pointer; }
 .media { background:transparent; position:absolute; inset:0; display:grid; place-items:center; overflow:hidden; }
-.media img { display:block; width:100%; height:100%; object-fit:contain; user-select:none; }
+.media img { display:block; width:auto; height:100%; max-width:100%; max-height:100%; min-width:0; min-height:0; object-fit:contain; user-select:none; }
 .caption { position:absolute; bottom:0; left:0; width:100%; display:flex; justify-content:center; gap:8px; font-size:10px; color:var(--ink); opacity:0; pointer-events:none; white-space:nowrap; overflow:hidden; }
 .caption span { overflow:hidden; text-overflow:ellipsis; }
 .caption small { color:var(--ink); font-size:9px; }

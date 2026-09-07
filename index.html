@@ -1,87 +1,46 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#ffffff">
-  <title>Santiago Barbieri — Portfolio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#000000"><title>Santiago Barbieri — Portfolio</title>
   <link rel="stylesheet" href="style/main.css">
-  <script src="js/catalog.js" defer></script>
-  <script src="js/main.js" defer></script>
-  <script src="js/viewer.js" defer></script>
-  <script src="js/panels.js" defer></script>
+  <script src="js/catalog.js" defer></script><script src="js/main.js" defer></script>
+  <script src="js/viewer.js" defer></script><script src="js/panels.js" defer></script><script src="js/featured.js" defer></script>
 </head>
 <body>
-  <div class="app" id="app">
-    <section class="panel panel-home" id="panel-home" aria-label="Inicio">
-      <div class="home-content">
-        <h1 class="home-statement">Diseño y desarrollo<br>con una idea propia<br>de cada marca.</h1>
-        <p class="home-name">Santiago Barbieri — Buenos Aires</p>
+  <main class="journey" id="journey">
+    <section class="home" aria-label="Introducción">
+      <p class="home-name">Santiago Barbieri — Buenos Aires</p>
+      <h1>Diseño y desarrollo<br>con una idea propia<br>de cada marca.</h1>
+      <a class="home-scroll" href="#featured-start">Scroll para explorar <span aria-hidden="true">↓</span></a>
+    </section>
+    <section class="featured-section" aria-label="Cinco proyectos destacados" id="featured-start">
+      <section class="featured-load" hidden><p class="featured-message" role="status"></p><label>Seleccionar JSON de proyectos <input type="file" accept=".json,application/json"></label></section>
+      <ol class="featured-list" aria-label="Proyectos destacados"></ol>
+    </section>
+    <section class="portal" id="portal" aria-label="Entrada a la grilla">
+      <div class="portal-sticky">
+        <button class="portal-entry" type="button" aria-label="Abrir grilla"><span class="diamond" aria-hidden="true"></span></button>
+        <p class="portal-caption">La colección <span aria-hidden="true">↓</span></p>
       </div>
-      <button type="button" class="scroll-hint" data-jump="panel-gallery" aria-label="Ver colección"><span></span></button>
     </section>
-
-    <section class="panel panel-gallery" id="panel-gallery" aria-label="Colección">
-      <header class="hero" id="home">
-        <div class="header-controls">
-          <button type="button" class="menu-toggle" aria-label="Abrir navegación" aria-haspopup="dialog" aria-controls="navigation-dialog" aria-expanded="false"><span></span><span></span></button>
-          <button type="button" class="filter-toggle icon-button" aria-label="Abrir filtros" aria-haspopup="dialog" aria-controls="navigation-dialog" aria-expanded="false"><img class="icon" src="assets/icons/filter.svg" alt="" aria-hidden="true"></button>
-        </div>
-      </header>
-      <dialog class="menu-dialog" id="navigation-dialog" aria-label="Navegación principal">
-        <div class="menu-top"></div>
-        <nav class="navigation" aria-label="Navegación principal">
-          <a href="#panel-home" data-jump="panel-home"><small>01</small><span>Home</span><span aria-hidden="true">↗</span></a>
-          <a href="#collection" data-nav-filter="all"><small>02</small><span>Gallery</span><span aria-hidden="true">↗</span></a>
-          <a href="#collection" data-nav-filter="tee"><small>03</small><span>Shop</span><span aria-hidden="true">↗</span></a>
-          <a href="#panel-featured" data-jump="panel-featured"><small>04</small><span>Featured</span><span aria-hidden="true">↗</span></a>
-        </nav>
-        <section class="filter-panel" aria-label="Filtros y grilla" hidden>
-        <nav class="filters" aria-label="Filtrar contenido">
-          <button type="button" data-filter="all" aria-pressed="true">All</button>
-          <button type="button" data-filter="posters" aria-pressed="false">Posters</button>
-          <button type="button" data-filter="fonts" aria-pressed="false">Fonts</button>
-          <button type="button" data-filter="logos" aria-pressed="false">Logos</button>
-          <button type="button" data-filter="prints" aria-pressed="false">Prints</button>
-          <button type="button" data-filter="mockups" aria-pressed="false">Mockups</button>
-          <button type="button" data-filter="tee" aria-pressed="false">Tee</button>
-        </nav>
-          <div class="view-control" role="group" aria-label="Columnas de la grilla"><span>Grilla</span><div class="grid-options">
-            <button type="button" data-columns="2" aria-label="2 columnas" aria-pressed="false">2</button>
-            <button type="button" data-columns="3" aria-label="3 columnas" aria-pressed="false">3</button>
-            <button type="button" data-columns="4" aria-label="4 columnas" aria-pressed="false">4</button>
-            <button type="button" data-columns="5" aria-label="5 columnas" aria-pressed="true">5</button>
-          </div></div>
-        </section>
-      </dialog>
-      <main id="collection">
-        <p class="sr-only" id="filter-status" role="status" aria-live="polite">16 elementos · todos</p>
-        <section class="catalog-load" hidden>
-          <p class="catalog-message" role="status"></p>
-          <label>Seleccionar JSON <input class="catalog-file" type="file" accept=".json,application/json"></label>
-        </section>
-        <section class="grid" aria-label="Proyectos del portfolio"></section>
-        <noscript><p>Activá JavaScript para ver la colección y cambiar su distribución.</p></noscript>
-      </main>
-      <nav class="panel-arrows" aria-label="Navegación entre secciones">
-        <button type="button" class="panel-arrow arrow-up" data-jump="panel-home" aria-label="Volver al inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 14 6-6 6 6"/></svg></button>
-        <button type="button" class="panel-arrow arrow-down" data-jump="panel-featured" aria-label="Ir a proyectos destacados"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 10 6 6 6-6"/></svg></button>
-      </nav>
-    </section>
-
-    <section class="panel panel-featured" id="panel-featured" aria-label="Proyectos destacados">
-      <div class="featured-content">
-        <h2 class="featured-title">Featured</h2>
-        <ul class="featured-list"></ul>
+  </main>
+  <dialog class="gallery" id="gallery" aria-label="Grilla de proyectos">
+    <header class="gallery-controls">
+      <button class="gallery-close cross" type="button" aria-label="Cerrar grilla y volver a Featured" autofocus><span></span><span></span></button>
+      <div class="grid-options" role="group" aria-label="Tamaño de la grilla">
+        <button type="button" data-columns="4" aria-pressed="true" aria-label="4 columnas">4</button>
+        <button type="button" data-columns="6" aria-pressed="false" aria-label="6 columnas">6</button>
+        <button type="button" data-columns="8" aria-pressed="false" aria-label="8 columnas">8</button>
+        <button type="button" data-columns="10" aria-pressed="false" aria-label="10 columnas">10</button>
       </div>
-      <nav class="panel-arrows panel-arrows-featured" aria-label="Navegación entre secciones">
-        <button type="button" class="panel-arrow arrow-up" data-jump="panel-gallery" aria-label="Volver a la galería"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 14 6-6 6 6"/></svg></button>
-      </nav>
-    </section>
-  </div>
+    </header>
+    <section class="catalog-load" hidden><p class="catalog-message" role="status"></p><label>Seleccionar JSON <input class="catalog-file" type="file" accept=".json,application/json"></label></section>
+    <p class="sr-only" id="filter-status" role="status"></p>
+    <div class="infinite-viewport" tabindex="0" aria-label="Colección infinita: arrastrá, usá el trackpad o las teclas de flecha para moverte"><div class="grid"></div></div>
+    <div class="gallery-shade" aria-hidden="true"></div>
+    <noscript>Activá JavaScript para cargar la colección.</noscript>
+  </dialog>
   <dialog class="item-dialog" id="item-dialog" aria-label="Detalle del elemento">
     <button class="item-close" type="button" aria-label="Cerrar detalle" autofocus><span></span><span></span></button>
     <button class="item-arrow item-previous" type="button" aria-label="Elemento anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button>

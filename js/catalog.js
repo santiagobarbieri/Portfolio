@@ -27,7 +27,6 @@
       const result = { id:item.id.trim(), type:item.type, title:item.title.trim(), src:item.src.trim(), alt:typeof item.alt === 'string' ? item.alt : item.title.trim(), color:item.color || '#ffffff', createdAt:item.createdAt || null };
       if (item.type === 'tee' || item.kind === 'product') result.kind = 'product';
       else if (item.download) result.download = item.download.trim();
-      if (item.featured === true) result.featured = true;
       return result;
     });
   }

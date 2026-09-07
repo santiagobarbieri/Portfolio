@@ -1,185 +1,126 @@
 (async () => {
   'use strict';
-  // El header conserva su espacio y las anclas compensan su altura responsive.
-  const header = document.querySelector('.hero');
-  const syncHeaderHeight = () => {
-    document.documentElement.style.setProperty('--header-height', `${header.offsetHeight}px`);
-  };
-  new ResizeObserver(syncHeaderHeight).observe(header);
-  syncHeaderHeight();
-
-  const menu = document.getElementById('navigation-dialog');
-  const controls = document.querySelector('.header-controls');
-  const menuToggle = document.querySelector('.menu-toggle');
-  const filterToggle = document.querySelector('.filter-toggle');
-  const navigation = menu.querySelector('.navigation');
-  const filterPanel = menu.querySelector('.filter-panel');
-  let activePanel = null;
-  let opener = menuToggle;
-
-  function openPanel(panel) {
-    activePanel = panel;
-    menu.classList.toggle('is-compact', panel !== 'navigation');
-    navigation.hidden = panel !== 'navigation';
-    filterPanel.hidden = panel !== 'filters';
-    menu.setAttribute('aria-label', panel === 'filters' ? 'Filtrar contenido' : 'Navegación principal');
-    if (!menu.open) {
-      opener = panel === 'filters' ? filterToggle : menuToggle;
-      menu.querySelector('.menu-top').append(controls);
-      menu.showModal();
-      document.documentElement.classList.add('menu-open');
-    }
-    menuToggle.setAttribute('aria-expanded', String(panel === 'navigation'));
-    menuToggle.setAttribute('aria-label', panel === 'navigation' ? 'Cerrar navegación' : 'Abrir navegación');
-    controls.classList.toggle('is-open', panel === 'navigation');
-    filterToggle.setAttribute('aria-expanded', String(panel === 'filters'));
-    (panel === 'filters' ? filterPanel.querySelector('[aria-pressed="true"]') : menuToggle).focus({ preventScroll:true });
-  }
-  function closeMenu() {
-    controls.classList.remove('is-open');
-    menu.close();
-  }
-  menuToggle.addEventListener('click', () => menu.open && activePanel === 'navigation' ? closeMenu() : openPanel('navigation'));
-  filterToggle.addEventListener('click', () => menu.open && activePanel === 'filters' ? closeMenu() : openPanel('filters'));
-  menu.addEventListener('close', () => {
-    controls.classList.remove('is-open');
-    header.append(controls);
-    document.documentElement.classList.remove('menu-open');
-    menuToggle.setAttribute('aria-expanded', 'false');
-    menuToggle.setAttribute('aria-label', 'Abrir navegación');
-    filterToggle.setAttribute('aria-expanded', 'false');
-    activePanel = null;
-    opener.focus({ preventScroll:true });
-  });
-  menu.addEventListener('click', event => {
-    if (activePanel === 'navigation' || event.target !== menu) return;
-    const bounds = menu.getBoundingClientRect();
-    if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) closeMenu();
-  });
-  menu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
-
-  const items = await window.Catalog.loadPortfolio();
-  window.portfolioItems = items;
-  const labels = { posters:'Posters', fonts:'Fonts', logos:'Logos', prints:'Prints', mockups:'Mockups', tee:'Tee · Shop' };
+  const viewport = document.querySelector('.infinite-viewport');
   const grid = document.querySelector('.grid');
-  const filters = [...document.querySelectorAll('[data-filter]')];
-  const status = document.getElementById('filter-status');
-  const columnButtons = [...document.querySelectorAll('[data-columns]')];
-  const fragment = document.createDocumentFragment();
-  items.forEach(item => {
-    const card = document.createElement('figure');
-    card.className = 'card';
-    card.dataset.type = item.type;
-    card.setAttribute('aria-label', `${item.title} — ${labels[item.type]}`);
-    const box = document.createElement('button');
-    box.type = 'button';
-    box.dataset.itemId = item.id;
-    box.setAttribute('aria-label', `Ver ${item.title}`);
-    box.setAttribute('aria-haspopup', 'dialog');
-    box.setAttribute('aria-controls', 'item-dialog');
-    box.className = 'box';
-    const media = document.createElement('div');
-    media.className = 'media';
-    media.style.setProperty('--placeholder', item.color);
-    if (item.src) {
-      const asset = document.createElement('img');
-      asset.src = item.src;
-      asset.alt = item.alt || item.title;
-      asset.loading = 'lazy';
-      asset.decoding = 'async';
-      media.append(asset);
-    } else {
-      media.setAttribute('role', 'img');
-      media.setAttribute('aria-label', `Placeholder: ${labels[item.type]} — ${item.title}`);
+  const gallery = document.getElementById('gallery');
+  const sizes = [...document.querySelectorAll('[data-columns]')];
+  const labels = { posters:'Posters', fonts:'Fonts', logos:'Logos', prints:'Prints', mockups:'Mockups', tee:'Tee · Shop' };
+  let columns = 4;
+  let cell = 1;
+  let x = 0, y = 0, targetX = 0, targetY = 0;
+  let frame = 0, lastTime = 0;
+  let pool = [];
+  let rows = 0, cols = 0;
+  let items = [];
+  let drag = null, suppressClick = false;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const mod = (n, size) => ((n % size) + size) % size;
 
+  function paint() {
+    if (!items.length) return;
+    const firstCol = Math.floor(x / cell) - 2;
+    const firstRow = Math.floor(y / cell) - 2;
+    for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+      const tile = pool[r * cols + c];
+      const worldCol = firstCol + c, worldRow = firstRow + r;
+      const item = items[mod(worldCol + worldRow * 7, items.length)];
+      if (tile.button.dataset.itemId !== item.id) {
+        tile.button.dataset.itemId = item.id;
+        tile.button.setAttribute('aria-label', `Ver ${item.title}`);
+        tile.image.src = item.src;
+        tile.image.alt = item.alt || item.title;
+        tile.media.style.background = item.color || '#000';
+        tile.title.textContent = item.title;
+        tile.kind.textContent = labels[item.type];
+      }
+      const left = worldCol * cell - x, top = worldRow * cell - y;
+      tile.card.style.transform = `translate3d(${left}px,${top}px,0)`;
+      tile.button.tabIndex = left >= 0 && top >= 0 && left + cell <= viewport.clientWidth && top + cell <= viewport.clientHeight ? 0 : -1;
     }
-    const caption = document.createElement('figcaption');
-    caption.className = 'caption';
-    const title = document.createElement('span');
-    title.textContent = item.title;
-    const number = document.createElement('small');
-    number.textContent = labels[item.type];
-    caption.append(title, number);
-    box.append(media);
-    card.append(box, caption);
-    fragment.append(card);
-  });
-  grid.append(fragment);
-
-  const featuredList = document.querySelector('.featured-list');
-  const featuredFragment = document.createDocumentFragment();
-  items.filter(item => item.featured).forEach(item => {
-    const entry = document.createElement('li');
-    entry.className = 'featured-item';
-    const box = document.createElement('button');
-    box.type = 'button';
-    box.className = 'featured-box';
-    box.dataset.itemId = item.id;
-    box.setAttribute('aria-haspopup', 'dialog');
-    box.setAttribute('aria-controls', 'item-dialog');
-    box.setAttribute('aria-label', `Ver ${item.title}`);
-    const media = document.createElement('div');
-    media.className = 'featured-media';
-    media.style.setProperty('--placeholder', item.color);
-    if (item.src) {
-      const asset = document.createElement('img');
-      asset.src = item.src;
-      asset.alt = item.alt || item.title;
-      asset.loading = 'lazy';
-      asset.decoding = 'async';
-      media.append(asset);
+  }
+  function rebuild() {
+    if (!gallery.open || !items.length) return;
+    const oldCell = cell;
+    cell = viewport.clientWidth / columns;
+    x = x / oldCell * cell; y = y / oldCell * cell;
+    targetX = x; targetY = y;
+    cols = columns + 4;
+    rows = Math.ceil(viewport.clientHeight / cell) + 4;
+    const fragment = document.createDocumentFragment();
+    pool = [];
+    for (let i = 0; i < rows * cols; i++) {
+      const card = document.createElement('figure'); card.className = 'card'; card.style.width = `${cell}px`; card.style.height = `${cell}px`;
+      const button = document.createElement('button'); button.className = 'box'; button.type = 'button'; button.setAttribute('aria-haspopup','dialog'); button.setAttribute('aria-controls','item-dialog');
+      const media = document.createElement('span'); media.className = 'media';
+      const image = document.createElement('img'); image.decoding = 'async'; image.draggable = false;
+      const caption = document.createElement('figcaption'); caption.className = 'caption';
+      const title = document.createElement('span'), kind = document.createElement('small');
+      media.append(image); button.append(media); caption.append(title,kind); card.append(button,caption); fragment.append(card);
+      pool.push({card,button,media,image,title,kind});
     }
-    const caption = document.createElement('span');
-    caption.className = 'featured-caption';
-    const title = document.createElement('span');
-    title.className = 'featured-caption-title';
-    title.textContent = item.title;
-    const kind = document.createElement('small');
-    kind.textContent = labels[item.type];
-    caption.append(title, kind);
-    box.append(media, caption);
-    entry.append(box);
-    featuredFragment.append(entry);
+    grid.replaceChildren(fragment);
+    paint();
+  }
+  function tick(time) {
+    frame = 0;
+    if (!gallery.open || document.getElementById('item-dialog').open) return;
+    const dt = Math.min(32, time - lastTime || 16); lastTime = time;
+    const ease = reduced.matches || drag ? 1 : 1 - Math.exp(-dt / 65);
+    x += (targetX - x) * ease; y += (targetY - y) * ease;
+    // Evita coordenadas enormes conservando exactamente el patrón periódico.
+    const period = Math.max(1, items.length) * cell;
+    if (Math.abs(x) > period * 4) { const shift = Math.trunc(x / period) * period; x -= shift; targetX -= shift; }
+    if (Math.abs(y) > period * 4) { const shift = Math.trunc(y / period) * period; y -= shift; targetY -= shift; }
+    paint();
+    if (Math.abs(targetX - x) + Math.abs(targetY - y) > .1) requestPaint();
+  }
+  function requestPaint() { if (!frame) frame = requestAnimationFrame(tick); }
+  viewport.addEventListener('wheel', event => {
+    if (event.ctrlKey || event.metaKey || !items.length) return;
+    event.preventDefault();
+    const multiplier = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? viewport.clientHeight : 1;
+    targetX += (event.shiftKey && !event.deltaX ? event.deltaY : event.deltaX) * multiplier;
+    targetY += (event.shiftKey && !event.deltaX ? 0 : event.deltaY) * multiplier;
+    requestPaint();
+  }, { passive:false });
+  viewport.addEventListener('pointerdown', event => {
+    if (!event.isPrimary || event.button !== 0) return;
+    suppressClick = false;
+    drag = {id:event.pointerId,startX:event.clientX,startY:event.clientY,lastX:event.clientX,lastY:event.clientY,moved:false};
   });
-  if (featuredList) featuredList.append(featuredFragment);
-
-  function setFilter(selected) {
-    filters.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === selected)));
-    [...grid.children].forEach(card => card.classList.toggle('is-muted', selected !== 'all' && card.dataset.type !== selected));
-    const matched = items.filter(item => item.type === selected).length;
-    status.textContent = selected === 'all' ? `${items.length} elementos · todos` : `${matched} destacados · ${items.length} elementos`;
+  viewport.addEventListener('pointermove', event => {
+    if (!drag || drag.id !== event.pointerId) return;
+    if (!drag.moved && Math.hypot(event.clientX-drag.startX,event.clientY-drag.startY) > 6) {
+      drag.moved = true; viewport.setPointerCapture(event.pointerId); viewport.classList.add('is-dragging');
+    }
+    if (drag.moved) { targetX -= event.clientX-drag.lastX; targetY -= event.clientY-drag.lastY; requestPaint(); }
+    drag.lastX = event.clientX; drag.lastY = event.clientY;
+  });
+  function endDrag(event) {
+    if (!drag || drag.id !== event.pointerId) return;
+    suppressClick = drag.moved;
+    if (viewport.hasPointerCapture(event.pointerId)) viewport.releasePointerCapture(event.pointerId);
+    drag = null; viewport.classList.remove('is-dragging');
   }
-  filters.forEach(button => button.addEventListener('click', () => {
-    setFilter(button.dataset.filter);
+  window.addEventListener('pointerup', endDrag);
+  window.addEventListener('pointercancel', endDrag);
+  viewport.addEventListener('click', event => { if (suppressClick) { event.preventDefault(); event.stopPropagation(); suppressClick = false; } }, true);
+  viewport.addEventListener('keydown', event => {
+    const movement = { ArrowLeft:[-cell,0], ArrowRight:[cell,0], ArrowUp:[0,-cell], ArrowDown:[0,cell] }[event.key];
+    if (!movement) return;
+    event.preventDefault(); viewport.focus({preventScroll:true}); targetX += movement[0]; targetY += movement[1]; requestPaint();
+  });
+  sizes.forEach(button => button.addEventListener('click', () => {
+    columns = Number(button.dataset.columns);
+    sizes.forEach(size => size.setAttribute('aria-pressed', String(size === button)));
+    rebuild();
   }));
-  document.querySelectorAll('[data-nav-filter]').forEach(link => link.addEventListener('click', () => setFilter(link.dataset.navFilter)));
-
-  setFilter('all');
-
-  // Máximo de 5 columnas en computadora y 3 en teléfono.
-  const viewport = window.matchMedia('(max-width: 600px)');
-  const tablet = window.matchMedia('(max-width: 900px)');
-  let customView = false;
-  let selectedColumns = 5;
-  function setColumns(value) {
-    const parsed = Number(value);
-    const maxColumns = viewport.matches ? 3 : 5;
-    const safe = Number.isFinite(parsed) ? Math.max(2, Math.min(maxColumns, Math.round(parsed))) : maxColumns;
-    grid.style.setProperty('--columns', safe);
-    selectedColumns = safe;
-    columnButtons.forEach(button => {
-      button.hidden = Number(button.dataset.columns) > maxColumns;
-      button.setAttribute('aria-pressed', String(Number(button.dataset.columns) === safe));
-    });
-  }
-  function updateViewport() {
-    setColumns(customView ? selectedColumns : viewport.matches ? 2 : tablet.matches ? 4 : 5);
-  }
-  columnButtons.forEach(button => button.addEventListener('click', () => {
-    customView = true;
-    setColumns(button.dataset.columns);
-  }));
-  viewport.addEventListener('change', updateViewport);
-  tablet.addEventListener('change', updateViewport);
-  updateViewport();
+  window.addEventListener('gallery-open', rebuild);
+  window.addEventListener('gallery-close', () => { cancelAnimationFrame(frame); frame=0; targetX=x; targetY=y; drag=null; });
+  new ResizeObserver(rebuild).observe(viewport);
+  items = await window.Catalog.loadPortfolio();
+  window.portfolioItems = items;
+  document.getElementById('filter-status').textContent = `${items.length} elementos`;
+  if (!items.length) { const message = document.createElement('p'); message.className='empty-grid'; message.textContent='La colección está vacía.'; grid.append(message); }
+  rebuild();
 })();

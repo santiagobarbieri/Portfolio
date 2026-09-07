@@ -6,8 +6,7 @@
     "src": "assets/previews/Ghost tale Poster.png",
     "alt": "Ghost tale — posters",
     "color": "#fff",
-    "createdAt": null,
-    "featured": true
+    "createdAt": null
   },
   {
     "id": "02",
@@ -17,8 +16,7 @@
     "alt": "Letra A de la tipografía Cinek Display",
     "color": "#fff",
     "createdAt": null,
-    "download": "assets/Cinek Display Font.zip",
-    "featured": true
+    "download": "assets/Cinek Display Font.zip"
   },
   {
     "id": "03",
@@ -27,8 +25,7 @@
     "src": "assets/previews/Monk Logo.png",
     "alt": "Monk — logos",
     "color": "#fff",
-    "createdAt": null,
-    "featured": true
+    "createdAt": null
   },
   {
     "id": "04",
@@ -56,8 +53,7 @@
     "src": "assets/previews/Chromakopia Poster.png",
     "alt": "Chromakopia — posters",
     "color": "#fff",
-    "createdAt": null,
-    "featured": true
+    "createdAt": null
   },
   {
     "id": "07",
@@ -85,8 +81,7 @@
     "src": "assets/previews/Crusade Logo.png",
     "alt": "Crusade — logos",
     "color": "#fff",
-    "createdAt": null,
-    "featured": true
+    "createdAt": null
   },
   {
     "id": "10",

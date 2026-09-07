@@ -47,3 +47,21 @@ El archivo es una lista JSON. Cada elemento admite:
 - `assets/`: originales, vistas previas e íconos (licencia en `assets/icons/LICENSE`).
 
 La grilla permite 2–5 columnas en computadora y 2–3 en teléfono. Los filtros mantienen las piezas visibles en escala de grises. Los menús y detalles admiten teclado y Escape. El scroll usa el comportamiento nativo del navegador.
+
+## Navegación y presentación
+
+Home, Grilla y Featured se presentan como capas negras superpuestas con tipografía sans serif. Cada capa tiene scroll independiente; la Grilla se abre sobre Home y Featured sobre la Grilla. Solo las flechas de la Grilla permiten salir a otra sección, conservando la posición de scroll al regresar.
+
+El control de tamaño ofrece 4, 6, 8 y 10 columnas en todas las pantallas. El botón activo aparece gris. El filtrado por categoría se retiró; la búsqueda queda para una próxima etapa. Featured tiene su propia colección en `data/featured.json`, independiente de la grilla.
+
+## Proyectos Featured
+
+`data/featured.json` contiene exactamente cinco proyectos independientes de `data/items.json`. Los placeholders Proyecto 01–05 se reemplazan con los datos reales. Campos:
+
+- `id`: identificador único.
+- `title`, `description`: título y texto del proyecto.
+- `backgroundColor`, `textColor`: colores hexadecimales propios de cada proyecto.
+- `src`: imagen opcional; `null` muestra únicamente el texto.
+- `alt`: descripción accesible de la imagen.
+
+`js/featured.js` carga y valida esta colección por separado. No depende de que la grilla termine de cargar y sus proyectos no abren el visor de elementos de la grilla. Con doble clic en el HTML, Featured ofrece su propio selector de JSON. El editor actual sigue editando únicamente `data/items.json`.

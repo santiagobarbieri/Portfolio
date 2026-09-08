@@ -30,8 +30,7 @@ export class Gallery {
         else {
           const unit =
             e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? this.height : 1;
-          this.target.x -= e.deltaX * unit;
-          this.target.y -= e.deltaY * unit;
+          this.pan(-e.deltaX * unit, -e.deltaY * unit);
           this.schedule();
         }
       },
@@ -136,6 +135,9 @@ export class Gallery {
     }
     this.current = { ...(this.states.get(id) || { x: 0, y: 0, zoom: 1 }) };
     this.target = { ...this.current };
+    this.lastFrame = null;
+    this.velocity = { x: 0, y: 0 };
+    this.pointers.clear();
     this.dialog.showModal();
     this.syncLock();
     this.active = true;
@@ -175,25 +177,53 @@ export class Gallery {
   zoomBy(factor) {
     this.setZoom(this.target.zoom * factor);
   }
+  pan(dx, dy) {
+    for (const [key, delta] of [
+      ["x", dx],
+      ["y", dy],
+    ]) {
+      // A direction change should respond immediately, without old momentum.
+      const remaining = this.target[key] - this.current[key];
+      if (delta * remaining < 0) this.target[key] = this.current[key];
+      this.target[key] += delta;
+    }
+  }
   schedule() {
     if (!this.active || this.frame) return;
-    this.frame = requestAnimationFrame(() => this.tick());
+    this.frame = requestAnimationFrame((time) => this.tick(time));
   }
-  tick() {
+  tick(time) {
     this.frame = 0;
+    const elapsed = Math.min(
+      40,
+      this.lastFrame == null ? 1000 / 60 : time - this.lastFrame,
+    );
+    this.lastFrame = time;
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
     let unsettled = false;
     for (const key of ["x", "y", "zoom"]) {
-      const d = this.target[key] - this.current[key];
-      if (Math.abs(d) > (key === "zoom" ? 0.0002 : 0.05)) {
-        this.current[key] += d * 0.23;
+      const distance = this.target[key] - this.current[key];
+      // Time-based damping keeps the same feel on 60 Hz and 120 Hz displays.
+      const response = key === "zoom" ? 110 : this.pointers.size ? 38 : 100;
+      const blend = reduced ? 1 : 1 - Math.exp(-elapsed / response);
+      if (!reduced && Math.abs(distance) > (key === "zoom" ? 0.0002 : 0.05)) {
+        this.current[key] += distance * blend;
         unsettled = true;
       } else this.current[key] = this.target[key];
     }
     this.draw();
     if (unsettled) this.schedule();
+    else this.lastFrame = null;
   }
   pointerDown(e) {
     if (e.pointerType === "mouse" && e.button !== 0) return;
+    if (!this.pointers.size) {
+      this.target.x = this.current.x;
+      this.target.y = this.current.y;
+      this.velocity = { x: 0, y: 0 };
+    }
+    if (!this.pointers.size) this.wasPinching = false;
+    this.lastPointerTime = performance.now();
     this.downTile = e.target.closest(".gallery-tile");
     this.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     this.dragged = false;
@@ -214,18 +244,23 @@ export class Gallery {
     if (!previous) return;
     const dx = e.clientX - previous.x,
       dy = e.clientY - previous.y;
+    const now = performance.now();
+    const elapsed = Math.max(8, now - this.lastPointerTime);
+    this.velocity.x = this.velocity.x * 0.45 + (dx / elapsed) * 0.55;
+    this.velocity.y = this.velocity.y * 0.45 + (dy / elapsed) * 0.55;
+    this.lastPointerTime = now;
     this.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     this.distanceMoved += Math.hypot(dx, dy);
     if (this.distanceMoved > 5) this.dragged = true;
     if (this.pointers.size === 2) {
       this.dragged = true;
+      this.wasPinching = true;
       this.setZoom(
         (this.pinchZoom * this.pointerDistance()) /
           Math.max(1, this.pinchDistance),
       );
     } else {
-      this.target.x += dx;
-      this.target.y += dy;
+      this.pan(dx, dy);
       this.schedule();
     }
   }
@@ -235,6 +270,21 @@ export class Gallery {
       !this.dragged &&
       this.pointers.size === 1 &&
       this.downTile;
+    if (
+      e.type === "pointerup" &&
+      this.pointers.size === 1 &&
+      this.dragged &&
+      !this.wasPinching &&
+      performance.now() - this.lastPointerTime < 80 &&
+      !matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      // A short release glide for dragging; trackpads already supply inertia.
+      this.pan(
+        Math.max(-160, Math.min(160, this.velocity.x * 85)),
+        Math.max(-160, Math.min(160, this.velocity.y * 85)),
+      );
+      this.schedule();
+    }
     this.pointers.delete(e.pointerId);
     if (this.viewport.hasPointerCapture(e.pointerId))
       this.viewport.releasePointerCapture(e.pointerId);

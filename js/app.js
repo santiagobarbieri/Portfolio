@@ -148,12 +148,28 @@ if (page === "shop") {
       busy = false;
     }
   }
-  function update() {
+  let displayedProgress = progress();
+  let previousFrame = null;
+  function update(time = performance.now()) {
+    if (typeof time !== "number") time = performance.now();
     raf = 0;
     if (busy || opened) return;
     const p = progress();
-    diamond.style.transform = transform(p);
-    if (p >= 0.995) openShop();
+    const elapsed = Math.min(
+      40,
+      previousFrame == null ? 1000 / 60 : time - previousFrame,
+    );
+    previousFrame = time;
+    displayedProgress +=
+      (p - displayedProgress) * (reduced ? 1 : 1 - Math.exp(-elapsed / 85));
+    if (Math.abs(p - displayedProgress) < 0.0001) displayedProgress = p;
+    diamond.style.transform = transform(displayedProgress);
+    if (p >= 0.995 && displayedProgress >= 0.995) {
+      previousFrame = null;
+      openShop();
+    } else if (displayedProgress !== p) {
+      raf = requestAnimationFrame(update);
+    } else previousFrame = null;
   }
   addEventListener(
     "scroll",
@@ -166,6 +182,8 @@ if (page === "shop") {
   async function reverse() {
     busy = true;
     opened = false;
+    displayedProgress = 0;
+    previousFrame = null;
     window.scrollTo({ top: 0, behavior: "instant" });
     diamond.style.transform = transform(0);
     await diamond.animate(
@@ -192,6 +210,8 @@ if (page === "shop") {
     });
     diamond.getAnimations().forEach((a) => a.cancel());
     diamond.style.transform = transform(1);
+    displayedProgress = 1;
+    previousFrame = null;
     busy = false;
     await openShop();
   });

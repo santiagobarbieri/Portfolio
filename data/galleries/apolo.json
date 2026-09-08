@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "id": "apolo",
+  "title": "Apolo Studios",
+  "kind": "project",
+  "backgroundColor": "#122b79",
+  "textColor": "#f1f0e5",
+  "items": [
+    {
+      "id": "apolo-01",
+      "title": "Apolo Studios — 01",
+      "type": "image",
+      "src": "assets/apolo-01.jpg",
+      "alt": "Apolo Studios — gallery image 1",
+      "description": "",
+      "year": "2024 – 2026",
+      "download": ""
+    },
+    {
+      "id": "apolo-02",
+      "title": "Apolo Studios — 02",
+      "type": "image",
+      "src": "assets/apolo-02.jpg",
+      "alt": "Apolo Studios — gallery image 2",
+      "description": "",
+      "year": "2024 – 2026",
+      "download": ""
+    },
+    {
+      "id": "apolo-03",
+      "title": "Apolo Studios — 03",
+      "type": "image",
+      "src": "assets/apolo-03.jpg",
+      "alt": "Apolo Studios — gallery image 3",
+      "description": "",
+      "year": "2024 – 2026",
+      "download": ""
+    },
+    {
+      "id": "apolo-04",
+      "title": "Apolo Studios — 04",
+      "type": "image",
+      "src": "assets/apolo-04.jpg",
+      "alt": "Apolo Studios — gallery image 4",
+      "description": "",
+      "year": "2024 – 2026",
+      "download": ""
+    },
+    {
+      "id": "apolo-05",
+      "title": "Apolo Studios — 05",
+      "type": "image",
+      "src": "assets/apolo-05.jpg",
+      "alt": "Apolo Studios — gallery image 5",
+      "description": "",
+      "year": "2024 – 2026",
+      "download": ""
+    },
+    {
+      "id": "apolo-06",
+      "title": "Apolo Studios — 06",
+      "type": "image",
+      "src": "assets/apolo-06.jpg",
+      "alt": "Apolo Studios — gallery image 6",
+      "description": "",
+      "year": "2024 – 2026",
+      "download": ""
+    }
+  ]
+}

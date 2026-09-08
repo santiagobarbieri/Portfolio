@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "id": "are-we-there-yet",
+  "title": "Are we there yet?",
+  "kind": "project",
+  "backgroundColor": "#0d35be",
+  "textColor": "#f1f0e5",
+  "items": [
+    {
+      "id": "are-we-there-yet-01",
+      "title": "Are we there yet? — 01",
+      "type": "image",
+      "src": "assets/are-we-there-yet-01.jpg",
+      "alt": "Are we there yet? — gallery image 1",
+      "description": "",
+      "year": "2026",
+      "download": ""
+    },
+    {
+      "id": "are-we-there-yet-02",
+      "title": "Are we there yet? — 02",
+      "type": "image",
+      "src": "assets/are-we-there-yet-02.jpg",
+      "alt": "Are we there yet? — gallery image 2",
+      "description": "",
+      "year": "2026",
+      "download": ""
+    },
+    {
+      "id": "are-we-there-yet-03",
+      "title": "Are we there yet? — 03",
+      "type": "image",
+      "src": "assets/are-we-there-yet-03.jpg",
+      "alt": "Are we there yet? — gallery image 3",
+      "description": "",
+      "year": "2026",
+      "download": ""
+    },
+    {
+      "id": "are-we-there-yet-04",
+      "title": "Are we there yet? — 04",
+      "type": "image",
+      "src": "assets/are-we-there-yet-04.jpg",
+      "alt": "Are we there yet? — gallery image 4",
+      "description": "",
+      "year": "2026",
+      "download": ""
+    },
+    {
+      "id": "are-we-there-yet-05",
+      "title": "Are we there yet? — 05",
+      "type": "image",
+      "src": "assets/are-we-there-yet-05.jpg",
+      "alt": "Are we there yet? — gallery image 5",
+      "description": "",
+      "year": "2026",
+      "download": ""
+    },
+    {
+      "id": "are-we-there-yet-06",
+      "title": "Are we there yet? — 06",
+      "type": "image",
+      "src": "assets/are-we-there-yet-06.jpg",
+      "alt": "Are we there yet? — gallery image 6",
+      "description": "",
+      "year": "2026",
+      "download": ""
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f1f0e5" />
+    <meta
+      name="description"
+      content="Santiago Barbieri — Graphic designer, Web developer and Photographer, Buenos Aires."
+    />
+    <title>Contact · Santiago Barbieri</title>
+    <link rel="stylesheet" href="style/main.css" />
+    <script type="module" src="js/app.js"></script>
+  </head>
+  <body data-page="contact">
+    <main class="contact-page">
+      <header class="site-header">
+        <button
+          class="menu-trigger"
+          aria-label="Open index"
+          aria-haspopup="dialog"
+        >
+          <span class="menu-icon" aria-hidden="true"></span><span>Contact</span>
+        </button>
+      </header>
+      <div class="contact-layout">
+        <div class="contact-intro">
+          <h1>Want to collab?</h1>
+          <p>Then leave me a message &amp; I’ll get in touch soon</p>
+          <img
+            class="contact-pattern decorative"
+            src="assets/contact-pattern.svg"
+            alt=""
+          />
+        </div>
+        <form
+          class="contact-form"
+          action="https://formsubmit.co/santibarbieri01@gmail.com"
+          method="POST"
+        >
+          <span class="folder-tab">Welcome</span
+          ><label
+            >Name<input
+              name="name"
+              autocomplete="name"
+              required
+              maxlength="120" /></label
+          ><label
+            >Email<input
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+              maxlength="254" /></label
+          ><label
+            >Message<textarea
+              name="message"
+              required
+              maxlength="10000"
+              rows="3"
+            ></textarea></label
+          ><input
+            type="hidden"
+            name="_subject"
+            value="Portfolio — new message"
+          /><input
+            type="text"
+            name="_honey"
+            class="honeypot"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+          />
+          <div class="form-footer">
+            <p class="form-status" role="status" aria-live="polite"></p>
+            <button class="pill filled" type="submit">send</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>

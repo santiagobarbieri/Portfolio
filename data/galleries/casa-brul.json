@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "id": "casa-brul",
+  "title": "Casa Brul",
+  "kind": "project",
+  "backgroundColor": "#180405",
+  "textColor": "#f1f0e5",
+  "items": [
+    {
+      "id": "casa-brul-01",
+      "title": "Casa Brul — 01",
+      "type": "image",
+      "src": "assets/casa-brul-01.jpg",
+      "alt": "Casa Brul — gallery image 1",
+      "description": "",
+      "year": "2024",
+      "download": ""
+    },
+    {
+      "id": "casa-brul-02",
+      "title": "Casa Brul — 02",
+      "type": "image",
+      "src": "assets/casa-brul-02.jpg",
+      "alt": "Casa Brul — gallery image 2",
+      "description": "",
+      "year": "2024",
+      "download": ""
+    },
+    {
+      "id": "casa-brul-03",
+      "title": "Casa Brul — 03",
+      "type": "image",
+      "src": "assets/casa-brul-03.jpg",
+      "alt": "Casa Brul — gallery image 3",
+      "description": "",
+      "year": "2024",
+      "download": ""
+    },
+    {
+      "id": "casa-brul-04",
+      "title": "Casa Brul — 04",
+      "type": "image",
+      "src": "assets/casa-brul-04.jpg",
+      "alt": "Casa Brul — gallery image 4",
+      "description": "",
+      "year": "2024",
+      "download": ""
+    },
+    {
+      "id": "casa-brul-05",
+      "title": "Casa Brul — 05",
+      "type": "image",
+      "src": "assets/casa-brul-05.jpg",
+      "alt": "Casa Brul — gallery image 5",
+      "description": "",
+      "year": "2024",
+      "download": ""
+    },
+    {
+      "id": "casa-brul-06",
+      "title": "Casa Brul — 06",
+      "type": "image",
+      "src": "assets/casa-brul-06.jpg",
+      "alt": "Casa Brul — gallery image 6",
+      "description": "",
+      "year": "2024",
+      "download": ""
+    }
+  ]
+}

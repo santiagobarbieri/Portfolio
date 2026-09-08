@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "id": "ola",
+  "title": "Organización de Liderazgo y Administraciones",
+  "kind": "project",
+  "backgroundColor": "#80c39c",
+  "textColor": "#f1f0e5",
+  "items": [
+    {
+      "id": "ola-01",
+      "title": "Organización de Liderazgo y Administraciones — 01",
+      "type": "image",
+      "src": "assets/ola-01.jpg",
+      "alt": "Organización de Liderazgo y Administraciones — gallery image 1",
+      "description": "",
+      "year": "2026",
+      "download": ""
+    },
+    {
+      "id": "ola-02",
+      "title": "Organización de Liderazgo y Administraciones — 02",
+      "type": "image",
+      "src": "assets/ola-02.jpg",
+      "alt": "Organización de Liderazgo y Administraciones — gallery image 2",
+      "description": "",
+      "year": "2026",
+      "download": ""
+    },
+    {
+      "id": "ola-03",
+      "title": "Organización de Liderazgo y Administraciones — 03",
+      "type": "image",
+      "src": "assets/ola-03.jpg",
+      "alt": "Organización de Liderazgo y Administraciones — gallery image 3",
+      "description": "",
+      "year": "2026",
+      "download": ""
+    },
+    {
+      "id": "ola-04",
+      "title": "Organización de Liderazgo y Administraciones — 04",
+      "type": "image",
+      "src": "assets/ola-04.jpg",
+      "alt": "Organización de Liderazgo y Administraciones — gallery image 4",
+      "description": "",
+      "year": "2026",
+      "download": ""
+    },
+    {
+      "id": "ola-05",
+      "title": "Organización de Liderazgo y Administraciones — 05",
+      "type": "image",
+      "src": "assets/ola-05.jpg",
+      "alt": "Organización de Liderazgo y Administraciones — gallery image 5",
+      "description": "",
+      "year": "2026",
+      "download": ""
+    },
+    {
+      "id": "ola-06",
+      "title": "Organización de Liderazgo y Administraciones — 06",
+      "type": "image",
+      "src": "assets/ola-06.jpg",
+      "alt": "Organización de Liderazgo y Administraciones — gallery image 6",
+      "description": "",
+      "year": "2026",
+      "download": ""
+    }
+  ]
+}

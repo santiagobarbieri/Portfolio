@@ -1,57 +1,320 @@
 <!doctype html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#1B1A16"><title>Santiago Barbieri — Portfolio</title>
-  <link rel="stylesheet" href="style/main.css">
-  <script src="js/catalog.js" defer></script><script src="js/main.js" defer></script>
-  <script src="js/viewer.js" defer></script><script src="js/panels.js" defer></script><script src="js/featured.js" defer></script>
-</head>
-<body>
-  <main class="journey" id="journey">
-    <section class="home" aria-label="Introducción">
-      <p class="home-name">Santiago Barbieri — Buenos Aires</p>
-      <h1>Diseño y desarrollo<br>con una idea propia<br>de cada marca.</h1>
-      <a class="home-scroll" href="#featured-start">Scroll para explorar <span aria-hidden="true">↓</span></a>
-    </section>
-    <section class="featured-section" aria-label="Cinco proyectos destacados" id="featured-start">
-      <section class="featured-load" hidden><p class="featured-message" role="status"></p><label>Seleccionar JSON de proyectos <input type="file" accept=".json,application/json"></label></section>
-      <ol class="featured-list" aria-label="Proyectos destacados"></ol>
-    </section>
-    <section class="portal" id="portal" aria-label="Entrada a la grilla">
-      <div class="portal-sticky">
-        <button class="portal-entry" type="button" aria-label="Abrir grilla"><span class="diamond" aria-hidden="true"></span></button>
-        <p class="portal-caption">La colección <span aria-hidden="true">↓</span></p>
-      </div>
-    </section>
-  </main>
-  <dialog class="gallery" id="gallery" aria-label="Grilla de proyectos">
-    <header class="gallery-controls">
-      <button class="gallery-close cross" type="button" aria-label="Cerrar grilla y volver a Featured" autofocus><span></span><span></span></button>
-    </header>
-    <section class="catalog-load" hidden><p class="catalog-message" role="status"></p><label>Seleccionar JSON <input class="catalog-file" type="file" accept=".json,application/json"></label></section>
-    <p class="sr-only" id="filter-status" role="status"></p>
-    <div class="infinite-viewport" tabindex="0" aria-label="Colección infinita: desplazá con el trackpad y pellizcá para acercar o alejar"><div class="grid"></div></div>
-    <div class="gallery-shade" aria-hidden="true"></div>
-    <noscript>Activá JavaScript para cargar la colección.</noscript>
-  </dialog>
-  <dialog class="item-dialog" id="item-dialog" aria-label="Detalle del elemento">
-    <button class="item-close" type="button" aria-label="Cerrar detalle" autofocus><span></span><span></span></button>
-    <button class="item-arrow item-previous" type="button" aria-label="Elemento anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button>
-    <button class="item-arrow item-next" type="button" aria-label="Elemento siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button>
-    <p class="sr-only item-position" role="status" aria-live="polite"></p>
-    <div class="item-layout">
-      <div class="item-image-wrap"><img class="item-image" alt=""></div>
-      <div class="item-information">
-        <div class="item-details">
-          <p class="item-category"></p>
-          <h2 class="item-title"></h2>
-          <p class="item-date-label">Fecha de creación <time class="item-date"></time></p>
-          <a class="item-download" download hidden>Descargar <span aria-hidden="true">↓</span></a>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f1f0e5" />
+    <meta
+      name="description"
+      content="Santiago Barbieri — Graphic designer, Web developer and Photographer, Buenos Aires."
+    />
+    <title>Portfolio · Santiago Barbieri</title>
+    <link rel="stylesheet" href="style/main.css" />
+    <script type="module" src="js/app.js"></script>
+  </head>
+  <body data-page="home">
+    <main>
+      <section class="home panel" id="home">
+        <header class="site-header">
+          <button
+            class="menu-trigger"
+            aria-label="Open index"
+            aria-haspopup="dialog"
+          >
+            <span class="menu-icon" aria-hidden="true"></span><span>Home</span>
+          </button>
+        </header>
+        <div class="home-content">
+          <h1>
+            Hello my name is Santiago Barbieri, I’m a Graphic designer, Web
+            developer &amp; Photographer from Buenos Aires, Argentina.
+          </h1>
+          <div class="home-details">
+            <div>
+              <p class="section-label">General Information</p>
+              <p class="bio">
+                <strong>Age:</strong> 19 &nbsp; <strong>Base:</strong> Buenos
+                Aires, Argentina <strong>Status:</strong> Looking For Work<br /><strong
+                  >Qualities:</strong
+                >
+                Organized, Innovative, <strong>Interests:</strong> Music,
+                Design, Film, Cameras
+              </p>
+              <div class="certificates">
+                <p class="section-label">Certificates</p>
+                <div class="certificate">
+                  <h2>Desarrollo Web</h2>
+                  <span>Web Development</span
+                  ><span class="tag">Coderhouse</span>
+                </div>
+                <div class="certificate">
+                  <h2>Certificate In Advanced English</h2>
+                  <span>PASS With C1 CEFR Level</span
+                  ><span class="tag">Cambridge University</span>
+                </div>
+              </div>
+            </div>
+            <figure class="portrait asset-frame">
+              <img
+                src="assets/santiago-portrait.jpg"
+                alt="Santiago Barbieri"
+                data-placeholder="Portrait"
+              />
+            </figure>
+          </div>
         </div>
-        <p class="item-shop" hidden>shop in work</p>
-      </div>
-    </div>
-  </dialog>
-</body>
+      </section>
+      <section
+        class="featured panel"
+        id="apolo"
+        style="--surface: #122b79; --text: #f1f0e5; --stack: 1"
+      >
+        <header class="site-header">
+          <button
+            class="menu-trigger"
+            aria-label="Open index"
+            aria-haspopup="dialog"
+          >
+            <span class="menu-icon" aria-hidden="true"></span><span>01</span>
+          </button>
+        </header>
+        <div class="project-content">
+          <div class="project-copy">
+            <h2>Apolo Studios</h2>
+            <div class="project-meta">
+              <div class="project-summary">
+                <p>Co Founder of a Streetwear Brand</p>
+                <p>2024 – 2026</p>
+              </div>
+              <p class="description-label">Description:</p>
+              <p class="project-description">
+                <!-- Add project description here. -->
+              </p>
+            </div>
+          </div>
+          <figure class="project-art asset-frame">
+            <img
+              src="assets/apolo-banner.png"
+              alt="Apolo Studios"
+              data-placeholder="Apolo Studios"
+            />
+          </figure>
+          <div class="project-footer">
+            <div class="tags">
+              <span class="tag">Marketing</span
+              ><span class="tag">Photography</span
+              ><span class="tag">Design</span
+              ><span class="tag">Creative Direction</span>
+            </div>
+            <div class="project-actions">
+              <button class="pill filled" data-open-gallery="apolo">
+                gallery
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section
+        class="featured panel"
+        id="ola"
+        style="--surface: #80c39c; --text: #f1f0e5; --stack: 2"
+      >
+        <header class="site-header">
+          <button
+            class="menu-trigger"
+            aria-label="Open index"
+            aria-haspopup="dialog"
+          >
+            <span class="menu-icon" aria-hidden="true"></span><span>02</span>
+          </button>
+        </header>
+        <div class="project-content">
+          <div class="project-copy">
+            <h2>Organización de Liderazgo y Administraciones</h2>
+            <div class="project-meta">
+              <div class="project-summary">
+                <p>Design & Identity for a school centre</p>
+                <p>2026</p>
+              </div>
+              <p class="description-label">Description:</p>
+              <p class="project-description">
+                <!-- Add project description here. -->
+              </p>
+            </div>
+          </div>
+          <figure class="project-art asset-frame">
+            <img
+              src="assets/ola-banner.png"
+              alt="Organización de Liderazgo y Administraciones"
+              data-placeholder="Organización de Liderazgo y Administraciones"
+            />
+          </figure>
+          <div class="project-footer">
+            <div class="tags">
+              <span class="tag">Marketing</span><span class="tag">Design</span>
+            </div>
+            <div class="project-actions">
+              <button class="pill filled" data-open-gallery="ola">
+                gallery
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section
+        class="featured panel"
+        id="astrak"
+        style="--surface: #e64b1c; --text: #f1f0e5; --stack: 3"
+      >
+        <header class="site-header">
+          <button
+            class="menu-trigger"
+            aria-label="Open index"
+            aria-haspopup="dialog"
+          >
+            <span class="menu-icon" aria-hidden="true"></span><span>03</span>
+          </button>
+        </header>
+        <div class="project-content">
+          <div class="project-copy">
+            <h2>Astrak</h2>
+            <div class="project-meta">
+              <div class="project-summary">
+                <p>Fast news app</p>
+                <p>2026</p>
+              </div>
+              <p class="description-label">Description:</p>
+              <p class="project-description">
+                <!-- Add project description here. -->
+              </p>
+            </div>
+          </div>
+          <figure class="project-art asset-frame">
+            <img
+              src="assets/astrak-banner.png"
+              alt="Astrak"
+              data-placeholder="Astrak"
+            />
+          </figure>
+          <div class="project-footer">
+            <div class="tags">
+              <span class="tag">Web Development</span
+              ><span class="tag">Design</span>
+            </div>
+            <div class="project-actions">
+              <a
+                class="pill filled visit-link"
+                aria-disabled="true"
+                title="Project URL coming soon"
+                >visit</a
+              ><!-- Add href="https://..." and remove aria-disabled when ready. -->
+            </div>
+          </div>
+        </div>
+      </section>
+      <section
+        class="featured panel"
+        id="are-we-there-yet"
+        style="--surface: #0d35be; --text: #f1f0e5; --stack: 4"
+      >
+        <header class="site-header">
+          <button
+            class="menu-trigger"
+            aria-label="Open index"
+            aria-haspopup="dialog"
+          >
+            <span class="menu-icon" aria-hidden="true"></span><span>04</span>
+          </button>
+        </header>
+        <div class="project-content">
+          <div class="project-copy">
+            <h2>Are we there yet?</h2>
+            <div class="project-meta">
+              <div class="project-summary">
+                <p>Digital Magazine</p>
+                <p>2026</p>
+              </div>
+              <p class="description-label">Description:</p>
+              <p class="project-description">
+                <!-- Add project description here. -->
+              </p>
+            </div>
+          </div>
+          <figure class="project-art asset-frame">
+            <img
+              src="assets/are-we-there-yet-banner.png"
+              alt="Are we there yet?"
+              data-placeholder="Are we there yet?"
+            />
+          </figure>
+          <div class="project-footer">
+            <div class="tags">
+              <span class="tag">Web Development</span
+              ><span class="tag">Creative Direction</span
+              ><span class="tag">Design</span>
+            </div>
+            <div class="project-actions">
+              <button class="pill filled" data-open-gallery="are-we-there-yet">
+                gallery</button
+              ><a
+                class="pill filled visit-link"
+                aria-disabled="true"
+                title="Project URL coming soon"
+                >visit</a
+              ><!-- Add href="https://..." and remove aria-disabled when ready. -->
+            </div>
+          </div>
+        </div>
+      </section>
+      <section
+        class="featured panel"
+        id="casa-brul"
+        style="--surface: #180405; --text: #f1f0e5; --stack: 5"
+      >
+        <header class="site-header">
+          <button
+            class="menu-trigger"
+            aria-label="Open index"
+            aria-haspopup="dialog"
+          >
+            <span class="menu-icon" aria-hidden="true"></span><span>05</span>
+          </button>
+        </header>
+        <div class="project-content">
+          <div class="project-copy">
+            <h2>Casa Brul</h2>
+            <div class="project-meta">
+              <div class="project-summary">
+                <p>Homedeco Brand</p>
+                <p>2024</p>
+              </div>
+              <p class="description-label">Description:</p>
+              <p class="project-description">
+                <!-- Add project description here. -->
+              </p>
+            </div>
+          </div>
+          <figure class="project-art asset-frame">
+            <img
+              src="assets/casa-brul-banner.png"
+              alt="Casa Brul"
+              data-placeholder="Casa Brul"
+            />
+          </figure>
+          <div class="project-footer">
+            <div class="tags">
+              <span class="tag">Creative Direction</span
+              ><span class="tag">Design</span>
+            </div>
+            <div class="project-actions">
+              <button class="pill filled" data-open-gallery="casa-brul">
+                gallery
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div class="page-tail" aria-hidden="true"></div>
+  </body>
 </html>

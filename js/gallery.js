@@ -91,16 +91,11 @@ export class Gallery {
     const heading = document.createElement("div");
     heading.className = "gallery-heading";
     if (data.kind === "shop") {
-      const menu = document.createElement("button");
-      menu.className = "menu-trigger";
-      menu.setAttribute("aria-label", "Open index");
-      menu.innerHTML =
-        '<span class="menu-icon" aria-hidden="true"></span><span>Shop</span>';
-      heading.append(menu);
       const close = document.createElement("button");
-      close.className = "icon-button gallery-close";
+      close.className = "text-button gallery-close shop-close";
       close.setAttribute("aria-label", "Close shop gallery");
-      close.innerHTML = '<span class="close-icon" aria-hidden="true"></span>';
+      close.innerHTML =
+        '<span class="close-icon" aria-hidden="true"></span><span>Shop</span>';
       close.addEventListener("click", () => this.close());
       heading.append(close);
       this.header.append(heading);

@@ -4,8 +4,8 @@ Web estática, sin build ni dependencias de ejecución. Albert Sans e Inter se s
 
 ## Páginas
 
-- `index.html`: Home y los cinco Featured, escritos directamente en HTML. Se superponen con scroll, empezando sobre Home.
-- `shop.html`: introducción de Shop y apertura de la grilla mediante el rombo. La X reproduce la transición inversa; las dos líneas abren Index.
+- `index.html`: Home y los cinco Featured, escritos directamente en HTML. Se superponen con scroll, empezando sobre Home, con una pausa de lectura entre fichas. Un footer de pantalla completa cierra el recorrido con contacto, acceso a Shop y vuelta al inicio.
+- `shop.html`: introducción de Shop y apertura de la grilla mediante el rombo. Dentro de la grilla, la X ocupa la posición del abridor del menú y reproduce la transición inversa. El menú se abre desde las dos líneas de la introducción.
 - `contact.html`: formulario de contacto.
 - `editor.html`: editor y exportador de los JSON de las galerías.
 

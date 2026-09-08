@@ -42,16 +42,40 @@ export class Viewer {
     this.dialog.showModal();
     this.syncLock();
   }
-  close() {
+  async close() {
+    if (this.closing || !this.dialog.open) return;
+    this.closing = true;
+    await this.dialog.animate([{ opacity: 1 }, { opacity: 0 }], {
+      duration: matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? 1
+        : 220,
+      easing: "ease-out",
+    }).finished;
     this.dialog.close();
+    this.closing = false;
     this.syncLock();
     this.trigger?.focus({ preventScroll: true });
   }
   move(delta) {
+    if (this.closing) return;
     this.index =
       (this.index + delta + this.data.items.length) % this.data.items.length;
     this.render();
     this.dialog.scrollTop = 0;
+    const content = this.dialog.querySelector(".detail-content");
+    content.getAnimations().forEach((animation) => animation.cancel());
+    content.animate(
+      [
+        { opacity: 0, transform: `translateX(${delta > 0 ? 18 : -18}px)` },
+        { opacity: 1, transform: "translateX(0)" },
+      ],
+      {
+        duration: matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? 1
+          : 320,
+        easing: "cubic-bezier(.22,1,.36,1)",
+      },
+    );
   }
   wishlist() {
     try {

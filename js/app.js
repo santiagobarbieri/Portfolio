@@ -38,10 +38,30 @@ function openIndex() {
   index.showModal();
   syncLock();
 }
-function closeIndex() {
+let closingIndex = false;
+async function closeIndex() {
+  if (closingIndex || !index.open) return;
+  closingIndex = true;
+  await index.animate(
+    [
+      { opacity: 1, transform: "translateY(0)" },
+      { opacity: 0, transform: "translateY(-18px)" },
+    ],
+    {
+      duration: matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? 1
+        : 260,
+      easing: "cubic-bezier(.4,0,.2,1)",
+    },
+  ).finished;
   index.close();
+  closingIndex = false;
   syncLock();
 }
+index.addEventListener("cancel", (event) => {
+  event.preventDefault();
+  closeIndex();
+});
 index.querySelector(".index-close").addEventListener("click", closeIndex);
 index.addEventListener("close", syncLock);
 document.addEventListener("click", (event) => {
@@ -209,3 +229,32 @@ if (form)
       button.textContent = "send";
     }
   });
+
+// Reveal content without replacing native scrolling or hiding it without JavaScript.
+const revealObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("is-revealed");
+      revealObserver.unobserve(entry.target);
+    });
+  },
+  { threshold: 0.12 },
+);
+document
+  .querySelectorAll(
+    ".home-content, .project-content, .footer-main, .contact-layout, .shop-welcome",
+  )
+  .forEach((element) => {
+    element.classList.add("reveal-content");
+    revealObserver.observe(element);
+  });
+document.querySelector(".back-to-top")?.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "instant"
+      : "smooth",
+  });
+  document.querySelector("#home .menu-trigger")?.focus({ preventScroll: true });
+});

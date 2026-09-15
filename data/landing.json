@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "id": "landing",
+  "title": "Selected works",
+  "kind": "project",
+  "backgroundColor": "#000000",
+  "textColor": "#f1f0e5",
+  "items": [
+    {
+      "id": "platform",
+      "title": "Platform",
+      "type": "design",
+      "src": "assets/hero/platform.jpg",
+      "alt": "Platform"
+    },
+    {
+      "id": "hawaii",
+      "title": "Hawaii",
+      "type": "design",
+      "src": "assets/hero/hawaii.jpg",
+      "alt": "Hawaii"
+    },
+    {
+      "id": "wish",
+      "title": "Wish you where here",
+      "type": "design",
+      "src": "assets/hero/wish-you-were-here.jpg",
+      "alt": "Wish you where here"
+    },
+    {
+      "id": "fallen",
+      "title": "Fallen",
+      "type": "design",
+      "src": "assets/Fallen Print.png",
+      "alt": "Fallen"
+    },
+    {
+      "id": "cuban",
+      "title": "Cuban girl taking a photograph",
+      "type": "design",
+      "src": "assets/Cuban Girl Print.png",
+      "alt": "Cuban girl taking a photograph"
+    }
+  ]
+}

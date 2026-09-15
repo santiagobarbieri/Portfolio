@@ -89,8 +89,15 @@ El generador crea una galería nueva: **reemplaza la lista anterior** si se publ
 
 No se necesita API key para usar enlaces públicos. El generador no sube archivos ni publica cambios. Los archivos actuales conservan sus rutas locales hasta contar con las URLs reales; no hay enlaces ficticios a ImgBB. Tanto la grilla como el visor y el editor aceptan URLs directas. La grilla usa `thumbnail` cuando existe y vuelve a `src` si la miniatura falla; el visor abre `src`.
 
-Alojar una imagen en ImgBB no garantiza que cargue más rápido: también importan su peso y dimensiones. El Home utiliza copias JPEG optimizadas en `assets/hero/`; los originales se conservan. Sus imágenes se configuran en `index.html` mientras se define el próximo diseño de Home.
+Alojar una imagen en ImgBB no garantiza que cargue más rápido: también importan su peso y dimensiones. El Home utiliza copias JPEG optimizadas en `assets/hero/`; los originales se conservan. El carrusel de trabajos del Home se configura en `data/landing.json`.
 
 ## Verificación
 
 Ejecutar `node --test tests/catalog.test.mjs` para validar URLs, datos y compatibilidad de todos los catálogos activos. Ver `REVIEW.md` para los resultados y pendientes de la revisión general.
+
+
+## Landing tipográfico
+
+El Home usa Inter Black (peso 900), fondo negro y el texto de la referencia. Los cortes se conservan en escritorio; en móvil el texto se adapta al ancho disponible. Las cajas usan `mix-blend-mode: difference` por encima de las letras, con bases `#9B0000`, `#7B6C2C` y `#005AD0`. Las tramas de sobreimpresión cambian en cada recarga.
+
+`start` abre un carrusel flotante sobre el texto. Admite flechas, teclado, swipe, pausa y Escape; respeta movimiento reducido. Las imágenes solo se solicitan al abrirlo. Su contenido está en `data/landing.json`, compatible con URLs directas de ImgBB y editable desde “Home — Selected works” en el editor o generador. La lógica está en `js/landing.js`.

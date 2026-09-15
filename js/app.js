@@ -1,5 +1,6 @@
 import { imageFallback } from "./catalog.js";
 import { Gallery } from "./gallery.js";
+import { initLanding } from "./landing.js";
 const page = document.body.dataset.page;
 const index = document.createElement("dialog");
 index.className = "index-dialog";
@@ -75,65 +76,7 @@ for (const img of document.querySelectorAll(".decorative")) {
 }
 const gallery = new Gallery(syncLock);
 if (page === "home") {
-  const hero = document.querySelector(".home");
-  let slides = [...hero.querySelectorAll(".hero-images img")];
-  const controls = hero.querySelector(".hero-controls");
-  const pauseButton = controls.querySelector("[data-hero-pause]");
-  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
-  let currentSlide = 0;
-  let paused = reducedMotion.matches;
-  let visible = true;
-  let timer;
-  function showSlide(next) {
-    if (!slides.length) return;
-    currentSlide = (next + slides.length) % slides.length;
-    slides.forEach((slide, i) => slide.classList.toggle("is-active", i === currentSlide));
-    controls.querySelector("[data-hero-count]").textContent =
-      `${String(currentSlide + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
-  }
-  function syncCarousel() {
-    clearInterval(timer);
-    controls.hidden = slides.length < 2;
-    pauseButton.textContent = paused ? "Play" : "Pause";
-    pauseButton.setAttribute("aria-label", `${paused ? "Play" : "Pause"} background carousel`);
-    if (slides.length > 1 && !paused && visible && !document.hidden && !document.querySelector("dialog[open]")) {
-      timer = setInterval(() => showSlide(currentSlide + 1), 6000);
-    }
-  }
-  for (const slide of [...slides]) {
-    const removeFailedSlide = () => {
-      const active = slides[currentSlide];
-      slides = slides.filter((candidate) => candidate !== slide);
-      slide.remove();
-      showSlide(Math.max(0, slides.indexOf(active)));
-      syncCarousel();
-    };
-    slide.addEventListener("error", removeFailedSlide, { once: true });
-    if (slide.complete && !slide.naturalWidth) removeFailedSlide();
-  }
-  controls.querySelector("[data-hero-prev]").addEventListener("click", () => {
-    showSlide(currentSlide - 1);
-    syncCarousel();
-  });
-  controls.querySelector("[data-hero-next]").addEventListener("click", () => {
-    showSlide(currentSlide + 1);
-    syncCarousel();
-  });
-  pauseButton.addEventListener("click", () => {
-    paused = !paused;
-    syncCarousel();
-  });
-  reducedMotion.addEventListener("change", () => {
-    paused = reducedMotion.matches;
-    syncCarousel();
-  });
-  document.addEventListener("visibilitychange", syncCarousel);
-  new MutationObserver(syncCarousel).observe(document.body, { attributes: true, attributeFilter: ["class"] });
-  new IntersectionObserver(([entry]) => {
-    visible = entry.isIntersecting;
-    syncCarousel();
-  }, { threshold: 0.1 }).observe(hero);
-  syncCarousel();
+  initLanding(syncLock);
   const panels = [...document.querySelectorAll(".panel")];
   const positionPanels = () =>
     panels.forEach((panel) =>

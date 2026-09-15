@@ -5,6 +5,7 @@ const status = document.querySelector("#creator-status");
 const preview = document.querySelector("#json-preview");
 const thumbnails = document.querySelector("#creator-thumbnails");
 const defaults = {
+  landing: ["Selected works", "#000000", "#f1f0e5"],
   apolo: ["Apolo Studios", "#122b79", "#f1f0e5"],
   ola: ["Organización de Liderazgo y Administraciones", "#80c39c", "#f1f0e5"],
   "are-we-there-yet": ["Are we there yet?", "#0d35be", "#f1f0e5"],

@@ -1,4 +1,5 @@
 export const galleryPaths = {
+  landing: "data/landing.json",
   apolo: "data/galleries/apolo.json",
   ola: "data/galleries/ola.json",
   "are-we-there-yet": "data/galleries/are-we-there-yet.json",

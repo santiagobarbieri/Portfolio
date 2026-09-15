@@ -98,6 +98,11 @@ Ejecutar `node --test tests/catalog.test.mjs` para validar URLs, datos y compati
 
 ## Landing tipográfico
 
-El Home usa Inter Black (peso 900), fondo negro y el texto de la referencia. Los cortes se conservan en escritorio; en móvil el texto se adapta al ancho disponible. Las cajas usan `mix-blend-mode: difference` por encima de las letras, con bases `#9B0000`, `#7B6C2C` y `#005AD0`. Las tramas de sobreimpresión cambian en cada recarga.
+El Home usa Albert Sans Bold (peso 700), fondo negro y el texto de la referencia. Las letras mantienen sus proporciones naturales, sin escalado horizontal; el tamaño de fuente se ajusta de forma uniforme al espacio disponible. Los cortes se conservan en escritorio; en móvil el texto se adapta al ancho disponible. Las cajas usan `mix-blend-mode: difference` por encima de las letras, con bases `#9B0000`, `#7B6C2C` y `#005AD0`. Las tramas de sobreimpresión cambian en cada recarga.
 
-`start` abre un carrusel flotante sobre el texto. Admite flechas, teclado, swipe, pausa y Escape; respeta movimiento reducido. Las imágenes solo se solicitan al abrirlo. Su contenido está en `data/landing.json`, compatible con URLs directas de ImgBB y editable desde “Home — Selected works” en el editor o generador. La lógica está en `js/landing.js`.
+`start` abre un carrusel flotante sobre el texto. Muestra la obra activa grande y las siguientes hacia la derecha a menor escala. Admite flechas, teclado, swipe y Escape; respeta movimiento reducido. Las imágenes solo se solicitan al abrirlo. Su contenido está en `data/landing.json`, compatible con URLs directas de ImgBB y editable desde “Home — Selected works” en el editor o generador. La lógica está en `js/landing.js`.
+
+
+### Shop pendiente de JSONBin
+
+El catálogo activo `data/shop.json` quedó con `items: []`: no carga productos, imágenes ni descargas. Shop conserva su acceso, navegación y estado vacío. La conexión con JSONBin se implementará cuando se defina el bin; el carrusel del Home usa su propio catálogo `data/landing.json`. En esta revisión la carpeta `assets/` ya estaba ausente: los trabajos y fuentes locales deben reponerse o cambiarse por URLs válidas.

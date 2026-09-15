@@ -6,14 +6,12 @@ export function initLanding(syncLock) {
   const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const dialog = home.querySelector(".landing-work");
   const start = home.querySelector(".landing-start");
-  const figure = dialog.querySelector("figure");
-  const caption = figure.querySelector("figcaption");
+  const rail = dialog.querySelector(".landing-work-rail");
   const status = dialog.querySelector("[role=status]");
   const count = dialog.querySelector("[data-work-count]");
-  const pause = dialog.querySelector("[data-work-pause]");
   const previous = dialog.querySelector("[data-work-prev]");
   const next = dialog.querySelector("[data-work-next]");
-  let items = [], current = 0, timer, sequence = 0, paused = reduced.matches;
+  let items = [], current = 0, sequence = 0;
 
   // The three base inks stay fixed; their overprints vary on each page load.
   const patterns = [
@@ -37,64 +35,77 @@ export function initLanding(syncLock) {
     });
   });
   function fitTitle() {
-    title.querySelectorAll(".landing-line").forEach((line) => {
-      const proportion = parseFloat(line.style.getPropertyValue("--line-width")) / 100;
-      line.style.setProperty("--line-scale", Math.min(1, title.clientWidth * proportion / line.offsetWidth) || 1);
-    });
+    title.style.removeProperty("font-size");
+    if (innerWidth <= 700) return;
+    const lines = [...title.querySelectorAll(".landing-line")];
+    const widest = Math.max(...lines.map(line => line.offsetWidth));
+    const fontSize = parseFloat(getComputedStyle(title).fontSize);
+    const content = home.querySelector(".home-content");
+    const availableHeight = innerHeight - home.querySelector(".site-header").offsetHeight - home.querySelector(".hero-footer").offsetHeight - 40;
+    const scale = Math.min(1, content.clientWidth > 0 ? title.clientWidth / widest : 1, Math.max(180, availableHeight) / title.offsetHeight);
+    title.style.fontSize = `${fontSize * scale}px`;
   }
-  new ResizeObserver(fitTitle).observe(title);
+  new ResizeObserver(fitTitle).observe(home.querySelector(".home-content"));
+  addEventListener("resize", fitTitle);
   document.fonts.ready.then(fitTitle);
   fitTitle();
 
-  function schedule() {
-    clearTimeout(timer);
-    pause.textContent = paused ? "play" : "pause";
-    pause.setAttribute("aria-label", paused ? "Play selected works" : "Pause selected works");
-    if (dialog.open && !paused && !document.hidden && items.length > 1) {
-      timer = setTimeout(() => show(current + 1), 4500);
-    }
-  }
   function controls() {
-    previous.disabled = next.disabled = pause.disabled = items.length < 2;
+    previous.disabled = next.disabled = items.length < 2;
   }
+  function sizeRail() {
+    const img = rail.querySelector("img");
+    if (!img?.naturalWidth) return;
+    const stage = dialog.querySelector(".landing-work-stage");
+    const maxWidth = innerWidth * (innerWidth <= 700 ? .72 : .46);
+    const width = Math.min(maxWidth, stage.clientHeight * img.naturalWidth / img.naturalHeight);
+    rail.style.setProperty("--active-width", `${width}px`);
+  }
+  new ResizeObserver(sizeRail).observe(dialog.querySelector(".landing-work-stage"));
   async function show(index, failures = 0) {
-    clearTimeout(timer);
     if (!items.length || !dialog.open) return;
     current = (index + items.length) % items.length;
-    const item = items[current];
     const token = ++sequence;
-    const img = new Image();
-    img.alt = item.alt;
-    img.decoding = "async";
-    img.draggable = false;
-    img.src = item.src;
+    const cards = Array.from({length: Math.min(3, items.length)}, (_, offset) => {
+      const item = items[(current + offset) % items.length];
+      const card = document.createElement(offset ? "button" : "figure");
+      card.className = "landing-work-card";
+      const img = new Image();
+      img.alt = item.alt;
+      img.decoding = "async";
+      img.draggable = false;
+      img.src = item.src;
+      card.append(img);
+      if (offset) {
+        card.type = "button";
+        card.setAttribute("aria-label", `View ${item.title}`);
+        card.addEventListener("click", () => show(current + offset));
+        img.addEventListener("error", () => { card.hidden = true; });
+      }
+      return card;
+    });
     try {
-      await img.decode();
+      await cards[0].querySelector("img").decode();
       if (token !== sequence || !dialog.open) return;
-      figure.querySelector("img").replaceWith(img);
-      figure.hidden = false;
-      caption.textContent = item.title;
-      count.textContent = `${String(current + 1).padStart(2, "0")} / ${String(items.length).padStart(2, "0")}`;
+      rail.replaceChildren(...cards);
+      sizeRail();
+      count.textContent = `${String(current + 1).padStart(2, "0")} / ${String(items.length).padStart(2, "0")} — ${items[current].title}`;
       status.textContent = "";
       if (!reduced.matches) {
-        figure.getAnimations().forEach(animation => animation.cancel());
-        figure.animate([{opacity: 0, transform: "translateY(20px)"}, {opacity: 1, transform: "none"}], {duration: 350, easing: "ease-out"});
+        rail.getAnimations().forEach(animation => animation.cancel());
+        rail.animate([{opacity: 0, marginLeft: "35px"}, {opacity: 1, marginLeft: "0px"}], {duration: 400, easing: "cubic-bezier(.22,1,.36,1)"});
       }
-      schedule();
     } catch {
       if (token !== sequence || !dialog.open) return;
       if (failures < items.length - 1) return show(current + 1, failures + 1);
-      paused = true;
       status.textContent = "Images could not be loaded. Try another work or close and reopen the carousel.";
-      schedule();
     }
   }
   start.hidden = false;
   start.addEventListener("click", async () => {
     if (dialog.open) return;
-    paused = reduced.matches;
     items = [];
-    figure.hidden = true;
+    rail.replaceChildren();
     count.textContent = "";
     status.textContent = "Loading works…";
     dialog.showModal();
@@ -118,34 +129,37 @@ export function initLanding(syncLock) {
   dialog.querySelector(".landing-work-close").addEventListener("click", () => dialog.close());
   dialog.addEventListener("close", () => {
     ++sequence;
-    clearTimeout(timer);
     syncLock();
     start.focus({preventScroll: true});
   });
   function move(delta) {
-    paused = true;
     show(current + delta);
-    schedule();
   }
   previous.addEventListener("click", () => move(-1));
   next.addEventListener("click", () => move(1));
-  pause.addEventListener("click", () => { paused = !paused; schedule(); });
   dialog.addEventListener("keydown", event => {
     if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
       event.preventDefault();
       move(event.key === "ArrowLeft" ? -1 : 1);
     }
   });
-  let touch;
+  let touch, swiped = false;
   const stage = dialog.querySelector(".landing-work-stage");
-  stage.addEventListener("pointerdown", event => { touch = {x: event.clientX, y: event.clientY}; });
+  stage.addEventListener("pointerdown", event => { swiped = false; touch = {x: event.clientX, y: event.clientY}; });
   stage.addEventListener("pointercancel", () => { touch = null; });
   stage.addEventListener("pointerup", event => {
     if (!touch) return;
     const dx = event.clientX - touch.x, dy = event.clientY - touch.y;
-    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) move(dx < 0 ? 1 : -1);
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      swiped = true;
+      move(dx < 0 ? 1 : -1);
+    }
     touch = null;
   });
-  document.addEventListener("visibilitychange", schedule);
-  reduced.addEventListener("change", () => { paused = reduced.matches; schedule(); });
+  stage.addEventListener("click", event => {
+    if (!swiped || event.detail === 0) return;
+    swiped = false;
+    event.preventDefault();
+    event.stopPropagation();
+  }, true);
 }

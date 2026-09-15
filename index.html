@@ -23,30 +23,31 @@
           >
             <span class="menu-icon" aria-hidden="true"></span><span>Home</span>
           </button>
+          <button class="landing-start" aria-haspopup="dialog" aria-controls="landing-work" hidden>start</button>
         </header>
         <div class="home-content">
           <h1 class="landing-title" aria-label="HELLO MY NAME IS SANTIAGO BARBIERI, I’M A GRAPHIC DESIGNER, WEB DEVELOPER & PHOTOGRAPHER FROM BUENOS AIRES, ARGENTINA.">
-            <span class="landing-line" style="--line-width: 90%">HELLO MY NAME IS SANTIAGO</span>
-            <span class="landing-line" style="--line-width: 80%">BARBIERI, I’M A <span class="landing-role role-graphic">GRAPHIC</span></span>
-            <span class="landing-line" style="--line-width: 95%"><span class="landing-role role-graphic">DESIGNER</span>, <span class="landing-role role-web">WEB DEVELOPER</span> &amp;</span>
-            <span class="landing-line" style="--line-width: 100%"><span class="landing-role role-photo">PHOTOGRAPHER</span> FROM BUENOS</span>
-            <span class="landing-line" style="--line-width: 60%">AIRES, ARGENTINA.</span>
+            <span class="landing-line">HELLO MY NAME IS SANTIAGO</span>
+            <span class="landing-line">BARBIERI, I’M A <span class="landing-role role-graphic">GRAPHIC</span></span>
+            <span class="landing-line"><span class="landing-role role-graphic">DESIGNER</span>, <span class="landing-role role-web">WEB DEVELOPER</span> &amp;</span>
+            <span class="landing-line"><span class="landing-role role-photo">PHOTOGRAPHER</span> FROM BUENOS</span>
+            <span class="landing-line">AIRES, ARGENTINA.</span>
           </h1>
         </div>
         <div class="hero-footer">
-          <button class="landing-start" aria-haspopup="dialog" aria-controls="landing-work" hidden>start</button>
+
         </div>
         <dialog class="landing-work" id="landing-work" aria-label="Selected works carousel">
-          <div class="landing-work-top"><span>Selected works</span><button class="landing-work-close" aria-label="Close selected works">close ×</button></div>
-          <div class="landing-work-stage">
-            <figure class="landing-work-figure"><img alt="" /><figcaption></figcaption></figure>
-          </div>
+          <header class="site-header">
+            <button class="menu-trigger" aria-label="Open index" aria-haspopup="dialog"><span class="menu-icon" aria-hidden="true"></span><span>Home</span></button>
+          </header>
+          <div class="landing-work-stage"><div class="landing-work-rail"></div></div>
           <div class="landing-work-controls">
-            <button data-work-prev aria-label="Previous work">←</button>
-            <span data-work-count aria-live="polite"></span>
-            <button data-work-pause>pause</button>
-            <button data-work-next aria-label="Next work">→</button>
+            <button data-work-prev aria-label="Previous work">‹</button>
+            <button class="landing-work-close" aria-label="Close selected works">close</button>
+            <button data-work-next aria-label="Next work">›</button>
           </div>
+          <span class="sr-only" data-work-count aria-live="polite"></span>
           <p class="landing-work-status" role="status"></p>
         </dialog>
       </section>

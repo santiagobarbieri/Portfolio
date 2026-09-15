@@ -1,4 +1,11 @@
 @font-face {
+  font-family: Druk Text;
+  src: url("../assets/fonts/druk-text-super-trial.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
   font-family: Albert Sans;
   src: url("../assets/fonts/albert-sans.ttf") format("truetype");
   font-weight: 100 900;
@@ -1539,7 +1546,7 @@ body {
 }
 
 
-/* Oversized Inter Black lettering, with ink applied above the letters. */
+/* Natural Druk lettering, with ink applied above the letters. */
 .home {
   --surface: #000;
   --text: #f1f0e5;
@@ -1562,20 +1569,17 @@ body {
   min-width: 0;
   width: 100%;
   max-width: none;
-  font-family: Inter, Arial, sans-serif;
+  font-family: Druk Text, Albert Sans, Arial, sans-serif;
   font-weight: 900;
-  font-size: clamp(60px, 14.1svh, 180px);
-  line-height: .82;
-  letter-spacing: -.04em;
+  font-size: clamp(50px, 8.5vw, 150px);
+  line-height: .88;
+  letter-spacing: -.015em;
   text-align: center;
 }
 .landing-line {
   display: block;
   width: max-content;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%) scaleX(var(--line-scale, .6));
-  transform-origin: center;
+  margin-inline: auto;
   white-space: nowrap;
 }
 .landing-role { position: relative; display: inline-block; }
@@ -1600,34 +1604,81 @@ body {
   color: var(--text);
   background: transparent;
   border: 0;
-  padding: 24px;
-  width: min(900px, 92vw);
-  height: min(760px, 90svh);
-  max-height: 90svh;
+  padding: 0;
+  margin: 0;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100svh;
+  max-height: none;
   overflow: hidden;
 }
-.landing-work::backdrop { background: #0007; backdrop-filter: blur(3px); }
-.landing-work[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto auto; gap: 16px; animation: work-open 500ms cubic-bezier(.22,1,.36,1); }
-.landing-work-top, .landing-work-controls { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.landing-work-top { text-shadow: 0 2px 10px #000; font-size: 14px; }
-.landing-work-top button, .landing-work-controls { background: #000; border-radius: 30px; padding: 8px 18px; }
-.landing-work-controls { justify-self: center; font-size: 14px; font-variant-numeric: tabular-nums; }
-.landing-work-controls button, .landing-work-close { min-width: 44px; min-height: 44px; }
-.landing-work-stage { min-height: 0; touch-action: pan-y; }
-.landing-work-figure { height: 100%; display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 12px; }
-.landing-work-figure img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 15px 35px #0008); }
-.landing-work-figure figcaption { justify-self: center; background: #000; padding: 6px 12px; font-size: 13px; }
-.landing-work-status { font-size: 14px; text-align: center; background: #000; }
+.landing-work::backdrop { background: #000b; }
+.landing-work[open] { display: block; animation: work-open 450ms cubic-bezier(.22,1,.36,1); }
+.landing-work-stage { position: absolute; top: 13.5svh; left: 0; width: 100%; height: 74svh; touch-action: pan-y; }
+.landing-work-rail { position: absolute; left: 50%; transform: translateX(calc(var(--active-width, 46vw) / -2)); height: 100%; display: flex; align-items: center; gap: 16px; }
+.landing-work-card { flex: none; height: 100%; width: var(--active-width, 46vw); display: flex; align-items: center; justify-content: center; }
+.landing-work-card img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.landing-work-card:nth-child(2) { height: 69%; width: auto; }
+.landing-work-card:nth-child(3) { height: 50%; width: auto; }
+.landing-work-card:nth-child(n+2) img { width: auto; max-width: 40vw; }
+.landing-work-controls { position: absolute; right: 5.5vw; bottom: 5.2svh; display: flex; gap: 4px; align-items: center; }
+.landing-work-controls button { background: #f1f0e5; color: #000; border-radius: 99px; min-width: 38px; min-height: 38px; font-size: 25px; line-height: 1; }
+.landing-work-controls .landing-work-close { padding: 6px 20px; font-size: 22px; letter-spacing: -.055em; }
+.landing-work-status { position: absolute; top: 50%; left: 15%; right: 15%; font-size: 14px; text-align: center; }
 .landing-work-status:empty { display: none; }
+.home:has(.landing-work[open]) .landing-start { visibility: hidden; }
 @keyframes work-open { from { opacity: 0; transform: translateY(70px) scale(.9); } to { opacity: 1; transform: none; } }
 @media (max-width: 700px) {
   .home .home-content { padding: 20px 24px; }
-  .home .landing-title { font-size: clamp(30px, 10.5vw, 70px); line-height: .98; letter-spacing: -.04em; }
+  .home .landing-title { font-size: clamp(34px, 11vw, 76px); line-height: .95; letter-spacing: -.01em; }
   .landing-line { display: contents; white-space: normal; }
   .hero-footer { min-height: 80px; padding: 20px 24px 24px; }
-  .landing-work { padding: 12px; width: 96vw; }
+  .landing-work-stage { top: 19svh; height: 60svh; }
+  .landing-work-rail { left: 44%; gap: 12px; }
+  .landing-work-controls { right: 24px; bottom: 24px; }
 }
 
 @media (min-width: 701px) {
   .home > .site-header { height: clamp(100px, 16svh, 145px); flex-shrink: 0; }
+}
+.home:has(.landing-work[open]) > .site-header { visibility: hidden; }
+@media (min-width: 701px) {
+  .landing-work > .site-header { height: clamp(100px, 16svh, 145px); }
+}
+
+/* Preview the seven existing panels as a fan; the panels keep native scrolling. */
+.landing-tabs {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  pointer-events: none;
+  z-index: 4;
+}
+.landing-tab {
+  position: absolute;
+  top: var(--tab-top);
+  left: -1%;
+  width: 102%;
+  height: 100svh;
+  background: var(--surface);
+  color: var(--text);
+  transform: rotate(var(--tab-angle));
+  transform-origin: 50% 0;
+}
+.landing-tab-label {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 40px calc(var(--margin) + 1vw);
+  font-size: clamp(17px, 1.55vw, 24px);
+}
+.home > .site-header { z-index: 5; }
+.home > .site-header .landing-start { margin-left: auto; font-size: 17px; }
+.home.has-panel-fan { overflow: clip; }
+@media (max-width: 700px) {
+  .landing-tab-label { padding-top: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .landing-tab { transform: none; }
 }

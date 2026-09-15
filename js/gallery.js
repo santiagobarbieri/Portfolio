@@ -1,4 +1,4 @@
-import { fetchGallery, imageFallback } from "./catalog.js";
+import { fetchGallery } from "./catalog.js";
 import { Viewer } from "./viewer.js";
 const mod = (n, m) => ((n % m) + m) % m;
 export class Gallery {
@@ -21,7 +21,10 @@ export class Gallery {
     this.header = this.dialog.querySelector("header");
     this.status = this.dialog.querySelector("[role=status]");
     this.viewer = new Viewer(syncLock);
-    this.dialog.addEventListener("cancel", (e) => e.preventDefault());
+    this.dialog.addEventListener("cancel", (e) => {
+      e.preventDefault();
+      this.close();
+    });
     this.viewport.addEventListener(
       "wheel",
       (e) => {
@@ -308,8 +311,17 @@ export class Gallery {
     placeholder.hidden = true;
     tile.append(img, placeholder);
     img.addEventListener("error", () => {
+      const original = tile.dataset.original;
+      if (original && img.getAttribute("src") !== original) {
+        img.src = original;
+        return;
+      }
       img.hidden = true;
       placeholder.hidden = false;
+    });
+    img.addEventListener("load", () => {
+      img.hidden = false;
+      placeholder.hidden = true;
     });
     this.viewport.append(tile);
     return { tile, img, placeholder, index: -1 };
@@ -348,7 +360,8 @@ export class Gallery {
           node.placeholder.hidden = true;
           node.placeholder.textContent = item.title;
           node.img.alt = item.alt;
-          node.img.src = item.src;
+          node.tile.dataset.original = item.src;
+          node.img.src = item.thumbnail || item.src;
         }
         const x = gx * step + this.current.x,
           y = gy * step + this.current.y;

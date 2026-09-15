@@ -24,44 +24,57 @@
             <span class="menu-icon" aria-hidden="true"></span><span>Home</span>
           </button>
         </header>
+        <div class="hero-images" aria-hidden="true">
+          <img class="is-active" src="assets/hero/platform.jpg" alt="" fetchpriority="high" />
+          <img src="assets/hero/hawaii.jpg" alt="" decoding="async" />
+          <img src="assets/hero/wish-you-were-here.jpg" alt="" decoding="async" />
+        </div>
         <div class="home-content">
-          <h1>
-            Hello my name is Santiago Barbieri, I’m a Graphic designer, Web
-            developer &amp; Photographer from Buenos Aires, Argentina.
-          </h1>
-          <div class="home-details">
-            <div>
-              <p class="section-label">General Information</p>
-              <p class="bio">
-                <strong>Age:</strong> 19 &nbsp; <strong>Base:</strong> Buenos
-                Aires, Argentina <strong>Status:</strong> Looking For Work<br /><strong
-                  >Qualities:</strong
-                >
-                Organized, Innovative, <strong>Interests:</strong> Music,
-                Design, Film, Cameras
-              </p>
-              <div class="certificates">
-                <p class="section-label">Certificates</p>
-                <div class="certificate">
-                  <h2>Desarrollo Web</h2>
-                  <span>Web Development</span
-                  ><span class="tag">Coderhouse</span>
-                </div>
-                <div class="certificate">
-                  <h2>Certificate In Advanced English</h2>
-                  <span>PASS With C1 CEFR Level</span
-                  ><span class="tag">Cambridge University</span>
-                </div>
-              </div>
-            </div>
-            <figure class="portrait asset-frame">
-              <img
-                src="assets/santiago-portrait.jpg"
-                alt="Santiago Barbieri"
-                data-placeholder="Portrait"
-              />
-            </figure>
+          <h1>Welcome, my name is Santiago Barbieri. I’m a Graphic designer, Web developer &amp; Photographer from Buenos Aires, Argentina.</h1>
+        </div>
+        <div class="hero-footer">
+          <a href="#about">More about me <span aria-hidden="true">↓</span></a>
+          <div class="hero-controls" role="group" aria-label="Background carousel" hidden>
+            <button data-hero-prev aria-label="Previous background">←</button>
+            <span data-hero-count>01 / 03</span>
+            <button data-hero-next aria-label="Next background">→</button>
+            <button data-hero-pause aria-label="Pause background carousel">Pause</button>
           </div>
+        </div>
+      </section>
+      <section class="about panel" id="about" aria-label="About me">
+        <header class="site-header">
+          <button class="menu-trigger" aria-label="Open index" aria-haspopup="dialog">
+            <span class="menu-icon" aria-hidden="true"></span><span>About</span>
+          </button>
+        </header>
+        <div class="about-content">
+          <div class="general-info">
+            <h2 class="section-label">General Information</h2>
+            <dl class="bio">
+              <div><dt>Age</dt><dd>19</dd></div>
+              <div><dt>Base</dt><dd>Buenos Aires, Argentina</dd></div>
+              <div><dt>Status</dt><dd>Looking For Work</dd></div>
+              <div><dt>Qualities</dt><dd>Organized, Innovative</dd></div>
+              <div><dt>Interests</dt><dd>Music, Design, Film, Cameras</dd></div>
+            </dl>
+          </div>
+          <div class="certificates">
+            <h2 class="section-label" id="certificates-heading">Certificates &amp; Courses</h2>
+            <div class="certificates-scroll" tabindex="0" role="region" aria-labelledby="certificates-heading">
+              <article class="certificate">
+                <h3>Desarrollo Web</h3>
+                <span>Web Development</span><span class="tag">Coderhouse</span>
+              </article>
+              <article class="certificate">
+                <h3>Certificate In Advanced English</h3>
+                <span>PASS With C1 CEFR Level</span><span class="tag">Cambridge University</span>
+              </article>
+            </div>
+          </div>
+          <figure class="portrait asset-frame">
+            <img src="assets/santiago-portrait.jpg" alt="Santiago Barbieri" data-placeholder="Portrait" loading="lazy" />
+          </figure>
         </div>
       </section>
       <section
@@ -96,7 +109,7 @@
             <img
               src="assets/apolo-banner.png"
               alt="Apolo Studios"
-              data-placeholder="Apolo Studios"
+              loading="lazy" decoding="async" data-placeholder="Apolo Studios"
             />
           </figure>
           <div class="project-footer">
@@ -146,7 +159,7 @@
             <img
               src="assets/ola-banner.png"
               alt="Organización de Liderazgo y Administraciones"
-              data-placeholder="Organización de Liderazgo y Administraciones"
+              loading="lazy" decoding="async" data-placeholder="Organización de Liderazgo y Administraciones"
             />
           </figure>
           <div class="project-footer">
@@ -193,7 +206,7 @@
             <img
               src="assets/astrak-banner.png"
               alt="Astrak"
-              data-placeholder="Astrak"
+              loading="lazy" decoding="async" data-placeholder="Astrak"
             />
           </figure>
           <div class="project-footer">
@@ -244,7 +257,7 @@
             <img
               src="assets/are-we-there-yet-banner.png"
               alt="Are we there yet?"
-              data-placeholder="Are we there yet?"
+              loading="lazy" decoding="async" data-placeholder="Are we there yet?"
             />
           </figure>
           <div class="project-footer">
@@ -298,7 +311,7 @@
             <img
               src="assets/casa-brul-banner.png"
               alt="Casa Brul"
-              data-placeholder="Casa Brul"
+              loading="lazy" decoding="async" data-placeholder="Casa Brul"
             />
           </figure>
           <div class="project-footer">

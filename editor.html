@@ -11,6 +11,7 @@
   <body class="editor-page">
     <header class="editor-header">
       <a href="index.html">← Portfolio</a>
+      <a href="json-creator.html">Create JSON from image URLs →</a>
       <h1>Gallery editor</h1>
       <p>Colors and content. Changes are saved when you download the JSON.</p>
     </header>
@@ -45,6 +46,7 @@
         <div id="editor-items" aria-label="Gallery items"></div>
       </aside>
       <section class="editor-workspace">
+        <p class="editor-mode-note">Use direct image links from ImgBB (i.ibb.co), not viewer links (ibb.co). An optional smaller thumbnail makes the gallery lighter; the viewer opens the full image.</p>
         <form id="gallery-settings">
           <h2>Gallery</h2>
           <div class="editor-fields">
@@ -70,10 +72,11 @@
                 name="year"
                 placeholder="2024 – 2026" /></label
             ><label class="wide"
-              >Image path<input
+              >Image URL or local path<input
                 name="src"
                 required
-                placeholder="assets/apolo-01.jpg" /></label
+                placeholder="https://i.ibb.co/…/photo.jpg" /></label
+            ><label class="wide">Thumbnail URL (optional)<input name="thumbnail" placeholder="Smaller image for the grid" /></label
             ><label class="wide"
               >Image description (alt text)<input name="alt" /></label
             ><label class="wide"

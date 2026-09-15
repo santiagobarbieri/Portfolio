@@ -1508,3 +1508,75 @@ body {
 .detail-dialog {
   overscroll-behavior: contain;
 }
+
+/* Landing and profile sit before the numbered project stack. */
+.home {
+  --surface: #171916;
+  --text: #f1f0e5;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+}
+.hero-images, .hero-images::after, .hero-images img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.hero-images { z-index: -1; overflow: hidden; }
+.hero-images::after {
+  content: "";
+  background: linear-gradient(180deg, #0005, #0008 45%, #000b);
+}
+.hero-images img { object-fit: cover; opacity: 0; transition: opacity 1200ms ease; }
+.hero-images img.is-active { opacity: 1; }
+.home .home-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 8vh var(--margin);
+  width: 100%;
+}
+.home h1 { max-width: 23ch; font-size: clamp(38px, 5.3vw, 92px); font-weight: 500; }
+.hero-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 24px var(--margin) 36px;
+  font-size: 14px;
+}
+.hero-footer a { display: flex; gap: 24px; align-items: center; }
+.hero-controls { display: flex; align-items: center; gap: 18px; font-variant-numeric: tabular-nums; }
+.hero-controls button { min-width: 44px; min-height: 44px; }
+.about { position: sticky; top: var(--sticky-top, 0px); z-index: 1; }
+.about-content {
+  padding: 6vh var(--margin) 9vh;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr 0.85fr;
+  gap: clamp(24px, 4vw, 72px);
+  align-items: start;
+}
+.about .section-label { font-family: Inter, Arial, sans-serif; font-weight: 400; font-size: clamp(16px, 1.5vw, 24px); margin-bottom: 32px; }
+.about .bio { margin: 0; font-size: clamp(22px, 2.1vw, 34px); }
+.bio div + div { margin-top: 24px; }
+.bio dt { font-weight: 600; }
+.bio dd { margin: 5px 0 0; }
+.about .certificates { margin: 0; min-width: 0; }
+.certificates-scroll { max-height: 52svh; overflow-y: auto; padding-right: 12px; scrollbar-width: thin; }
+.certificates-scroll:focus-visible { outline: 2px solid currentColor; outline-offset: 6px; }
+.about .certificate { grid-template-columns: 1fr; gap: 16px; padding: 24px 0; }
+.certificate h3 { margin: 0; font-family: Albert Sans, Arial, sans-serif; letter-spacing: -0.045em; font-weight: 600; font-size: clamp(25px, 2.5vw, 40px); line-height: 1.05; }
+.about .certificate > span:not(.tag) { display: block; font-size: 16px; }
+.about .certificate .tag { justify-self: start; white-space: normal; }
+.about .portrait { width: 100%; align-self: start; }
+@media (max-width: 700px) {
+  .about-content { grid-template-columns: 1fr; gap: 48px; padding-top: 24px; }
+  .about .portrait { max-width: 360px; }
+  .certificates-scroll { max-height: 340px; }
+  .hero-footer { flex-wrap: wrap; gap: 12px; padding-bottom: 24px; }
+  .hero-controls { gap: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-images img { transition: none; }
+}

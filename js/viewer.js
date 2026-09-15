@@ -180,6 +180,10 @@ export class Viewer {
     if (item.download) {
       download.href = safeURL(item.download);
       download.download = "";
+      if (new URL(download.href).origin !== location.origin) {
+        download.target = "_blank";
+        download.rel = "noopener noreferrer";
+      }
     } else {
       download.setAttribute("aria-disabled", "true");
       download.title = "Download file coming soon";

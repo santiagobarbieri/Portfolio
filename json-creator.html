@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>JSON creator · Santiago Barbieri</title>
+    <link rel="stylesheet" href="style/main.css" />
+    <link rel="stylesheet" href="style/editor.css" />
+    <script type="module" src="js/json-creator.js"></script>
+  </head>
+  <body class="editor-page">
+    <header class="editor-header">
+      <a href="editor.html">← Gallery editor</a>
+      <a href="index.html">Portfolio</a>
+      <h1>Create JSON from image URLs</h1>
+      <p>Paste your image links, preview the result and download a gallery file.</p>
+    </header>
+    <main class="creator-layout">
+      <form id="creator-form">
+        <div class="editor-fields">
+          <label>Destination<select name="gallery">
+            <option value="apolo">Apolo Studios</option>
+            <option value="ola">OLA</option>
+            <option value="are-we-there-yet">Are we there yet?</option>
+            <option value="casa-brul">Casa Brul</option>
+            <option value="shop">Shop</option>
+          </select></label>
+          <label>Gallery title<input name="title" required /></label>
+          <label>Background color<input name="backgroundColor" type="color" /></label>
+          <label>Text color<input name="textColor" type="color" /></label>
+          <label>Category<select name="type"></select></label>
+          <label>Year / period<input name="year" placeholder="2026" /></label>
+          <label class="wide">Images — one per line<textarea name="images" rows="12" required spellcheck="false" aria-describedby="image-help" placeholder="https://i.ibb.co/…/photo.jpg&#10;Image title | https://i.ibb.co/…/photo.jpg | https://i.ibb.co/…/thumbnail.jpg"></textarea></label>
+        </div>
+        <div id="image-help" class="creator-help">
+          <p>Upload images to <a href="https://imgbb.com/" target="_blank" rel="noopener noreferrer">ImgBB ↗</a> and copy their direct image links (https://i.ibb.co/…). Links to viewer pages (https://ibb.co/…) will not work.</p>
+          <p>Each line accepts a URL, or <code>Title | Image URL | Optional thumbnail URL</code>. Local paths such as <code>assets/photo.jpg</code> also work. Use a smaller thumbnail to speed up the grid.</p>
+          <p>This creates a new gallery file. To preserve existing IDs, prices, descriptions or wishlist entries, update the current JSON in the <a href="editor.html">gallery editor</a>.</p>
+        </div>
+        <div class="editor-file-actions">
+          <button class="pill" type="submit">Preview JSON</button>
+          <button class="pill filled" type="button" id="download-json">Download JSON</button>
+        </div>
+        <p id="creator-status" role="status" aria-live="polite"></p>
+      </form>
+      <section class="creator-output" aria-label="Generated JSON">
+        <h2>Preview</h2>
+        <p id="creator-destination"></p>
+        <pre id="json-preview">Your JSON will appear here.</pre>
+        <div id="creator-thumbnails"></div>
+      </section>
+    </main>
+  </body>
+</html>

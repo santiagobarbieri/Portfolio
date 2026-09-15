@@ -3,7 +3,7 @@ import {
   validateGallery,
   galleryPaths,
   shopTypes,
-  safeURL,
+  imageURL,
 } from "./catalog.js";
 const $ = (s) => document.querySelector(s),
   settings = $("#gallery-settings"),
@@ -14,19 +14,31 @@ let data = null,
   selected = 0,
   mode = "project",
   dirty = false,
-  sequence = 0;
+  sequence = 0,
+  loading = false;
+const dirtyDrafts = new Set();
+function markDirty() {
+  if (data) dirtyDrafts.add(data.id);
+  dirty = dirtyDrafts.size > 0;
+}
+function setLoading(value) {
+  loading = value;
+  document.querySelectorAll(".editor-workspace input, .editor-workspace select, .editor-workspace textarea, .editor-workspace button, #add-item, #export-json, #import-json, #editor-items button")
+    .forEach((element) => { element.disabled = value || !data; });
+}
 const drafts = new Map();
 function message(text) {
   status.textContent = text;
 }
 function remember() {
-  if (data) {
+  if (data && !loading) {
     capture();
     drafts.set(data.id, structuredClone(data));
   }
 }
 async function load(id) {
   const token = ++sequence;
+  setLoading(true);
   try {
     const next = drafts.has(id)
       ? structuredClone(drafts.get(id))
@@ -37,7 +49,14 @@ async function load(id) {
     draw();
     message(`Editing ${galleryPaths[id]}.`);
   } catch (error) {
+    if (token !== sequence) return;
+    data = null;
+    form.hidden = true;
+    $(".editor-preview").hidden = true;
+    $("#editor-items").replaceChildren();
     message(error.message);
+  } finally {
+    if (token === sequence) setLoading(false);
   }
 }
 function capture() {
@@ -52,6 +71,7 @@ function capture() {
     "type",
     "year",
     "src",
+    "thumbnail",
     "alt",
     "description",
     "download",
@@ -109,6 +129,7 @@ function drawItem() {
     "type",
     "year",
     "src",
+    "thumbnail",
     "alt",
     "description",
     "download",
@@ -124,8 +145,9 @@ function drawItem() {
 }
 function preview() {
   const img = $("#item-preview"),
-    src = safeURL(form.elements.src.value);
+    src = imageURL(form.elements.src.value);
   img.hidden = !src;
+  $(".editor-preview figcaption").textContent = src ? "Loading preview…" : "Enter a direct image URL or local path.";
   if (src) {
     img.src = src;
     img.alt = form.elements.alt.value || form.elements.title.value;
@@ -133,7 +155,7 @@ function preview() {
   img.onerror = () => {
     img.hidden = true;
     $(".editor-preview figcaption").textContent =
-      "Image will appear when its asset is added.";
+      "Image could not be loaded. Check the direct URL or local file.";
   };
   img.onload = () => {
     $(".editor-preview figcaption").textContent = "Preview";
@@ -142,7 +164,7 @@ function preview() {
 for (const f of [settings, form]) {
   f.addEventListener("submit", (e) => e.preventDefault());
   f.addEventListener("input", () => {
-    dirty = true;
+    markDirty();
     capture();
     if (f === settings) {
       $(".editor-preview").style.background = data.backgroundColor;
@@ -192,7 +214,7 @@ $("#add-item").addEventListener("click", () => {
     soldOut: false,
   });
   selected = data.items.length - 1;
-  dirty = true;
+  markDirty();
   drawList();
   drawItem();
   form.elements.title.focus();
@@ -201,7 +223,7 @@ $("#remove-item").addEventListener("click", () => {
   if (!data.items[selected]) return;
   data.items.splice(selected, 1);
   selected = Math.max(0, selected - 1);
-  dirty = true;
+  markDirty();
   drawList();
   drawItem();
 });
@@ -219,7 +241,8 @@ $("#export-json").addEventListener("click", () => {
     a.download = `${data.id}.json`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-    dirty = false;
+    dirtyDrafts.delete(data.id);
+    dirty = dirtyDrafts.size > 0;
     message(
       `Downloaded ${data.id}.json. Replace ${galleryPaths[data.id]} to publish these changes.`,
     );
@@ -231,7 +254,10 @@ $("#import-json").addEventListener("change", async (e) => {
   const file = e.target.files[0];
   if (!file) return;
   try {
+    const importSequence = sequence;
     const incoming = validateGallery(JSON.parse(await file.text()));
+    if (importSequence !== sequence || loading || !data)
+      throw Error("Gallery changed during import. Please import the file again.");
     if (incoming.kind !== mode)
       throw Error(
         `This is a ${incoming.kind} gallery. Switch editor section before importing.`,
@@ -240,7 +266,7 @@ $("#import-json").addEventListener("change", async (e) => {
       throw Error(`Select ${incoming.id} before importing its file.`);
     data = incoming;
     selected = 0;
-    dirty = true;
+    markDirty();
     draw();
     message("Imported. Download the JSON to keep your changes.");
   } catch (error) {

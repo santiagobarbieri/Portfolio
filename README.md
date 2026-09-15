@@ -4,10 +4,11 @@ Web estática, sin build ni dependencias de ejecución. Albert Sans e Inter se s
 
 ## Páginas
 
-- `index.html`: Home y los cinco Featured, escritos directamente en HTML. Se superponen con scroll, empezando sobre Home, con una pausa de lectura entre fichas. Un footer de pantalla completa cierra el recorrido con contacto, acceso a Shop y vuelta al inicio.
+- `index.html`: Home con carrusel, sección About de tres columnas (información, certificados con scroll y retrato) y los cinco Featured, escritos directamente en HTML. Se superponen con scroll, empezando sobre Home, con una pausa de lectura entre fichas. Un footer de pantalla completa cierra el recorrido con contacto, acceso a Shop y vuelta al inicio.
 - `shop.html`: introducción de Shop y apertura de la grilla mediante el rombo. Dentro de la grilla, la X ocupa la posición del abridor del menú y reproduce la transición inversa. El menú se abre desde las dos líneas de la introducción.
 - `contact.html`: formulario de contacto.
 - `editor.html`: editor y exportador de los JSON de las galerías.
+- `json-creator.html`: generador de galerías nuevas a partir de URLs de imágenes, incluidas URLs directas de ImgBB.
 
 Para ver la web localmente, ejecutar `python3 -m http.server 8000` en esta carpeta y abrir `http://localhost:8000`. No abrir los HTML con `file://`, porque las galerías se cargan mediante fetch.
 
@@ -46,7 +47,7 @@ Los patrones se ocultan hasta que se agreguen. Las imágenes de Shop usan los pr
 
 `data/shop.json` es exclusivo de Shop. `data/galleries/` contiene un JSON local por galería de proyecto. El editor tiene secciones separadas para ambos. No hay integración con JsonBin ni backend de administración.
 
-Cada archivo contiene `version`, `id`, `title`, `kind` (`shop` o `project`), `backgroundColor`, `textColor` y `items`. Los colores deben ser hex de seis dígitos. Cada elemento necesita `id` único, `title`, `type` y `src`. Puede incluir `alt`, `description`, `year`, `createdAt` y `download`. Los productos también usan `price` (número o null), `currency` (por ejemplo `ARS`) y `soldOut` (booleano).
+Cada archivo contiene `version`, `id`, `title`, `kind` (`shop` o `project`), `backgroundColor`, `textColor` y `items`. Los colores deben ser hex de seis dígitos. Cada elemento necesita `id` único, `title`, `type` y `src`. Puede incluir `thumbnail` (imagen más pequeña para la grilla), `alt`, `description`, `year`, `createdAt` y `download`. Los productos también usan `price` (número o null), `currency` (por ejemplo `ARS`) y `soldOut` (booleano).
 
 En el editor: elegir Featured o Shop, seleccionar galería, editar o importar, descargar JSON y reemplazar el archivo indicado. Cambiar de sección conserva el borrador durante esa sesión. El editor no escribe archivos en el servidor. Los campos adicionales del JSON se conservan al exportar.
 
@@ -56,7 +57,7 @@ El catálogo anterior queda como respaldo en `data/archive/`; la web ya no lo us
 
 Las galerías reciclan una cantidad acotada de elementos para permitir desplazamiento infinito en ambos ejes. Trackpad: desplazar con dos dedos y pellizcar para cambiar escala. Mouse: rueda y arrastre; Ctrl + rueda cambia escala. Móvil: arrastre y pellizco con dos dedos. La zona central aumenta progresivamente los elementos y los bordes se funden con el fondo mediante una máscara ovalada. No hay controles numéricos de zoom.
 
-Click o Enter sobre un elemento abre el carrusel. Flechas o teclado recorren el catálogo; `back to grid` vuelve a la misma posición. Escape cierra el carrusel o Index. La grilla se cierra con su propio control. `back to general` devuelve a la ficha Featured conservando su lugar en la página.
+Click o Enter sobre un elemento abre el carrusel. Flechas o teclado recorren el catálogo; `back to grid` vuelve a la misma posición. Escape cierra el carrusel o Index. La grilla se cierra con su propio control o Escape. `back to general` devuelve a la ficha Featured conservando su lugar en la página.
 
 `add to wishlist` guarda IDs en `localStorage` bajo `portfolio-wishlist`. El botón permite agregar y quitar. No requiere cuenta. `add to cart` es una presentación del futuro flujo: informa que el checkout aún no está disponible, sin registrar compras ni simular pagos. Los agotados muestran `sold out` y precio tachado. Para ofrecer una descarga gratuita, asignar categoría `freebies` y ruta `download`; su botón descarga directamente el archivo, sin carrito ni formulario. Si no hay archivo configurado el botón permanece inactivo.
 
@@ -75,3 +76,21 @@ No hay claves ni servidor de correo en el repositorio. Documentación del servic
 - `js/viewer.js`: carrusel, wishlist y descarga.
 - `js/catalog.js`: rutas y validación de datos.
 - `js/editor.js`: importación, edición y exportación.
+
+
+## Crear JSON con imágenes de ImgBB
+
+1. Abrir `json-creator.html` desde el servidor local y elegir el proyecto o Shop.
+2. Subir las imágenes a ImgBB y copiar el **enlace directo**, como `https://i.ibb.co/…/foto.jpg`. El enlace `https://ibb.co/…` abre una página y se rechaza como imagen. La [documentación de ImgBB](https://api.imgbb.com/) distingue `url` de `url_viewer`.
+3. Pegar una imagen por línea. Se acepta solo la URL, o `Título | URL de imagen | URL de miniatura opcional`.
+4. Revisar la previsualización y descargar el JSON. Reemplazar el archivo indicado en pantalla. Para agregar descripciones, precios o diferentes categorías, importar el resultado en `editor.html`.
+
+El generador crea una galería nueva: **reemplaza la lista anterior** si se publica sobre el mismo archivo. Para conservar IDs (y las wishlist), precios y demás información, editar/importar el JSON existente con `editor.html` y cambiar sus campos `src` y `thumbnail`.
+
+No se necesita API key para usar enlaces públicos. El generador no sube archivos ni publica cambios. Los archivos actuales conservan sus rutas locales hasta contar con las URLs reales; no hay enlaces ficticios a ImgBB. Tanto la grilla como el visor y el editor aceptan URLs directas. La grilla usa `thumbnail` cuando existe y vuelve a `src` si la miniatura falla; el visor abre `src`.
+
+Alojar una imagen en ImgBB no garantiza que cargue más rápido: también importan su peso y dimensiones. El Home utiliza copias JPEG optimizadas en `assets/hero/`; los originales se conservan. Sus imágenes se configuran en `index.html` mientras se define el próximo diseño de Home.
+
+## Verificación
+
+Ejecutar `node --test tests/catalog.test.mjs` para validar URLs, datos y compatibilidad de todos los catálogos activos. Ver `REVIEW.md` para los resultados y pendientes de la revisión general.

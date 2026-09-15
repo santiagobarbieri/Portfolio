@@ -9,13 +9,21 @@ export const shopTypes = ["mockups", "fonts", "prints", "freebies"];
 export function safeURL(value) {
   if (typeof value !== "string" || !value.trim()) return "";
   const v = value.trim();
-  if (v.startsWith("//")) return "";
+  if (v.startsWith("//") || v.includes("\\")) return "";
   try {
     const u = new URL(v, location.href);
     return ["http:", "https:"].includes(u.protocol) ? v : "";
   } catch {
     return "";
   }
+}
+// ImgBB's viewer pages are HTML; images must use its direct i.ibb.co URL.
+export function imageURL(value) {
+  const url = safeURL(value);
+  if (!url) return "";
+  const host = new URL(url, location.href).hostname.toLowerCase();
+  if (host === "ibb.co" || host === "imgbb.com" || host.endsWith(".imgbb.com")) return "";
+  return url;
 }
 export function validateGallery(value) {
   if (!value || typeof value !== "object" || Array.isArray(value))
@@ -41,7 +49,14 @@ export function validateGallery(value) {
         throw Error(`${name}: ${field} is required.`);
     if (ids.has(item.id)) throw Error(`${name}: duplicate id ${item.id}.`);
     ids.add(item.id);
-    if (!safeURL(item.src)) throw Error(`${name}: invalid image URL.`);
+    if (!imageURL(item.src))
+      throw Error(`${name}: use a direct image URL (https://i.ibb.co/…) or a local asset path, not an ImgBB viewer page.`);
+    if (item.thumbnail && !imageURL(item.thumbnail))
+      throw Error(`${name}: invalid thumbnail URL. Use a direct image link.`);
+    if (typeof item.type !== "string" || !item.type.trim())
+      throw Error(`${name}: type is required.`);
+    if (item.soldOut != null && typeof item.soldOut !== "boolean")
+      throw Error(`${name}: soldOut must be true or false.`);
     if (item.download && !safeURL(item.download))
       throw Error(`${name}: invalid download URL.`);
     if (value.kind === "shop" && !shopTypes.includes(item.type))
@@ -52,6 +67,8 @@ export function validateGallery(value) {
       throw Error(`${name}: currency must have three uppercase letters.`);
     return {
       ...item,
+      src: imageURL(item.src),
+      thumbnail: imageURL(item.thumbnail),
       description: String(item.description || ""),
       year: String(item.year || ""),
       alt: String(item.alt || item.title),
@@ -72,10 +89,15 @@ export async function fetchGallery(id) {
 export function imageFallback(img) {
   const fail = () => {
     const frame = img.parentElement;
+    if (!frame) return;
     frame.classList.add("missing");
     frame.dataset.label = img.dataset.placeholder || img.alt || "Image";
     img.hidden = true;
   };
-  img.addEventListener("error", fail, { once: true });
+  img.addEventListener("load", () => {
+    img.hidden = false;
+    img.parentElement?.classList.remove("missing");
+  });
+  img.addEventListener("error", fail);
   if (img.complete && !img.naturalWidth) fail();
 }

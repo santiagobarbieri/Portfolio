@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f1f0e5" />
+  <meta name="description" content="Poster explorations and collections by Santiago Barbieri." />
+  <title>Posters · Santiago Barbieri</title>
+  <link rel="stylesheet" href="style/main.css" />
+  <link rel="stylesheet" href="style/posters.css" />
+  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/posters.js"></script>
+</head>
+<body data-page="posters">
+  <main class="posters-page">
+    <section id="poster-grid-view" aria-label="Poster grid">
+      <header class="site-header posters-header">
+        <button class="menu-trigger" aria-label="Open index" aria-haspopup="dialog"><span class="menu-icon" aria-hidden="true"></span><span>Posters</span></button>
+        <button class="poster-search-trigger" aria-haspopup="dialog"><span class="search-icon" aria-hidden="true"></span>Search</button>
+        <button class="collections-trigger">Collections</button>
+      </header>
+      <h1 class="sr-only">Posters by Santiago Barbieri</h1>
+      <div class="poster-filter-summary" hidden><span></span><button class="clear-poster-filters">Show all ×</button></div>
+      <div class="poster-grid" id="poster-grid"></div>
+      <p class="poster-empty" id="poster-empty" hidden>No posters match your search. Try another title or tag.</p>
+    </section>
+    <section id="poster-collections-view" hidden aria-labelledby="collections-title">
+      <header class="site-header"><button class="text-button poster-back"><span aria-hidden="true">←</span> back to grid</button></header>
+      <div class="poster-collections-content"><h1 id="collections-title" tabindex="-1">POSTER<br />COLLECTIONS</h1><div id="poster-collections"></div></div>
+    </section>
+    <section id="poster-detail-view" hidden aria-labelledby="poster-detail-title">
+      <header class="site-header poster-detail-header"><button class="text-button poster-back"><span aria-hidden="true">←</span> back to grid</button></header>
+      <div class="poster-detail-layout">
+        <div class="poster-detail-copy"><h1 id="poster-detail-title" tabindex="-1"></h1><p id="poster-techniques"></p><div class="poster-byline"><p>by Santiago Barbieri<br />Buenos Aires, Argentina.</p><time id="poster-date"></time></div></div>
+        <figure class="poster-main-image asset-frame"><img id="poster-full-image" alt="" /><figcaption class="sr-only"></figcaption></figure>
+        <aside class="poster-credit" aria-label="Image credit" hidden><img alt="" /><span>Credit.</span><h2></h2><p></p></aside>
+      </div>
+      <nav class="poster-detail-controls" aria-label="Browse posters"><button class="poster-round" id="poster-prev" aria-label="Previous poster">←</button><div><a class="pill filled" id="poster-download" download>download</a><button class="poster-round" id="poster-next" aria-label="Next poster">→</button></div></nav>
+      <p id="poster-detail-notice" class="sr-only" role="status"></p>
+    </section>
+    <p id="posters-status" role="status">Loading posters…</p>
+    <button id="posters-retry" hidden>Try again</button>
+  </main>
+  <dialog id="poster-search" aria-label="Search posters">
+    <div class="poster-search-top"><button class="poster-search-close icon-button" aria-label="Close search">×</button><form role="search"><label class="poster-search-field"><span class="search-icon" aria-hidden="true"></span><span class="sr-only">Search posters</span><input type="search" id="poster-query" placeholder="Search" autocomplete="off" /></label></form></div>
+    <div id="poster-search-tags" aria-label="Filter by tag"></div>
+    <p class="sr-only" id="poster-search-count" role="status"></p>
+    <div class="poster-grid" id="poster-search-results"></div>
+    <p class="poster-empty" id="poster-search-empty" hidden>No posters match your search.</p>
+  </dialog>
+</body>
+</html>

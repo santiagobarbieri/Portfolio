@@ -1,0 +1,295 @@
+{
+  "version": 1,
+  "collections": [
+    {
+      "id": "polaroid",
+      "title": "& His Polaroid Collection",
+      "year": "2026",
+      "cover": ""
+    },
+    {
+      "id": "horses",
+      "title": "Horses",
+      "year": "2025",
+      "cover": "assets/posters/days-at-cuba-thumb.jpg"
+    },
+    {
+      "id": "under-under",
+      "title": "Under & Under Studios",
+      "year": "2024",
+      "cover": "assets/posters/sugar-thumb.jpg"
+    },
+    {
+      "id": "y-ahora",
+      "title": "Y Ahora Que Vamos A Hacer?",
+      "year": "2023",
+      "cover": "assets/posters/nadie-sabe-thumb.jpg"
+    }
+  ],
+  "tags": [
+    "Apolo Studios",
+    "freebies",
+    "scholastic",
+    "geometry",
+    "PW",
+    "OLAS, DiTella",
+    "Casa BRUL",
+    "typographic",
+    "music",
+    "cinematic"
+  ],
+  "items": [
+    {
+      "id": "this-is-the-end",
+      "title": "This Is The End",
+      "src": "assets/posters/this-is-the-end.jpg",
+      "thumbnail": "",
+      "download": "",
+      "collection": "polaroid",
+      "tags": [
+        "cinematic",
+        "texture"
+      ],
+      "tools": [
+        "Photoshop",
+        "Blend Explorations",
+        "Texture"
+      ],
+      "date": "2026-09-16",
+      "dateLabel": "16 – Sep, 2026",
+      "credit": {
+        "src": "",
+        "title": "Untitled",
+        "description": "Part of Dream House (2002) by American photographer Gregory Crewdson."
+      }
+    },
+    {
+      "id": "days-at-cuba",
+      "title": "Days at Cuba",
+      "src": "assets/posters/days-at-cuba.jpg",
+      "thumbnail": "assets/posters/days-at-cuba-thumb.jpg",
+      "download": "assets/posters/days-at-cuba.jpg",
+      "collection": "horses",
+      "tags": [
+        "photography",
+        "texture"
+      ],
+      "tools": [
+        "Photoshop",
+        "Poster Exploration",
+        "Texture"
+      ],
+      "date": "2025-05-08",
+      "dateLabel": "8 – May, 2025",
+      "credit": {
+        "src": "assets/posters/cuba-credit.jpg",
+        "title": "Cuban girl and a camera",
+        "description": "Part of Atlas (2023) by Santiago Barbieri."
+      },
+      "imageScale": 1.35
+    },
+    {
+      "id": "ghost-tale",
+      "title": "Ghost Tale",
+      "src": "assets/posters/ghost-tale.jpg",
+      "thumbnail": "assets/posters/ghost-tale-thumb.jpg",
+      "download": "assets/posters/ghost-tale.jpg",
+      "collection": "",
+      "tags": [
+        "typographic",
+        "texture"
+      ],
+      "tools": []
+    },
+    {
+      "id": "platform",
+      "title": "Platform",
+      "src": "assets/posters/platform.jpg",
+      "thumbnail": "assets/posters/platform-thumb.jpg",
+      "download": "assets/posters/platform.jpg",
+      "collection": "",
+      "tags": [
+        "geometry",
+        "typographic"
+      ],
+      "tools": []
+    },
+    {
+      "id": "ono-lulu",
+      "title": "Ono Lulu",
+      "src": "assets/posters/ono-lulu.jpg",
+      "thumbnail": "assets/posters/ono-lulu-thumb.jpg",
+      "download": "assets/posters/ono-lulu.jpg",
+      "collection": "",
+      "tags": [
+        "texture"
+      ],
+      "tools": []
+    },
+    {
+      "id": "fisherman",
+      "title": "Fisherman",
+      "src": "assets/posters/fisherman.jpg",
+      "thumbnail": "assets/posters/fisherman-thumb.jpg",
+      "download": "assets/posters/fisherman.jpg",
+      "collection": "",
+      "tags": [
+        "typographic"
+      ],
+      "tools": []
+    },
+    {
+      "id": "sugar",
+      "title": "Sugar",
+      "src": "assets/posters/sugar.jpg",
+      "thumbnail": "assets/posters/sugar-thumb.jpg",
+      "download": "assets/posters/sugar.jpg",
+      "collection": "under-under",
+      "tags": [
+        "typographic",
+        "texture"
+      ],
+      "tools": []
+    },
+    {
+      "id": "wish-you-where-here",
+      "title": "Wish You Where Here",
+      "src": "assets/posters/wish-you-where-here.jpg",
+      "thumbnail": "assets/posters/wish-you-where-here-thumb.jpg",
+      "download": "assets/posters/wish-you-where-here.jpg",
+      "collection": "",
+      "tags": [
+        "typographic",
+        "geometry"
+      ],
+      "tools": []
+    },
+    {
+      "id": "neon",
+      "title": "Neon",
+      "src": "assets/posters/neon.jpg",
+      "thumbnail": "assets/posters/neon-thumb.jpg",
+      "download": "assets/posters/neon.jpg",
+      "collection": "",
+      "tags": [
+        "music",
+        "typographic"
+      ],
+      "tools": []
+    },
+    {
+      "id": "companion",
+      "title": "Companion",
+      "src": "assets/posters/companion.jpg",
+      "thumbnail": "assets/posters/companion-thumb.jpg",
+      "download": "assets/posters/companion.jpg",
+      "collection": "horses",
+      "tags": [
+        "photography",
+        "texture"
+      ],
+      "tools": [],
+      "imageScale": 1.35
+    },
+    {
+      "id": "nadie-sabe",
+      "title": "Nadie Sabe",
+      "src": "assets/posters/nadie-sabe.jpg",
+      "thumbnail": "assets/posters/nadie-sabe-thumb.jpg",
+      "download": "assets/posters/nadie-sabe.jpg",
+      "collection": "y-ahora",
+      "tags": [
+        "music",
+        "typographic"
+      ],
+      "tools": []
+    },
+    {
+      "id": "explore",
+      "title": "Explore",
+      "src": "assets/posters/explore.jpg",
+      "thumbnail": "assets/posters/explore-thumb.jpg",
+      "download": "assets/posters/explore.jpg",
+      "collection": "horses",
+      "tags": [
+        "photography",
+        "texture"
+      ],
+      "tools": []
+    },
+    {
+      "id": "blond",
+      "title": "Blond",
+      "src": "assets/posters/blond.jpg",
+      "thumbnail": "assets/posters/blond-thumb.jpg",
+      "download": "assets/posters/blond.jpg",
+      "collection": "",
+      "tags": [
+        "music"
+      ],
+      "tools": []
+    },
+    {
+      "id": "legacy-of-radiation",
+      "title": "Legacy of Radiation",
+      "src": "assets/posters/legacy-of-radiation.jpg",
+      "thumbnail": "assets/posters/legacy-of-radiation-thumb.jpg",
+      "download": "assets/posters/legacy-of-radiation.jpg",
+      "collection": "under-under",
+      "tags": [
+        "typographic"
+      ],
+      "tools": []
+    },
+    {
+      "id": "into-the-unknown",
+      "title": "Into the Unknown",
+      "src": "assets/posters/into-the-unknown.jpg",
+      "thumbnail": "assets/posters/into-the-unknown-thumb.jpg",
+      "download": "assets/posters/into-the-unknown.jpg",
+      "collection": "under-under",
+      "tags": [
+        "typographic"
+      ],
+      "tools": []
+    },
+    {
+      "id": "under-under",
+      "title": "Under & Under",
+      "src": "assets/posters/under-under.jpg",
+      "thumbnail": "assets/posters/under-under-thumb.jpg",
+      "download": "assets/posters/under-under.jpg",
+      "collection": "under-under",
+      "tags": [
+        "geometry",
+        "typographic"
+      ],
+      "tools": []
+    },
+    {
+      "id": "chromakopia",
+      "title": "Chromakopia",
+      "src": "assets/posters/chromakopia.jpg",
+      "thumbnail": "assets/posters/chromakopia-thumb.jpg",
+      "download": "assets/posters/chromakopia.jpg",
+      "collection": "",
+      "tags": [
+        "music"
+      ],
+      "tools": []
+    },
+    {
+      "id": "sayonara",
+      "title": "Sayonara",
+      "src": "assets/posters/sayonara.jpg",
+      "thumbnail": "assets/posters/sayonara-thumb.jpg",
+      "download": "assets/posters/sayonara.jpg",
+      "collection": "",
+      "tags": [
+        "music",
+        "cinematic"
+      ],
+      "tools": []
+    }
+  ]
+}

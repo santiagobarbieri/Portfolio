@@ -1583,6 +1583,7 @@ body {
   white-space: nowrap;
 }
 .landing-role { position: relative; display: inline-block; }
+.landing-word { display: inline-block; }
 .role-graphic { --ink: #9b0000; }
 .role-web { --ink: #7b6c2c; }
 .role-photo { --ink: #005ad0; }
@@ -1647,7 +1648,7 @@ body {
   .landing-work > .site-header { height: clamp(100px, 16svh, 145px); }
 }
 
-/* Preview the seven existing panels as a fan; the panels keep native scrolling. */
+/* Preview the existing panels as a fan; the panels keep native scrolling. */
 .landing-tabs {
   position: absolute;
   inset: 0;
@@ -1670,15 +1671,37 @@ body {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 40px calc(var(--margin) + 1vw);
+  height: clamp(96px, 12.5vh, 120px);
+  padding: 0 calc(var(--margin) + 1vw);
   font-size: clamp(17px, 1.55vw, 24px);
 }
 .home > .site-header { z-index: 5; }
 .home > .site-header .landing-start { margin-left: auto; font-size: 17px; }
 .home.has-panel-fan { overflow: clip; }
 @media (max-width: 700px) {
-  .landing-tab-label { padding-top: 22px; }
+  .landing-tab-label { height: 88px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .landing-tab { transform: none; }
+}
+
+/* Posters joins the native panel stack between About and the five projects. */
+.posters-intro { --surface: #e4e56b; --text: #232323; position: sticky; top: var(--sticky-top, 0px); z-index: 2; }
+.posters-intro-link { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 5vw; min-height: calc(100svh - 120px); padding: 5vh var(--margin) 9vh; }
+.posters-intro-link:hover { opacity: 1; }
+.posters-intro h2 { font-family: Druk Text, Impact, sans-serif; font-size: clamp(90px,12vw,190px); font-weight: 900; line-height: 1; letter-spacing: -.025em; }
+.posters-intro-link > div > p:not(.section-label) { font-size: clamp(17px,1.5vw,24px); margin-top: 20px; }
+.posters-explore { display: inline-flex; align-items: center; gap: 40px; margin-top: 60px; font-size: 22px; border-bottom: 1px solid; padding-bottom: 8px; }
+.posters-explore > span { font-size: 36px; }
+.posters-intro-art { display: flex; align-items: center; justify-content: center; padding: 35px 15px; }
+.posters-intro-art img { width: 38%; height: auto; box-shadow: 0 12px 25px #0002; }
+.posters-intro-art img:first-child { transform: rotate(-12deg) translateX(15%); }
+.posters-intro-art img:nth-child(2) { position: relative; z-index: 1; transform: translateY(-6%); }
+.posters-intro-art img:last-child { transform: rotate(12deg) translateX(-15%); }
+.site-footer { z-index: 8; }
+@media (max-width:700px) {
+ .posters-intro-link { grid-template-columns: 1fr; padding-top: 20px; gap: 25px; }
+ .posters-intro h2 { font-size: clamp(85px,22vw,145px); }
+ .posters-explore { margin-top: 25px; }
+ .posters-intro-art { max-width: 430px; margin: auto; }
 }

@@ -98,7 +98,7 @@ Ejecutar `node --test tests/catalog.test.mjs` para validar URLs, datos y compati
 
 ## Landing tipográfico
 
-El Home usa Albert Sans Bold (peso 700), fondo negro y el texto de la referencia. Las letras mantienen sus proporciones naturales, sin escalado horizontal; el tamaño de fuente se ajusta de forma uniforme al espacio disponible. Los cortes se conservan en escritorio; en móvil el texto se adapta al ancho disponible. Las cajas usan `mix-blend-mode: difference` por encima de las letras, con bases `#9B0000`, `#7B6C2C` y `#005AD0`. Las tramas de sobreimpresión cambian en cada recarga.
+El Home usa Druk Text Super Trial (peso 900), fondo negro y el texto de la referencia. Inter está disponible localmente para la interfaz. Las letras mantienen sus proporciones naturales, sin escalado horizontal; el tamaño de fuente se ajusta de forma uniforme al espacio disponible. Los cortes se conservan en escritorio; en móvil el texto se adapta al ancho disponible. Las cajas usan `mix-blend-mode: difference` por encima de las letras, con bases `#9B0000`, `#7B6C2C` y `#005AD0`. Las tramas de sobreimpresión cambian en cada recarga.
 
 `start` abre un carrusel flotante sobre el texto. Muestra la obra activa grande y las siguientes hacia la derecha a menor escala. Admite flechas, teclado, swipe y Escape; respeta movimiento reducido. Las imágenes solo se solicitan al abrirlo. Su contenido está en `data/landing.json`, compatible con URLs directas de ImgBB y editable desde “Home — Selected works” en el editor o generador. La lógica está en `js/landing.js`.
 
@@ -106,3 +106,29 @@ El Home usa Albert Sans Bold (peso 700), fondo negro y el texto de la referencia
 ### Shop pendiente de JSONBin
 
 El catálogo activo `data/shop.json` quedó con `items: []`: no carga productos, imágenes ni descargas. Shop conserva su acceso, navegación y estado vacío. La conexión con JSONBin se implementará cuando se defina el bin; el carrusel del Home usa su propio catálogo `data/landing.json`. En esta revisión la carpeta `assets/` ya estaba ausente: los trabajos y fuentes locales deben reponerse o cambiarse por URLs válidas.
+
+
+### Entrada con ocho solapas
+
+About, Posters, los cinco Featured y el footer se anticipan al pie del Home como ocho solapas inclinadas. `js/panel-fan.js` obtiene sus colores y etiquetas de las secciones existentes, y las endereza durante el primer tramo del desplazamiento. El efecto revierte al regresar arriba. Las secciones mantienen su contenido y el scroll nativo con superposición anterior; la vista previa no duplica controles para lectores de pantalla. Con movimiento reducido se omite la rotación.
+
+El botón `start` del carrusel permanece accesible arriba a la derecha. El admin y la conexión con JSONBin quedan pendientes.
+
+
+## Posters
+
+`posters.html` es una página independiente enlazada desde la nueva solapa entre About y Apolo, y desde el menú principal. La entrada del Home ahora anticipa ocho solapas; las cinco fichas Featured conservan su numeración.
+
+- Grilla responsive: seis columnas en escritorio, cuatro en tablet y dos en móvil.
+- Search: búsqueda por título, etiquetas, colección, técnicas y fecha. Las etiquetas seleccionadas se combinan; `Show all` limpia los filtros.
+- Collections: cuatro colecciones de la referencia, con portada y año. Seleccionar una muestra su grilla filtrada.
+- Detalle: obra, técnicas, autor, fecha, crédito cuando está disponible, descarga y flechas. Flechas de teclado recorren la selección activa; Escape o `back to grid` regresan a la grilla conservando filtros y posición.
+- El estado se guarda en el fragmento de URL, por ejemplo `posters.html#view=detail&id=days-at-cuba`, y funciona con los botones atrás/adelante del navegador.
+
+### Editar el archivo `data/posters.json`
+
+Este catálogo es independiente de Shop. Contiene `collections`, `tags` e `items`. Cada poster usa `id`, `title`, `src`, `thumbnail`, `download`, `collection`, `tags` y `tools`. Campos opcionales: `date` (ISO), `dateLabel`, `credit` (`src`, `title`, `description`) e `imageScale` (encuadre visual entre 1 y 2 para exports con margen; la descarga conserva el archivo). Las imágenes admiten rutas locales o URLs directas. `download` vacío desactiva la descarga; los créditos se ocultan cuando no están configurados.
+
+Se incorporaron 17 obras locales en `assets/posters/`, con imágenes de hasta 1800 px y miniaturas de hasta 500 px. Los originales fuera del proyecto no se modificaron. La ficha de **This Is The End** reproduce los metadatos de la referencia pero queda pendiente de su archivo individual: completar `src`, `thumbnail`, `download`, la portada de `polaroid` y, opcionalmente, `credit.src`. Las técnicas y fechas que no se suministraron quedan vacías.
+
+La interacción y validación están en `js/posters.js`; el diseño, en `style/posters.css`. No requiere JSONBin ni admin para funcionar.

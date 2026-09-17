@@ -77,7 +77,7 @@ for (const img of document.querySelectorAll(".decorative")) {
 }
 const gallery = new Gallery(syncLock);
 if (page === "home") {
-  initLanding(syncLock);
+  initLanding();
   initPanelFan();
   const panels = [...document.querySelectorAll(".panel")];
   const positionPanels = () =>

@@ -28,24 +28,39 @@ export function initPanelFan() {
     fan.append(tab);
     return tab;
   });
-  home.append(fan);
+  document.body.append(fan);
+  // About is the back sheet itself, never a duplicate above the stack.
+  tabs[0].hidden = true;
+  const about = panels[0];
   home.classList.add("has-panel-fan");
   let frame = 0;
   function update() {
     frame = 0;
     const height = home.offsetHeight;
-    const distance = Math.max(1, Math.min(height, innerHeight) * .28);
+    const distance = Math.max(1, Math.min(height, innerHeight) * .7);
     const progress = Math.max(0, Math.min(1, scrollY / distance));
-    fan.hidden = progress >= 1;
-    if (fan.hidden) return;
-    // Meet About exactly where it enters the viewport, then let the actual
-    // panels take over. Scrolling upward reverses the same transition.
-    const targetTop = height - scrollY;
+    const smooth = value => {
+      const t = Math.max(0, Math.min(1, value));
+      return t * t * t * (t * (t * 6 - 15) + 10);
+    };
+    fan.hidden = reduced.matches || progress >= 1;
+    if (reduced.matches || progress >= 1) {
+      about.style.removeProperty("transform");
+      return;
+    }
+    // The actual back sheet rises while the foreground sheets settle down,
+    // preserving their depth order throughout the handoff to native scroll.
+    const straighten = smooth(progress / .85);
+    const lift = -height * .14 * (1 - straighten);
+    about.style.transformOrigin = "50% 0";
+    about.style.transform = `translateY(${lift}px) rotate(${angles[0] * (1 - straighten)}deg)`;
     tabs.forEach((tab, index) => {
+      if (!index) return;
       const initialTop = height * positions[index] / 100;
-      const top = initialTop + (targetTop + index * 24 - initialTop) * progress;
+      const settle = smooth((progress - index * .025) / (1 - index * .025));
+      const top = initialTop + (innerHeight * 1.15 + index * 24 - initialTop) * settle;
       tab.style.setProperty("--tab-top", `${top}px`);
-      tab.style.setProperty("--tab-angle", `${reduced.matches ? 0 : angles[index] * (1 - progress)}deg`);
+      tab.style.setProperty("--tab-angle", `${angles[index] * (1 - settle)}deg`);
     });
   }
   function schedule() {

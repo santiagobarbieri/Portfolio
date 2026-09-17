@@ -4,7 +4,7 @@ Web estática, sin build ni dependencias de ejecución. Albert Sans e Inter se s
 
 ## Páginas
 
-- `index.html`: Home con carrusel, sección About de tres columnas (información, certificados con scroll y retrato) y los cinco Featured, escritos directamente en HTML. Se superponen con scroll, empezando sobre Home, con una pausa de lectura entre fichas. Un footer de pantalla completa cierra el recorrido con contacto, acceso a Shop y vuelta al inicio.
+- `index.html`: Home tipográfico, sección About de tres columnas (información, certificados con scroll y retrato) y los cinco Featured, escritos directamente en HTML. Se superponen con scroll, empezando sobre Home, con una pausa de lectura entre fichas. Un footer de pantalla completa cierra el recorrido con contacto, acceso a Shop y vuelta al inicio.
 - `shop.html`: introducción de Shop y apertura de la grilla mediante el rombo. Dentro de la grilla, la X ocupa la posición del abridor del menú y reproduce la transición inversa. El menú se abre desde las dos líneas de la introducción.
 - `contact.html`: formulario de contacto.
 - `editor.html`: editor y exportador de los JSON de las galerías.
@@ -89,7 +89,7 @@ El generador crea una galería nueva: **reemplaza la lista anterior** si se publ
 
 No se necesita API key para usar enlaces públicos. El generador no sube archivos ni publica cambios. Los archivos actuales conservan sus rutas locales hasta contar con las URLs reales; no hay enlaces ficticios a ImgBB. Tanto la grilla como el visor y el editor aceptan URLs directas. La grilla usa `thumbnail` cuando existe y vuelve a `src` si la miniatura falla; el visor abre `src`.
 
-Alojar una imagen en ImgBB no garantiza que cargue más rápido: también importan su peso y dimensiones. El Home utiliza copias JPEG optimizadas en `assets/hero/`; los originales se conservan. El carrusel de trabajos del Home se configura en `data/landing.json`.
+Alojar una imagen en ImgBB no garantiza que cargue más rápido: también importan su peso y dimensiones. El Home ya no carga un carrusel. `data/landing.json` y las copias en `assets/hero/` quedan conservados como material previo.
 
 ## Verificación
 
@@ -98,21 +98,20 @@ Ejecutar `node --test tests/catalog.test.mjs` para validar URLs, datos y compati
 
 ## Landing tipográfico
 
-El Home usa Druk Text Super Trial (peso 900), fondo negro y el texto de la referencia. Inter está disponible localmente para la interfaz. Las letras mantienen sus proporciones naturales, sin escalado horizontal; el tamaño de fuente se ajusta de forma uniforme al espacio disponible. Los cortes se conservan en escritorio; en móvil el texto se adapta al ancho disponible. Las cajas usan `mix-blend-mode: difference` por encima de las letras, con bases `#9B0000`, `#7B6C2C` y `#005AD0`. Las tramas de sobreimpresión cambian en cada recarga.
+El Home usa Druk Text Super Trial (peso 900), fondo negro y el texto de la referencia. Inter está disponible localmente para la interfaz. Las letras mantienen sus proporciones naturales, sin escalado horizontal; el tamaño de fuente se ajusta de forma uniforme al espacio disponible. Los cortes se conservan en escritorio; en móvil el texto se adapta al ancho disponible. Las cajas usan `mix-blend-mode: difference` por encima de las letras, con bases `#9B0000`, `#7B6C2C` y `#005AD0`. Sin gradientes ni tramas adicionales.
 
-`start` abre un carrusel flotante sobre el texto. Muestra la obra activa grande y las siguientes hacia la derecha a menor escala. Admite flechas, teclado, swipe y Escape; respeta movimiento reducido. Las imágenes solo se solicitan al abrirlo. Su contenido está en `data/landing.json`, compatible con URLs directas de ImgBB y editable desde “Home — Selected works” en el editor o generador. La lógica está en `js/landing.js`.
 
 
 ### Shop pendiente de JSONBin
 
-El catálogo activo `data/shop.json` quedó con `items: []`: no carga productos, imágenes ni descargas. Shop conserva su acceso, navegación y estado vacío. La conexión con JSONBin se implementará cuando se defina el bin; el carrusel del Home usa su propio catálogo `data/landing.json`. En esta revisión la carpeta `assets/` ya estaba ausente: los trabajos y fuentes locales deben reponerse o cambiarse por URLs válidas.
+El catálogo activo `data/shop.json` quedó con `items: []`: no carga productos, imágenes ni descargas. Shop conserva su acceso, navegación y estado vacío. La conexión con JSONBin se implementará cuando se defina el bin; el antiguo catálogo del Home `data/landing.json` ya no se solicita desde la portada. En esta revisión la carpeta `assets/` ya estaba ausente: los trabajos y fuentes locales deben reponerse o cambiarse por URLs válidas.
 
 
 ### Entrada con ocho solapas
 
 About, Posters, los cinco Featured y el footer se anticipan al pie del Home como ocho solapas inclinadas. `js/panel-fan.js` obtiene sus colores y etiquetas de las secciones existentes, y las endereza durante el primer tramo del desplazamiento. El efecto revierte al regresar arriba. Las secciones mantienen su contenido y el scroll nativo con superposición anterior; la vista previa no duplica controles para lectores de pantalla. Con movimiento reducido se omite la rotación.
 
-El botón `start` del carrusel permanece accesible arriba a la derecha. El admin y la conexión con JSONBin quedan pendientes.
+El carrusel del Home fue retirado. El admin y la conexión con JSONBin quedan pendientes.
 
 
 ## Posters
@@ -132,3 +131,6 @@ Este catálogo es independiente de Shop. Contiene `collections`, `tags` e `items
 Se incorporaron 17 obras locales en `assets/posters/`, con imágenes de hasta 1800 px y miniaturas de hasta 500 px. Los originales fuera del proyecto no se modificaron. La ficha de **This Is The End** reproduce los metadatos de la referencia pero queda pendiente de su archivo individual: completar `src`, `thumbnail`, `download`, la portada de `polaroid` y, opcionalmente, `credit.src`. Las técnicas y fechas que no se suministraron quedan vacías.
 
 La interacción y validación están en `js/posters.js`; el diseño, en `style/posters.css`. No requiere JSONBin ni admin para funcionar.
+
+### Transición y Contact
+About es la hoja del fondo: su contenido real sube desde detrás de las otras solapas, que se enderezan y salen hacia abajo con progresión escalonada. El movimiento se revierte con el scroll y respeta movimiento reducido. Contact ocupa la altura de la ventana; únicamente el interior de la carpeta desplaza su contenido cuando hace falta.

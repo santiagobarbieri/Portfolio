@@ -1,3 +1,4 @@
+import { initImageMotion } from "./motion.js";
 import { imageFallback } from "./catalog.js";
 import { Gallery } from "./gallery.js";
 import { initLanding } from "./landing.js";
@@ -75,7 +76,7 @@ for (const img of document.querySelectorAll(".decorative")) {
   img.addEventListener("error", () => (img.hidden = true), { once: true });
   if (img.complete && !img.naturalWidth) img.hidden = true;
 }
-const gallery = new Gallery(syncLock);
+const gallery = page === "home" ? null : new Gallery(syncLock);
 if (page === "home") {
   initLanding();
   initPanelFan();
@@ -284,3 +285,5 @@ document.querySelector(".back-to-top")?.addEventListener("click", () => {
   });
   document.querySelector("#home .menu-trigger")?.focus({ preventScroll: true });
 });
+
+initImageMotion();

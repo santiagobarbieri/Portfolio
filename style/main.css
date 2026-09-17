@@ -1363,8 +1363,10 @@ a {
   opacity: 1;
   transform: translateY(0);
 }
-.featured {
-  margin-bottom: 18svh;
+/* Extra native scroll travel holds each sheet before the next one enters.
+   This space is outside the card, so tall content remains fully scrollable. */
+body[data-page="home"] main > :is(.about, .posters-intro, .featured, .projects-index) {
+  margin-bottom: 72svh;
 }
 .site-footer {
   --surface: #dc2b2b;
@@ -1437,8 +1439,8 @@ a {
   align-items: center;
 }
 @media (max-width: 600px) {
-  .featured {
-    margin-bottom: 12svh;
+  body[data-page="home"] main > :is(.about, .posters-intro, .featured, .projects-index) {
+    margin-bottom: 60svh;
   }
   .site-footer {
     padding: 32px 24px;
@@ -1656,10 +1658,10 @@ body {
 .posters-intro-art img:first-child { transform: rotate(-12deg) translateX(15%); }
 .posters-intro-art img:nth-child(2) { position: relative; z-index: 1; transform: translateY(-6%); }
 .posters-intro-art img:last-child { transform: rotate(12deg) translateX(-15%); }
-.site-footer { z-index: 8; }
+.site-footer { z-index: 9; }
 @media (max-width:700px) {
- .posters-intro-link { grid-template-columns: 1fr; padding-top: 20px; gap: 25px; }
- .posters-intro h2 { font-size: clamp(85px,22vw,145px); }
+ .posters-intro-link { grid-template-columns: minmax(0, 1fr); padding-top: 20px; gap: 25px; }
+ .posters-intro h2 { font-size: clamp(70px,22vw,145px); }
  .posters-explore { margin-top: 25px; }
  .posters-intro-art { max-width: 430px; margin: auto; }
 }
@@ -1700,4 +1702,55 @@ body[data-page="contact"] { height: 100dvh; overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .site-loader { transition: none; }
   .loader-dot, .loader-track::after { animation: none; }
+}
+
+.project-page-button:disabled { opacity: 1; cursor: default; }
+.featured .project-actions { flex-direction: column; align-items: flex-end; flex-wrap: nowrap; flex-shrink: 0; margin-right: calc(var(--margin) * -.5); gap: 7px; }
+.project-coming-soon { display: block; width: 100%; font-size: 12px; text-align: right; opacity: .7; }
+.projects-index { --surface: #f1f0e5; --text: #232323; position: sticky; top: var(--sticky-top, 0px); z-index: 8; }
+.projects-index-content { padding: 16px var(--margin) 48px; }
+#projects-title { font-family: Druk Text, Impact, sans-serif; font-weight: 900; font-size: clamp(72px, 10vw, 150px); line-height: .9; letter-spacing: -.025em; }
+.projects-index-note { margin: 18px 0 24px; font-size: 14px; opacity: .65; }
+.projects-list { list-style: none; padding: 0; margin: 0; }
+.project-list-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 20px; padding: 13px 0; border-bottom: 1px solid currentColor; }
+.project-list-name { min-width: 0; overflow-wrap: anywhere; font-family: Albert Sans, Arial, sans-serif; font-size: clamp(22px, 2.1vw, 32px); font-weight: 800; letter-spacing: -.045em; line-height: 1.1; }
+.project-list-type { display: block; font-family: Inter, Arial, sans-serif; font-size: 12px; font-weight: 400; letter-spacing: 0; margin-top: 5px; opacity: .65; }
+.project-list-row time { font-size: clamp(14px, 1.3vw, 19px); }
+@media (max-width: 600px) {
+  #projects-title { font-size: clamp(58px, 17vw, 100px); }
+  .project-list-row { gap: 14px; padding: 11px 0; }
+}
+
+@media (max-width: 900px) {
+  .featured .project-actions { margin-right: -8px; }
+}
+@media (max-width: 600px) {
+  .featured .project-actions { flex-shrink: 1; min-width: 125px; }
+}
+
+/* Tilted sheets must not widen the document or move the Home sideways.
+   clip preserves the viewport as the sticky panels' scroll container. */
+body[data-page="home"] { overflow-x: clip; background: #000; }
+body[data-page="home"] > main { overflow-x: clip; }
+
+/* Shared page and view transitions; native navigation remains intact. */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: page-leave 180ms ease-in both; }
+::view-transition-new(root) { animation: page-enter 300ms cubic-bezier(.22,1,.36,1) both; }
+@keyframes page-leave { to { opacity: 0; } }
+@keyframes page-enter { from { opacity: 0; } to { opacity: 1; } }
+.image-loading { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+}
+
+/* Stack Contact on phones, including landscape and wider mobile previews. */
+@media (max-width: 900px) {
+  .contact-layout { display: flex; flex-direction: column; padding: 15px 24px 0; gap: 40px; }
+  .contact-intro { flex: 0 0 auto; padding-right: 0; }
+  .contact-intro h1 { font-size: clamp(28px, 6dvh, 44px); }
+  .contact-intro > p { margin-top: 8px; font-size: 16px; }
+  .contact-pattern { display: none; }
+  .contact-folder { flex: 1 1 0; width: 100%; margin-top: 0; }
+  .contact-folder .contact-form { min-height: 0; padding: 28px 22px; gap: 22px; }
 }

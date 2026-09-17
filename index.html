@@ -128,9 +128,8 @@
               ><span class="tag">Creative Direction</span>
             </div>
             <div class="project-actions">
-              <button class="pill filled" data-open-gallery="apolo">
-                gallery
-              </button>
+              <button class="pill filled project-page-button" data-project="apolo" disabled aria-describedby="apolo-soon">view project <span aria-hidden="true">↗</span></button>
+              <span class="project-coming-soon" id="apolo-soon">Project page coming soon</span>
             </div>
           </div>
         </div>
@@ -175,9 +174,8 @@
               <span class="tag">Marketing</span><span class="tag">Design</span>
             </div>
             <div class="project-actions">
-              <button class="pill filled" data-open-gallery="ola">
-                gallery
-              </button>
+              <button class="pill filled project-page-button" data-project="ola" disabled aria-describedby="ola-soon">view project <span aria-hidden="true">↗</span></button>
+              <span class="project-coming-soon" id="ola-soon">Project page coming soon</span>
             </div>
           </div>
         </div>
@@ -223,12 +221,8 @@
               ><span class="tag">Design</span>
             </div>
             <div class="project-actions">
-              <a
-                class="pill filled visit-link"
-                aria-disabled="true"
-                title="Project URL coming soon"
-                >visit</a
-              ><!-- Add href="https://..." and remove aria-disabled when ready. -->
+              <button class="pill filled project-page-button" data-project="astrak" disabled aria-describedby="astrak-soon">view project <span aria-hidden="true">↗</span></button>
+              <span class="project-coming-soon" id="astrak-soon">Project page coming soon</span>
             </div>
           </div>
         </div>
@@ -275,14 +269,8 @@
               ><span class="tag">Design</span>
             </div>
             <div class="project-actions">
-              <button class="pill filled" data-open-gallery="are-we-there-yet">
-                gallery</button
-              ><a
-                class="pill filled visit-link"
-                aria-disabled="true"
-                title="Project URL coming soon"
-                >visit</a
-              ><!-- Add href="https://..." and remove aria-disabled when ready. -->
+              <button class="pill filled project-page-button" data-project="are-we-there-yet" disabled aria-describedby="are-we-there-yet-soon">view project <span aria-hidden="true">↗</span></button>
+              <span class="project-coming-soon" id="are-we-there-yet-soon">Project page coming soon</span>
             </div>
           </div>
         </div>
@@ -328,11 +316,58 @@
               ><span class="tag">Design</span>
             </div>
             <div class="project-actions">
-              <button class="pill filled" data-open-gallery="casa-brul">
-                gallery
-              </button>
+              <button class="pill filled project-page-button" data-project="casa-brul" disabled aria-describedby="casa-brul-soon">view project <span aria-hidden="true">↗</span></button>
+              <span class="project-coming-soon" id="casa-brul-soon">Project page coming soon</span>
             </div>
           </div>
+        </div>
+      </section>
+      <section class="projects-index panel" id="projects" aria-labelledby="projects-title">
+        <header class="site-header">
+          <button class="menu-trigger" aria-label="Open index" aria-haspopup="dialog"><span class="menu-icon" aria-hidden="true"></span><span>Proyectos</span></button>
+        </header>
+        <div class="projects-index-content">
+          <h2 id="projects-title">PROYECTOS</h2>
+          <p class="projects-index-note">Project pages coming soon.</p>
+          <!-- Newest creation year first. Rows will become links when project pages exist. -->
+          <ol class="projects-list">
+            <li class="project-list-row" data-project="ola">
+              <span class="project-list-name">OLA<span class="project-list-type">Design</span></span>
+              <time datetime="2026">(2026)</time>
+            </li>
+            <li class="project-list-row" data-project="astrak">
+              <span class="project-list-name">Astrak<span class="project-list-type">Web Development</span></span>
+              <time datetime="2026">(2026)</time>
+            </li>
+            <li class="project-list-row" data-project="are-we-there-yet">
+              <span class="project-list-name">Are we there yet?<span class="project-list-type">Digital Magazine</span></span>
+              <time datetime="2026">(2026)</time>
+            </li>
+            <li class="project-list-row" data-project="polaroid">
+              <span class="project-list-name">&amp; His Polaroid Collection<span class="project-list-type">Poster Collection</span></span>
+              <time datetime="2026">(2026)</time>
+            </li>
+            <li class="project-list-row" data-project="horses">
+              <span class="project-list-name">Horses<span class="project-list-type">Poster Collection</span></span>
+              <time datetime="2025">(2025)</time>
+            </li>
+            <li class="project-list-row" data-project="apolo">
+              <span class="project-list-name">Apolo Studios<span class="project-list-type">Creative Direction</span></span>
+              <time datetime="2024">(2024)</time>
+            </li>
+            <li class="project-list-row" data-project="casa-brul">
+              <span class="project-list-name">Casa Brul<span class="project-list-type">Design</span></span>
+              <time datetime="2024">(2024)</time>
+            </li>
+            <li class="project-list-row" data-project="under-under">
+              <span class="project-list-name">Under &amp; Under Studios<span class="project-list-type">Poster Collection</span></span>
+              <time datetime="2024">(2024)</time>
+            </li>
+            <li class="project-list-row" data-project="y-ahora">
+              <span class="project-list-name">Y Ahora Que Vamos A Hacer?<span class="project-list-type">Poster Collection</span></span>
+              <time datetime="2023">(2023)</time>
+            </li>
+          </ol>
         </div>
       </section>
       <footer

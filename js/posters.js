@@ -1,3 +1,4 @@
+import { transitionView } from "./motion.js";
 import { imageURL, safeURL, imageFallback } from "./catalog.js";
 
 const $ = selector => document.querySelector(selector);
@@ -26,7 +27,7 @@ function navigate(next, replace = false) {
   for (const tag of route.tags) params.append("tag", tag);
   if (route.collection) params.set("collection", route.collection);
   history[replace ? "replaceState" : "pushState"]({}, "", `${location.pathname}${location.search}${params.size ? `#${params}` : ""}`);
-  render();
+  transitionView(render);
 }
 function filtered(route) {
   const words = normalize(route.q).split(/\s+/).filter(Boolean);
@@ -52,11 +53,11 @@ function makeTile(item, fromSearch = false) {
   imageFallback(img);
   button.append(frame, element("span", "", item.title));
   button.addEventListener("click", () => {
+    if (searchClosing) return;
     returnId = item.id;
     if (fromSearch) {
       searchNavigating = true;
-      search.close();
-      navigate({...searchState, view: "detail", id: item.id});
+      closeSearch(() => navigate({...searchState, view: "detail", id: item.id}));
     } else navigate({view: "detail", id: item.id});
   });
   return button;
@@ -94,7 +95,6 @@ function renderDetail() {
   if (item.date) date.dateTime = item.date; else date.removeAttribute("datetime");
   const frame = $(".poster-main-image");
   frame.classList.remove("missing");
-  frame.style.setProperty("--poster-image-scale", item.imageScale);
   const img = new Image();
   img.id = "poster-full-image";
   img.alt = item.title;
@@ -164,25 +164,58 @@ function renderSearch() {
   $("#poster-search-results").replaceChildren(...items.map(item => makeTile(item, true)));
   $("#poster-search-empty").hidden = items.length > 0;
   $("#poster-search-count").textContent = `${items.length} posters found`;
-  for (const button of $("#poster-search-tags").children) button.setAttribute("aria-pressed", String(searchState.tags.includes(button.textContent)));
+  for (const button of $("#poster-search-tags").querySelectorAll("button")) button.setAttribute("aria-pressed", String(searchState.tags.includes(button.textContent)));
 }
 function syncLock() { document.body.classList.toggle("modal-open", !!document.querySelector("dialog[open]")); }
+let searchClosing = false;
+async function closeSearch(afterClose) {
+  if (!search.open || searchClosing) return;
+  searchClosing = true;
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const animation = search.animate([
+      {backgroundColor: "#232323", color: "#f1f0e5", opacity: 1},
+      {backgroundColor: "#f1f0e5", color: "#232323", opacity: 1, offset: .7},
+      {backgroundColor: "#f1f0e5", color: "#232323", opacity: 0}
+    ], {duration: 320, easing: "ease-in-out", fill: "forwards"});
+    await animation.finished.catch(() => {});
+    search.close();
+    animation.cancel();
+  } else search.close();
+  searchClosing = false;
+  if (afterClose) afterClose();
+}
+search.addEventListener("cancel", event => {
+  event.preventDefault();
+  closeSearch();
+});
 $(".poster-search-trigger").addEventListener("click", () => {
   if (!catalog) return;
   searchState = {...state, tags: [...state.tags]};
   searchNavigating = false;
   query.value = state.q;
-  const tags = [...new Set([...catalog.collections.map(c => c.title), ...catalog.tags, ...catalog.items.flatMap(item => item.tags)])];
-  $("#poster-search-tags").replaceChildren(...tags.map(tag => {
-    const button = element("button", "", tag);
-    button.addEventListener("click", () => {searchState.tags = searchState.tags.includes(tag) ? searchState.tags.filter(t => t !== tag) : [...searchState.tags, tag]; renderSearch();});
-    return button;
-  }));
+  const collections = catalog.collections.map(c => c.title);
+  const topics = [...new Set([...catalog.tags, ...catalog.items.flatMap(item => item.tags)])].filter(tag => !collections.includes(tag));
+  const groups = [["Collections", collections], ["Suggested topics", topics]].map(([title, tags]) => {
+    const group = element("section", "search-suggestions-group");
+    group.append(element("h2", "", title));
+    const list = element("div", "search-suggestions-list");
+    for (const tag of tags) {
+      const button = element("button", "", tag);
+      button.addEventListener("click", () => {
+        searchState.tags = searchState.tags.includes(tag) ? searchState.tags.filter(t => t !== tag) : [...searchState.tags, tag];
+        renderSearch();
+      });
+      list.append(button);
+    }
+    group.append(list);
+    return group;
+  });
+  $("#poster-search-tags").replaceChildren(...groups);
   renderSearch(); search.showModal(); syncLock(); query.focus();
 });
 query.addEventListener("input", renderSearch);
-search.querySelector("form").addEventListener("submit", event => {event.preventDefault(); search.close();});
-$(".poster-search-close").addEventListener("click", () => search.close());
+search.querySelector("form").addEventListener("submit", event => {event.preventDefault(); closeSearch();});
+$(".poster-search-close").addEventListener("click", () => closeSearch());
 search.addEventListener("close", () => {
   syncLock();
   if (!searchNavigating) {savedScroll = 0; navigate({...searchState, view: "grid"}); $(".poster-search-trigger").focus({preventScroll: true});}
@@ -197,8 +230,8 @@ document.addEventListener("keydown", event => {
   if (event.key === "ArrowLeft" || event.key === "ArrowRight") {event.preventDefault(); move(event.key === "ArrowLeft" ? -1 : 1);}
   if (event.key === "Escape") navigate({view: "grid", id: ""});
 });
-addEventListener("popstate", render);
-addEventListener("hashchange", render);
+addEventListener("popstate", () => transitionView(render));
+addEventListener("hashchange", () => transitionView(render));
 async function load() {
   $("#posters-retry").hidden = true;
   $("#posters-status").textContent = "Loading posters…";

@@ -1,0 +1,13 @@
+# Keep development files and private configuration out of the deployment.
+.git
+.env
+.env.*
+!.env.example
+node_modules
+tests
+docs
+REVIEW.md
+README.md
+.codex
+.agents
+**/.DS_Store

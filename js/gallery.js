@@ -1,3 +1,4 @@
+import { settleAnimation } from "./motion.js";
 import { fetchGallery } from "./catalog.js";
 import { Viewer } from "./viewer.js";
 const mod = (n, m) => ((n % m) + m) % m;
@@ -127,7 +128,7 @@ export class Gallery {
     } else {
       const back = document.createElement("button");
       back.className = "text-button gallery-close";
-      back.innerHTML = '<span aria-hidden="true">←</span> back to general';
+      back.innerHTML = 'back to general';
       back.addEventListener("click", () => this.close());
       heading.append(back);
       this.header.append(heading);
@@ -154,12 +155,12 @@ export class Gallery {
     cancelAnimationFrame(this.frame);
     this.frame = 0;
     this.states.set(this.data.id, { ...this.current });
-    await this.dialog.animate([{ opacity: 1 }, { opacity: 0 }], {
+    await settleAnimation(this.dialog.animate([{ opacity: 1 }, { opacity: 0 }], {
       duration: matchMedia("(prefers-reduced-motion: reduce)").matches
         ? 1
         : 180,
       easing: "ease-out",
-    }).finished;
+    }));
     this.dialog.close();
     this.syncLock();
     if (this.options.onClose) await this.options.onClose();

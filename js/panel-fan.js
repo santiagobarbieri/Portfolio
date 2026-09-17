@@ -9,7 +9,7 @@ export function initPanelFan() {
   fan.className = "landing-tabs";
   fan.setAttribute("aria-hidden", "true");
   const positions = panels.map((_, index) => 86 + Math.floor(index / 2) * 5 + (index > 1 && index % 2 ? 3 : 0));
-  const angles = panels.map((_, index) => index % 2 ? 5 : -5);
+  const angles = panels.map((_, index) => [-4, 4.5, -4, 5, -4.5, 4, -5, 4.5, -4][index % 9]);
   const tabs = panels.map((panel, index) => {
     const tab = document.createElement("div");
     const palette = getComputedStyle(panel);
@@ -33,6 +33,20 @@ export function initPanelFan() {
   tabs[0].hidden = true;
   const about = panels[0];
   home.classList.add("has-panel-fan");
+  // Measure actual flow positions instead of summing heights and margins:
+  // collapsed margins and sticky offsets otherwise start the rotation too early.
+  const markers = panels.map(panel => {
+    const marker = document.createElement("div");
+    marker.className = "panel-entry-marker";
+    marker.setAttribute("aria-hidden", "true");
+    panel.before(marker);
+    return marker;
+  });
+  let starts = [];
+  function measure() {
+    starts = markers.map(marker => marker.getBoundingClientRect().top + scrollY);
+    schedule();
+  }
   let frame = 0;
   let displayedScroll = scrollY;
   let lastTime = performance.now();
@@ -57,6 +71,19 @@ export function initPanelFan() {
       const t = Math.max(0, Math.min(1, value));
       return t * t * t * (t * (t * 6 - 15) + 10);
     };
+    panels.forEach((panel, index) => {
+      if (!index) return;
+      // Keep a visible diagonal through the first half of the entrance,
+      // then settle flat precisely as the sheet reaches the top.
+      const travel = (displayedScroll - (starts[index] - innerHeight)) / innerHeight;
+      const entering = smooth((travel - .35) / .65);
+      if (reduced.matches || entering >= .9999) {
+        panel.style.removeProperty("transform");
+        return;
+      }
+      panel.style.transformOrigin = "50% 0";
+      panel.style.transform = `translateY(${-innerHeight * .06 * (1 - entering)}px) rotate(${angles[index] * (1 - entering)}deg)`;
+    });
     fan.hidden = reduced.matches || progress >= 1;
     if (reduced.matches || progress >= 1) {
       about.style.removeProperty("transform");
@@ -84,10 +111,11 @@ export function initPanelFan() {
     }
   }
   addEventListener("scroll", schedule, {passive: true});
-  addEventListener("resize", schedule);
+  addEventListener("resize", measure);
   addEventListener("pageshow", schedule);
   reduced.addEventListener("change", schedule);
-  new ResizeObserver(schedule).observe(home);
-  document.fonts.ready.then(schedule);
-  update();
+  const sizes = new ResizeObserver(measure);
+  [home, ...panels].forEach(panel => sizes.observe(panel));
+  document.fonts.ready.then(measure);
+  measure();
 }

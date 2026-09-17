@@ -80,10 +80,14 @@
       </section>
       <section class="posters-intro panel" id="posters" aria-labelledby="posters-intro-title">
         <header class="site-header"><button class="menu-trigger" aria-label="Open index" aria-haspopup="dialog"><span class="menu-icon" aria-hidden="true"></span><span>Posters</span></button></header>
-        <a class="posters-intro-link" href="posters.html">
-          <div><p class="section-label">An ongoing archive</p><h2 id="posters-intro-title">POSTERS</h2><p>Explorations in type, image &amp; texture.</p><span class="posters-explore">Explore the archive <span aria-hidden="true">↗</span></span></div>
-          <div class="posters-intro-art" aria-hidden="true"><img src="assets/posters/ghost-tale-thumb.jpg" alt="" loading="lazy" /><img src="assets/posters/platform-thumb.jpg" alt="" loading="lazy" /><img src="assets/posters/sugar-thumb.jpg" alt="" loading="lazy" /></div>
-        </a>
+        <div class="posters-intro-link">
+          <div><p class="section-label">An ongoing archive</p><h2 id="posters-intro-title">POSTERS</h2><p>Explorations in type, image &amp; texture.</p><a class="posters-explore pill" href="posters.html">Explore the archive</a></div>
+          <div class="posters-intro-art poster-streams" aria-hidden="true">
+            <div class="poster-stream"><div class="poster-stream-track"><div class="poster-stream-group"><img src="assets/posters/ghost-tale-thumb.jpg" alt="" loading="lazy" decoding="async" /><img src="assets/posters/sugar-thumb.jpg" alt="" loading="lazy" decoding="async" /><img src="assets/posters/companion-thumb.jpg" alt="" loading="lazy" decoding="async" /><img src="assets/posters/neon-thumb.jpg" alt="" loading="lazy" decoding="async" /><img src="assets/posters/days-at-cuba-thumb.jpg" alt="" loading="lazy" decoding="async" /><img src="assets/posters/explore-thumb.jpg" alt="" loading="lazy" decoding="async" /></div></div></div>
+            <div class="poster-stream"><div class="poster-stream-track"><div class="poster-stream-group"><img src="assets/posters/platform-thumb.jpg" alt="" loading="lazy" decoding="async" /><img src="assets/posters/nadie-sabe-thumb.jpg" alt="" loading="lazy" decoding="async" /><img src="assets/posters/blond-thumb.jpg" alt="" loading="lazy" decoding="async" /><img src="assets/posters/companion-thumb.jpg" alt="" loading="lazy" decoding="async" /><img src="assets/posters/explore-thumb.jpg" alt="" loading="lazy" decoding="async" /><img src="assets/posters/sugar-thumb.jpg" alt="" loading="lazy" decoding="async" /></div></div></div>
+          </div>
+        </div>
+        <button class="poster-stream-toggle" aria-pressed="false">Pause motion</button>
       </section>
       <section
         class="featured panel"
@@ -128,7 +132,7 @@
               ><span class="tag">Creative Direction</span>
             </div>
             <div class="project-actions">
-              <button class="pill filled project-page-button" data-project="apolo" disabled aria-describedby="apolo-soon">view project <span aria-hidden="true">↗</span></button>
+              <button class="pill filled project-page-button" data-project="apolo" disabled aria-describedby="apolo-soon">view project</button>
               <span class="project-coming-soon" id="apolo-soon">Project page coming soon</span>
             </div>
           </div>
@@ -174,7 +178,7 @@
               <span class="tag">Marketing</span><span class="tag">Design</span>
             </div>
             <div class="project-actions">
-              <button class="pill filled project-page-button" data-project="ola" disabled aria-describedby="ola-soon">view project <span aria-hidden="true">↗</span></button>
+              <button class="pill filled project-page-button" data-project="ola" disabled aria-describedby="ola-soon">view project</button>
               <span class="project-coming-soon" id="ola-soon">Project page coming soon</span>
             </div>
           </div>
@@ -221,7 +225,7 @@
               ><span class="tag">Design</span>
             </div>
             <div class="project-actions">
-              <button class="pill filled project-page-button" data-project="astrak" disabled aria-describedby="astrak-soon">view project <span aria-hidden="true">↗</span></button>
+              <button class="pill filled project-page-button" data-project="astrak" disabled aria-describedby="astrak-soon">view project</button>
               <span class="project-coming-soon" id="astrak-soon">Project page coming soon</span>
             </div>
           </div>
@@ -269,7 +273,7 @@
               ><span class="tag">Design</span>
             </div>
             <div class="project-actions">
-              <button class="pill filled project-page-button" data-project="are-we-there-yet" disabled aria-describedby="are-we-there-yet-soon">view project <span aria-hidden="true">↗</span></button>
+              <button class="pill filled project-page-button" data-project="are-we-there-yet" disabled aria-describedby="are-we-there-yet-soon">view project</button>
               <span class="project-coming-soon" id="are-we-there-yet-soon">Project page coming soon</span>
             </div>
           </div>
@@ -316,7 +320,7 @@
               ><span class="tag">Design</span>
             </div>
             <div class="project-actions">
-              <button class="pill filled project-page-button" data-project="casa-brul" disabled aria-describedby="casa-brul-soon">view project <span aria-hidden="true">↗</span></button>
+              <button class="pill filled project-page-button" data-project="casa-brul" disabled aria-describedby="casa-brul-soon">view project</button>
               <span class="project-coming-soon" id="casa-brul-soon">Project page coming soon</span>
             </div>
           </div>
@@ -330,7 +334,7 @@
           <h2 id="projects-title">PROYECTOS</h2>
           <p class="projects-index-note">Project pages coming soon.</p>
           <!-- Newest creation year first. Rows will become links when project pages exist. -->
-          <ol class="projects-list">
+          <ol class="projects-list" tabindex="0" aria-label="Projects, newest first">
             <li class="project-list-row" data-project="ola">
               <span class="project-list-name">OLA<span class="project-list-type">Design</span></span>
               <time datetime="2026">(2026)</time>
@@ -383,7 +387,7 @@
           <p class="section-label">Have a project in mind?</p>
           <a class="footer-invitation" href="contact.html"
             ><h2>Let’s work<br />together.</h2>
-            <span aria-hidden="true">↗</span></a
+           </a
           ><a class="footer-email" href="mailto:santibarbieri01@gmail.com"
             >santibarbieri01@gmail.com</a
           >
@@ -393,8 +397,8 @@
             © 2026 Santiago Barbieri<br />Design, development &amp; photography.
           </p>
           <nav aria-label="Footer">
-            <a href="shop.html">Explore the shop ↗</a
-            ><button class="back-to-top">Back to top ↑</button>
+            <a href="shop.html">Explore the shop</a
+            ><button class="back-to-top">Back to top</button>
           </nav>
         </div>
       </footer>

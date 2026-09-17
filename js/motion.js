@@ -1,22 +1,29 @@
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
-let activeTransition;
+let viewAnimation;
 
-// Native snapshots preserve layout, focus and history during view changes.
+// Update navigation immediately. Visual effects never gate interaction.
 export function transitionView(update) {
-  activeTransition?.skipTransition();
-  if (reducedMotion.matches || !document.startViewTransition) {
-    update();
-    return;
-  }
-  const transition = document.startViewTransition(async () => {
-    update();
-    await new Promise(resolve => requestAnimationFrame(resolve));
+  viewAnimation?.cancel();
+  update();
+  if (reducedMotion.matches) return;
+  const view = document.querySelector(".posters-page > section:not([hidden])");
+  if (view) viewAnimation = view.animate([{opacity: .45}, {opacity: 1}], {
+    duration: 220, easing: "ease-out"
   });
-  activeTransition = transition;
-  transition.ready.catch(() => {});
-  transition.finished.finally(() => {
-    if (activeTransition === transition) activeTransition = null;
-  }).catch(() => {});
+}
+
+// Closing a modal must complete even if its animation is cancelled or paused.
+export async function settleAnimation(animation) {
+  let timer;
+  try {
+    await Promise.race([
+      animation.finished.catch(() => {}),
+      new Promise(resolve => { timer = setTimeout(resolve, 550); })
+    ]);
+  } finally {
+    clearTimeout(timer);
+    animation.cancel();
+  }
 }
 
 export function initImageMotion() {

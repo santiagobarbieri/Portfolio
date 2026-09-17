@@ -1,4 +1,6 @@
-import { initImageMotion } from "./motion.js";
+import { initButtons } from "./buttons.js";
+import { initPosterStreams } from "./poster-streams.js";
+import { initImageMotion, settleAnimation } from "./motion.js";
 import { imageFallback } from "./catalog.js";
 import { Gallery } from "./gallery.js";
 import { initLanding } from "./landing.js";
@@ -45,7 +47,7 @@ let closingIndex = false;
 async function closeIndex() {
   if (closingIndex || !index.open) return;
   closingIndex = true;
-  await index.animate(
+  await settleAnimation(index.animate(
     [
       { opacity: 1, transform: "translateY(0)" },
       { opacity: 0, transform: "translateY(-18px)" },
@@ -56,7 +58,7 @@ async function closeIndex() {
         : 260,
       easing: "cubic-bezier(.4,0,.2,1)",
     },
-  ).finished;
+  ));
   index.close();
   closingIndex = false;
   syncLock();
@@ -79,6 +81,7 @@ for (const img of document.querySelectorAll(".decorative")) {
 const gallery = page === "home" ? null : new Gallery(syncLock);
 if (page === "home") {
   initLanding();
+  initPosterStreams();
   initPanelFan();
   const panels = [...document.querySelectorAll(".panel")];
   const positionPanels = () =>
@@ -287,3 +290,5 @@ document.querySelector(".back-to-top")?.addEventListener("click", () => {
 });
 
 initImageMotion();
+
+initButtons();

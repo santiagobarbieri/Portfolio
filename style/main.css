@@ -1288,7 +1288,7 @@ body.modal-open {
 
 /* A shared, restrained motion rhythm across pages and overlays. */
 @view-transition {
-  navigation: auto;
+  navigation: none;
 }
 ::view-transition-old(root) {
   animation: page-out 220ms ease both;
@@ -1734,7 +1734,7 @@ body[data-page="home"] { overflow-x: clip; background: #000; }
 body[data-page="home"] > main { overflow-x: clip; }
 
 /* Shared page and view transitions; native navigation remains intact. */
-@view-transition { navigation: auto; }
+@view-transition { navigation: none; }
 ::view-transition-old(root) { animation: page-leave 180ms ease-in both; }
 ::view-transition-new(root) { animation: page-enter 300ms cubic-bezier(.22,1,.36,1) both; }
 @keyframes page-leave { to { opacity: 0; } }
@@ -1753,4 +1753,64 @@ body[data-page="home"] > main { overflow-x: clip; }
   .contact-pattern { display: none; }
   .contact-folder { flex: 1 1 0; width: 100%; margin-top: 0; }
   .contact-folder .contact-form { min-height: 0; padding: 28px 22px; gap: 22px; }
+}
+
+/* Three typographic levels: display, reading text, and small metadata. */
+:root { --font-display: "Druk Text", Impact, sans-serif; --font-body: "Albert Sans", Arial, sans-serif; --font-detail: Inter, Arial, sans-serif; font-family: var(--font-body); }
+.home .landing-title, .project-copy h2, .contact-intro h1,
+.shop-welcome h1, .footer-invitation h2, .detail-title,
+.posters-intro h2, #projects-title {
+  font-family: var(--font-display); font-weight: 900; text-transform: uppercase; letter-spacing: -.015em; line-height: .98;
+}
+.home .landing-title { line-height: .88; }
+.project-summary, .project-description, .contact-intro > p,
+.contact-form, .bio, .index-links, .project-list-name, .certificate h3 {
+  font-family: var(--font-body);
+}
+.section-label, .tag, .project-coming-soon, .project-list-type,
+.project-list-row time, .projects-index-note, .certificate > span,
+.form-status, .credits, .footer-top, .footer-bottom,
+.detail-meta, .detail-notice, .gallery-announcement {
+  font-family: var(--font-detail);
+}
+@media (max-width: 700px) {
+  .home .landing-title { line-height: .95; }
+}
+
+/* Two seamless poster belts travel in opposite directions. */
+.posters-intro-art.poster-streams { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); align-items: start; gap: 18px; width: 100%; max-width: none; height: 66svh; min-height: 300px; padding: 0; margin: 0; overflow: hidden; }
+.poster-stream { height: 100%; min-width: 0; overflow: hidden; }
+.poster-stream-track { animation: poster-stream-up 48s linear infinite; animation-play-state: paused; }
+.poster-stream:nth-child(2) .poster-stream-track { animation-direction: reverse; animation-duration: 54s; }
+.poster-stream-group { display: grid; gap: 18px; padding-bottom: 18px; }
+.posters-intro-art .poster-stream img { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1.414; object-fit: cover; transform: none; box-shadow: none; position: static; }
+.streams-running .poster-stream-track { animation-play-state: running; }
+@keyframes poster-stream-up { to { transform: translateY(-50%); } }
+.poster-stream-toggle { display: block; margin: -32px var(--margin) 16px auto; position: relative; font-family: var(--font-detail); font-size: 12px; text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 700px) {
+  .posters-intro-art.poster-streams { height: 46svh; min-height: 280px; gap: 12px; max-width: 430px; margin-inline: auto; }
+  .poster-stream-group { gap: 12px; padding-bottom: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .poster-stream-track { animation: none; }
+  .poster-stream-toggle { display: none; }
+}
+
+/* A shared pill shape for actions; image cards keep their own geometry. */
+body .ui-pill { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: auto; height: auto; min-height: 36px; padding: 6px 16px; border: 1px solid currentColor; border-radius: 999px; font-family: var(--font-body); font-size: clamp(16px,1.3vw,20px); font-weight: 500; line-height: 1.2; letter-spacing: -.025em; text-decoration: none; white-space: nowrap; }
+body .ui-pill:not(.filled) { background: transparent; color: inherit; }
+body .poster-stream-toggle.ui-pill { font-family: var(--font-detail); font-size: 12px; min-height: 30px; padding: 5px 12px; }
+.posters-explore.pill { margin-top: 40px; gap: 0; }
+
+.panel-entry-marker { height: 0; pointer-events: none; }
+/* The Projects heading stays put; only its list owns the inner scroll. */
+.projects-index { height: 100svh; min-height: 0; display: flex; flex-direction: column; overflow: clip; }
+.projects-index > .site-header { flex: 0 0 auto; }
+.projects-index-content { display: flex; flex-direction: column; flex: 1; min-height: 0; padding-bottom: 24px; }
+.projects-index-content > h2, .projects-index-note { flex: 0 0 auto; }
+.projects-list { flex: 1; min-height: 0; overflow-y: auto; padding-right: 12px; scrollbar-width: thin; }
+.projects-list:focus-visible { outline: 1px solid currentColor; outline-offset: 5px; }
+@media (max-width: 600px) {
+  .projects-index-content { padding-bottom: 20px; }
+  .projects-index-note { margin-block: 12px 18px; }
 }

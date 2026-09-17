@@ -1,3 +1,4 @@
+import { settleAnimation } from "./motion.js";
 import { imageFallback, safeURL } from "./catalog.js";
 export class Viewer {
   constructor(syncLock) {
@@ -6,7 +7,7 @@ export class Viewer {
     this.dialog.className = "detail-dialog";
     this.dialog.setAttribute("aria-label", "Selected item");
     this.dialog.innerHTML =
-      '<button class="text-button detail-back"><span aria-hidden="true">←</span> back to grid</button><div class="detail-content"><div class="detail-copy"><h2 class="detail-title"></h2><div class="detail-meta"><div class="detail-row"><span class="detail-type"></span><span class="detail-year"></span></div><p class="detail-description"></p></div><div class="detail-bottom"><span class="detail-price"></span><div class="detail-actions"></div></div></div><figure class="detail-image asset-frame"></figure></div><div class="carousel-controls"><button class="icon-button detail-prev" aria-label="Previous item">←</button><p class="detail-notice" role="status"></p><button class="icon-button detail-next" aria-label="Next item">→</button></div>';
+      '<button class="text-button detail-back">back to grid</button><div class="detail-content"><div class="detail-copy"><h2 class="detail-title"></h2><div class="detail-meta"><div class="detail-row"><span class="detail-type"></span><span class="detail-year"></span></div><p class="detail-description"></p></div><div class="detail-bottom"><span class="detail-price"></span><div class="detail-actions"></div></div></div><figure class="detail-image asset-frame"></figure></div><div class="carousel-controls"><button class="icon-button detail-prev" aria-label="Previous item">previous</button><p class="detail-notice" role="status"></p><button class="icon-button detail-next" aria-label="Next item">next</button></div>';
     document.body.append(this.dialog);
     this.dialog
       .querySelector(".detail-back")
@@ -45,12 +46,12 @@ export class Viewer {
   async close() {
     if (this.closing || !this.dialog.open) return;
     this.closing = true;
-    await this.dialog.animate([{ opacity: 1 }, { opacity: 0 }], {
+    await settleAnimation(this.dialog.animate([{ opacity: 1 }, { opacity: 0 }], {
       duration: matchMedia("(prefers-reduced-motion: reduce)").matches
         ? 1
         : 220,
       easing: "ease-out",
-    }).finished;
+    }));
     this.dialog.close();
     this.closing = false;
     this.syncLock();

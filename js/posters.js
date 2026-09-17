@@ -1,4 +1,4 @@
-import { transitionView } from "./motion.js";
+import { transitionView, settleAnimation } from "./motion.js";
 import { imageURL, safeURL, imageFallback } from "./catalog.js";
 
 const $ = selector => document.querySelector(selector);
@@ -177,7 +177,7 @@ async function closeSearch(afterClose) {
       {backgroundColor: "#f1f0e5", color: "#232323", opacity: 1, offset: .7},
       {backgroundColor: "#f1f0e5", color: "#232323", opacity: 0}
     ], {duration: 320, easing: "ease-in-out", fill: "forwards"});
-    await animation.finished.catch(() => {});
+    await settleAnimation(animation);
     search.close();
     animation.cancel();
   } else search.close();

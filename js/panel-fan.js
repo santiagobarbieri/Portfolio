@@ -34,11 +34,25 @@ export function initPanelFan() {
   const about = panels[0];
   home.classList.add("has-panel-fan");
   let frame = 0;
-  function update() {
+  let displayedScroll = scrollY;
+  let lastTime = performance.now();
+  function update(now = performance.now()) {
     frame = 0;
     const height = home.offsetHeight;
     const distance = Math.max(1, Math.min(height, innerHeight) * .7);
-    const progress = Math.max(0, Math.min(1, scrollY / distance));
+    // A short, time-based catch-up softens wheel steps equally at 60/120 Hz.
+    // Large jumps (anchors, restored positions) should land immediately.
+    const elapsed = Math.min(64, Math.max(0, now - lastTime));
+    lastTime = now;
+    const target = scrollY;
+    if (reduced.matches || Math.abs(target - displayedScroll) > innerHeight * .85) {
+      displayedScroll = target;
+    } else {
+      displayedScroll += (target - displayedScroll) * (1 - Math.exp(-elapsed / 95));
+    }
+    if (Math.abs(target - displayedScroll) < .25) displayedScroll = target;
+    else frame = requestAnimationFrame(update);
+    const progress = Math.max(0, Math.min(1, displayedScroll / distance));
     const smooth = value => {
       const t = Math.max(0, Math.min(1, value));
       return t * t * t * (t * (t * 6 - 15) + 10);
@@ -64,7 +78,10 @@ export function initPanelFan() {
     });
   }
   function schedule() {
-    if (!frame) frame = requestAnimationFrame(update);
+    if (!frame) {
+      lastTime = performance.now();
+      frame = requestAnimationFrame(update);
+    }
   }
   addEventListener("scroll", schedule, {passive: true});
   addEventListener("resize", schedule);

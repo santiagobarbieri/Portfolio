@@ -80,7 +80,9 @@ function renderCollections() {
     if (collection.cover) img.src = collection.cover;
     else img.style.visibility = "hidden";
     img.onerror = () => { img.style.visibility = "hidden"; };
-    button.append(img, element("h2", "", collection.title), element("time", "", `(${collection.year})`));
+    const copy = element("div", "collection-copy");
+    copy.append(element("h2", "", collection.title), element("span", "collection-caption", "Poster collection"));
+    button.append(img, copy, element("time", "", `(${collection.year})`));
     button.addEventListener("click", () => {savedScroll = 0; navigate({view: "grid", collection: collection.id, q: "", tags: []});});
     return button;
   }));
@@ -190,6 +192,7 @@ search.addEventListener("cancel", event => {
 });
 $(".poster-search-trigger").addEventListener("click", () => {
   if (!catalog) return;
+  const origin = $(".poster-search-trigger").getBoundingClientRect();
   searchState = {...state, tags: [...state.tags]};
   searchNavigating = false;
   query.value = state.q;
@@ -211,7 +214,15 @@ $(".poster-search-trigger").addEventListener("click", () => {
     return group;
   });
   $("#poster-search-tags").replaceChildren(...groups);
-  renderSearch(); search.showModal(); syncLock(); query.focus();
+  renderSearch(); search.showModal(); syncLock(); query.focus({preventScroll: true});
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const field = $(".poster-search-field");
+    const target = field.getBoundingClientRect();
+    field.animate([
+      {transform: `translate(${origin.left - target.left}px, ${origin.top - target.top}px) scale(${origin.width / target.width}, ${origin.height / target.height})`, borderRadius: "999px", backgroundColor: "#f1f0e5", color: "#232323", borderColor: "#232323", borderWidth: "1px"},
+      {transform: "none", borderRadius: "0", backgroundColor: "#232323", color: "#f1f0e5", borderColor: "transparent transparent #f1f0e5 transparent", borderWidth: "1px"}
+    ], {duration: 440, easing: "cubic-bezier(.22,1,.36,1)"});
+  }
 });
 query.addEventListener("input", renderSearch);
 search.querySelector("form").addEventListener("submit", event => {event.preventDefault(); closeSearch();});

@@ -9,7 +9,7 @@ export function initPanelFan() {
   fan.className = "landing-tabs";
   fan.setAttribute("aria-hidden", "true");
   const positions = panels.map((_, index) => 86 + Math.floor(index / 2) * 5 + (index > 1 && index % 2 ? 3 : 0));
-  const angles = panels.map((_, index) => [-4, 4.5, -4, 5, -4.5, 4, -5, 4.5, -4][index % 9]);
+  const angles = panels.map((_, index) => [-4.5, 4.5, -4.2, 4.8, -4.5, 4.2, -4.8, 4.5, -4.2][index % 9]);
   const tabs = panels.map((panel, index) => {
     const tab = document.createElement("div");
     const palette = getComputedStyle(panel);
@@ -38,13 +38,14 @@ export function initPanelFan() {
   const markers = panels.map(panel => {
     const marker = document.createElement("div");
     marker.className = "panel-entry-marker";
+    if (panel.id === "footer") marker.classList.add("footer-entry-marker");
     marker.setAttribute("aria-hidden", "true");
     panel.before(marker);
     return marker;
   });
   let starts = [];
   function measure() {
-    starts = markers.map(marker => marker.getBoundingClientRect().top + scrollY);
+    starts = markers.map(marker => marker.getBoundingClientRect().bottom + scrollY);
     schedule();
   }
   let frame = 0;
@@ -62,7 +63,7 @@ export function initPanelFan() {
     if (reduced.matches || Math.abs(target - displayedScroll) > innerHeight * .85) {
       displayedScroll = target;
     } else {
-      displayedScroll += (target - displayedScroll) * (1 - Math.exp(-elapsed / 95));
+      displayedScroll += (target - displayedScroll) * (1 - Math.exp(-elapsed / 125));
     }
     if (Math.abs(target - displayedScroll) < .25) displayedScroll = target;
     else frame = requestAnimationFrame(update);
@@ -73,16 +74,16 @@ export function initPanelFan() {
     };
     panels.forEach((panel, index) => {
       if (!index) return;
-      // Keep a visible diagonal through the first half of the entrance,
-      // then settle flat precisely as the sheet reaches the top.
+      // Spread the turn across most of the entrance, with zero velocity
+      // at both ends rather than a late, abrupt pivot.
       const travel = (displayedScroll - (starts[index] - innerHeight)) / innerHeight;
-      const entering = smooth((travel - .35) / .65);
+      const entering = smooth((travel - .15) / .85);
       if (reduced.matches || entering >= .9999) {
         panel.style.removeProperty("transform");
         return;
       }
       panel.style.transformOrigin = "50% 0";
-      panel.style.transform = `translateY(${-innerHeight * .06 * (1 - entering)}px) rotate(${angles[index] * (1 - entering)}deg)`;
+      panel.style.transform = `translateY(${-innerHeight * .025 * (1 - entering)}px) rotate(${angles[index] * (1 - entering)}deg)`;
     });
     fan.hidden = reduced.matches || progress >= 1;
     if (reduced.matches || progress >= 1) {

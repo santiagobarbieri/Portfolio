@@ -159,3 +159,23 @@ body .poster-round.ui-pill, body #poster-download.ui-pill { width: auto; height:
   .poster-detail-controls > div { gap: 8px; }
   body .poster-round.ui-pill, body #poster-download.ui-pill { padding-inline: 12px; font-size: 15px; }
 }
+
+/* Collection artwork, names and dates sit on a consistent three-column grid. */
+.poster-collection { grid-template-columns: 84px minmax(0,1fr) auto; align-items: center; gap: 28px; padding: 20px 0; }
+.poster-collection img { width: 84px; height: 118px; }
+.collection-copy { min-width: 0; }
+.poster-collection h2 { font-family: var(--font-body); font-size: clamp(24px,2.6vw,40px); font-weight: 700; line-height: 1.08; letter-spacing: -.035em; max-width: 28ch; text-wrap: balance; }
+.collection-caption { display: block; margin-top: 10px; font: 11px/1.3 var(--font-detail); letter-spacing: .04em; text-transform: uppercase; opacity: .6; }
+.poster-collection time { font: 15px/1.3 var(--font-detail); opacity: .7; }
+.poster-search-top { padding-inline: var(--margin); }
+.poster-search-field { transform-origin: top left; border-style: solid; border-color: transparent transparent currentColor transparent; border-width: 1px; }
+@media (max-width: 600px) {
+  .poster-collection { grid-template-columns: 54px minmax(0,1fr) auto; gap: 14px; padding: 18px 0; }
+  .poster-collection img { width: 54px; height: 76px; }
+  .poster-collection h2 { font-size: 23px; }
+  .poster-collection time { font-size: 12px; }
+  .collection-caption { margin-top: 7px; font-size: 9px; }
+}
+@media (max-width: 600px) {
+  #collections-title { font-size: clamp(46px,12.5vw,75px); }
+}

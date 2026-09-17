@@ -1814,3 +1814,36 @@ body .poster-stream-toggle.ui-pill { font-family: var(--font-detail); font-size:
   .projects-index-content { padding-bottom: 20px; }
   .projects-index-note { margin-block: 12px 18px; }
 }
+
+/* Shared page gutters, with a dedicated layout for the Shop display title. */
+.featured .project-actions { margin-right: 0; }
+.project-content { padding-inline: var(--margin); }
+.shop-welcome { grid-template-columns: minmax(0,1fr) 160px minmax(0,1fr); padding: 0 var(--margin) 80px; gap: 5vw; }
+.shop-heading { min-width: 0; }
+.shop-heading .section-label { font-family: var(--font-detail); font-size: 13px; letter-spacing: .04em; margin: 0 0 20px; }
+.shop-heading h1 { font-family: var(--font-display); font-size: clamp(80px,10vw,160px); font-weight: 900; line-height: .86; letter-spacing: -.015em; margin: 0; }
+.shop-scroll-label { margin-top: 24px; font-family: var(--font-body); font-size: 20px; }
+.shop-welcome > p { line-height: 1.3; letter-spacing: -.025em; max-width: 29ch; justify-self: end; }
+.portal-open { border: 0; background: transparent; border-radius: 0; padding: 0; }
+@media (max-width: 600px) {
+  .shop-welcome { padding: 20px var(--margin) 30px; }
+  .shop-heading { align-self: flex-start; }
+  .shop-heading h1 { font-size: clamp(68px,18vw,105px); max-width: none; }
+  .shop-heading .section-label { font-size: 11px; margin-bottom: 12px; }
+  .shop-scroll-label { font-size: 16px; margin-top: 14px; }
+  .shop-welcome > p { max-width: 25ch; font-size: 14px; }
+}
+body .poster-stream-toggle.ui-pill { display: flex; width: max-content; margin-left: auto; margin-right: var(--margin); }
+@media (max-width: 600px) {
+  .portal-diamond { top: 60%; }
+  .portal-open { top: calc(60% - 60px); }
+}
+
+/* Keep the reading pause in flow, outside Projects' sticky margin box.
+   A bottom margin on the last sticky sheet made it retreat at the page end. */
+body[data-page="home"] main > .projects-index { margin-bottom: 0; }
+.footer-entry-marker { height: 72svh; }
+.site-footer { position: sticky; top: var(--sticky-top, 0px); }
+@media (max-width: 600px) {
+  .footer-entry-marker { height: 60svh; }
+}

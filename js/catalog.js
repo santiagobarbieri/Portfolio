@@ -1,3 +1,4 @@
+import { loadCatalog } from "./content-source.js";
 export const galleryPaths = {
   landing: "data/landing.json",
   apolo: "data/galleries/apolo.json",
@@ -80,6 +81,7 @@ export function validateGallery(value) {
   return { ...value, version: 1, items };
 }
 export async function fetchGallery(id) {
+  if (id === "shop") return validateGallery(await loadCatalog("shop", "data/shop.json"));
   const path = galleryPaths[id];
   if (!path) throw Error("Unknown gallery.");
   const response = await fetch(path, { cache: "no-cache" });

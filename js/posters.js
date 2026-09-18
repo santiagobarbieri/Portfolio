@@ -1,3 +1,4 @@
+import { loadCatalog } from "./content-source.js";
 import { transitionView, settleAnimation } from "./motion.js";
 import { imageURL, safeURL, imageFallback } from "./catalog.js";
 
@@ -247,9 +248,7 @@ async function load() {
   $("#posters-retry").hidden = true;
   $("#posters-status").textContent = "Loading posters…";
   try {
-    const response = await fetch("data/posters.json", {cache: "no-cache"});
-    if (!response.ok) throw Error();
-    const data = await response.json();
+    const data = await loadCatalog("posters", "data/posters.json");
     if (!Array.isArray(data.items) || !Array.isArray(data.collections)) throw Error();
     const ids = new Set();
     data.items = data.items.map(item => {

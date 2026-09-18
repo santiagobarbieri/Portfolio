@@ -153,22 +153,10 @@ export class Viewer {
           }
         });
         actions.append(wish);
-        if (item.type === "freebies") {
-          this.downloadButton(actions, item);
-        } else {
-          const buy = document.createElement("button");
-          buy.className = "pill filled";
-          buy.textContent = "add to cart";
-          buy.setAttribute("aria-describedby", "purchase-note");
-          q(".detail-notice").id = "purchase-note";
-          buy.addEventListener(
-            "click",
-            () =>
-              (q(".detail-notice").textContent =
-                "The shop is coming soon. Checkout is not available yet."),
-          );
-          actions.append(buy);
-        }
+        const note = document.createElement("span");
+        note.className = "catalog-only-note";
+        note.textContent = "Catalog preview";
+        actions.append(note);
       }
     } else if (item.download) this.downloadButton(actions, item);
     q(".detail-prev").disabled = q(".detail-next").disabled =

@@ -1,86 +1,104 @@
-# Catálogo y administración: propuesta de implementación
+# Catálogos con JSONBin y Vercel
 
-## Estado real
+## Decisión actual
 
-- La web pública es estática y lee `data/posters.json` y `data/shop.json`.
-- `editor.html` y `json-creator.html` generan JSON localmente. No tienen permisos para publicar contenido.
-- No hay todavía base de datos, autenticación de administradores, cobros ni entrega privada de productos.
-- `vercel.json` incorpora cabeceras de seguridad. Solo se aplicarán al desplegar; el servidor Python local no las aplica.
-- No se creó ningún servicio externo ni se migraron datos en esta etapa.
+Supabase y el administrador propio quedan descartados por ahora. Posters y Shop leen JSONBin mediante `/api/content`, una función de Vercel de **solo lectura**. Shop es únicamente catálogo: no tiene checkout ni entrega de productos.
 
-## Arquitectura recomendada (pendiente de elección)
+El patrón del sitio se toma de `assets/Pattern.png`, integrado en Index y Contact.
 
-Vercel sirve el portfolio. Supabase ofrece PostgreSQL, autenticación y almacenamiento de imágenes. El administrador carga contenido y la web consulta únicamente lo publicado. No hace falta subir cambios de código para publicar cada poster.
+## Configurar una vez
 
-No usar JSONBin como base de una tienda: el catálogo, las identidades de administradores y los archivos privados necesitan permisos independientes. Una URL de imagen es pública; no debe usarse como control de acceso para productos pagos.
+1. Crear en JSONBin un **bin privado para Posters** y pegar el contenido completo de `data/posters.json`.
+2. Crear otro **bin privado para Shop** y pegar `data/shop.json`. Puede seguir vacío hasta cargar productos.
+3. En JSONBin, crear una **Access Key limitada a Bins Read**, sin permisos de crear, actualizar o borrar. No utilizar la Master Key para este sitio.
+4. En Vercel → proyecto → Settings → Environment Variables, cargar:
 
-## Modelo de datos
+   | Variable | Valor |
+   | --- | --- |
+   | `JSONBIN_ACCESS_KEY` | Access Key de solo lectura |
+   | `JSONBIN_POSTERS_BIN_ID` | ID del bin de Posters, no la URL |
+   | `JSONBIN_SHOP_BIN_ID` | ID del bin de Shop, no la URL |
 
-| Tabla | Campos principales | Acceso público |
-| --- | --- | --- |
-| collections | id, slug, title, year, cover, sort_order, published | Solo publicadas |
-| posters | id, slug, title, collection_id, image_path, thumbnail_path, tags, tools, date, credits, image_scale, download_enabled, published | Solo publicados |
-| products | id, slug, title, type, description, price_minor, currency, preview_path, thumbnail_path, checkout_url, sold_out, published | Solo publicados; sin archivo privado |
-| admin_users | user_id | Ninguno; alta manual desde una cuenta de confianza |
-| private_product_files | product_id, storage_path | Ninguno |
-| audit_events | actor_id, action, entity, entity_id, timestamp | Solo administración |
+5. Aplicarlas a los entornos deseados y hacer un nuevo despliegue. La configuración de variables necesita despliegue; las futuras ediciones del JSON no.
+6. Comprobar `/api/content?kind=posters` y `/api/content?kind=shop`: deben devolver el catálogo, nunca la clave.
 
-Usar claves únicas, referencias entre tablas, importes enteros en unidades menores y validación de tipos/categorías en base de datos. Mantener fechas originales y créditos de los posters. Los borradores quedan fuera de las consultas públicas. No mezclar metadatos de pago o rutas privadas con la tabla pública de productos.
+No pegar claves en el chat, los HTML, los archivos JSON ni JavaScript del navegador. `.env.example` es solo una plantilla sin valores reales.
 
-Si se elige vender dentro de la web, sumar pedidos, eventos del proveedor y permisos de descarga, con claves únicas para que un evento repetido no duplique una entrega.
+## Actualizar contenido
 
-## Flujo de carga
+Editar el bin correspondiente desde JSONBin y guardar. La web consulta `/latest`; la caché de Vercel dura hasta 60 segundos. Un refresco durante ese minuto puede seguir mostrando la versión anterior.
 
-1. Iniciar sesión en `admin.html`, con cuenta autorizada y segundo factor.
-2. Arrastrar imágenes individuales o varias a la vez.
-3. Validar tamaño, extensión, tipo real y dimensiones; aceptar JPEG, PNG y WebP como imágenes de catálogo. Rechazar SVG/HTML y nombres de archivo que controlen rutas.
-4. Guardar originales con nombres generados; crear una miniatura optimizada. Limitar tamaño y cantidad por lote.
-5. Completar colección, título, créditos, etiquetas o datos de producto; guardar como borrador.
-6. Revisar una vista previa y publicar. Actualizar/invalidatear la caché del catálogo sin desplegar la web.
-7. Mostrar los errores por archivo y permitir reintentos sin duplicar registros. Si una carga queda incompleta, limpiar archivos huérfanos.
+**JSONBin almacena datos, no sube las fotos.** Las fotos se alojan aparte (por ejemplo ImgBB) y se pegan como URL directa `https://i.ibb.co/...`. También siguen siendo válidas las rutas `assets/...` de archivos ya publicados. El cambio automatiza la actualización del catálogo, no la subida de imágenes a un proveedor.
 
-El primer importador debe leer los JSON existentes sin alterar IDs, colecciones, orden, créditos ni `imageScale`. Debe poder ejecutarse nuevamente sin duplicar contenido y conservar una copia de los JSON originales.
+No poner secretos, pedidos, datos de clientes ni archivos privados en estos bins: todo el catálogo es público a través de la web aunque el bin sea privado.
 
-## Permisos y protección
+### Poster
 
-- Activar Row Level Security (RLS): visitantes leen solo publicados. Usuarios comunes no escriben. Solo usuarios incluidos en `admin_users` administran contenido.
-- Aplicar reglas de almacenamiento separadas: vistas previas públicas, archivos pagos privados. Una política de tabla no protege por sí sola un bucket público.
-- Nunca incluir claves secretas, `service_role` o contraseñas en HTML, JavaScript, JSON público o Git. La clave publicable del cliente depende de políticas RLS correctas; no es una clave de administración.
-- Autorizar cada operación en servidor/base de datos. Ocultar el enlace a `admin.html` no constituye protección.
-- Para un administrador con cookies: sesión HttpOnly/Secure/SameSite, protección CSRF, comprobación de origen y expiración. Evitar tokens de larga duración en localStorage.
-- Validar entradas y URLs; renderizar texto con `textContent`. Consultas parametrizadas y límites de longitud/tamaño/paginación.
-- Limitar intentos de acceso, escrituras y subidas; configurar límites de gasto y alertas del proveedor. Los límites en JavaScript del navegador son solo ayuda de interfaz, no protección.
-- Pagos: checkout del proveedor, firma del webhook y confirmación del servidor. No entregar archivos por confiar en un parámetro de URL o en el estado del navegador.
-- Backups y prueba de restauración antes de reemplazar la fuente de datos pública. Activar registros sin contraseñas, tokens ni datos de pago.
+Agregar a `items` en el bin de Posters, sin borrar `collections` ni `tags`:
 
-## Cabeceras preparadas
+```json
+{
+  "id": "nuevo-poster",
+  "title": "Nuevo poster",
+  "src": "https://i.ibb.co/REEMPLAZAR/poster.jpg",
+  "thumbnail": "https://i.ibb.co/REEMPLAZAR/poster-thumb.jpg",
+  "collection": "horses",
+  "tags": ["typographic"],
+  "tools": ["Photoshop"],
+  "date": "2026-09-18",
+  "imageScale": 1
+}
+```
 
-`vercel.json` restringe scripts y fuentes al propio sitio, bloquea incrustación en iframes y contenido ejecutable de plugins, evita inferencia de tipos y restringe permisos del navegador. Permite imágenes HTTPS para conservar enlaces externos y FormSubmit para Contact.
+Las URLs anteriores son ejemplos; reemplazarlas por enlaces reales. `collection` debe coincidir con un ID existente en `collections`, o quedar vacío. Los IDs son únicos y usan letras minúsculas, números y guiones. `imageScale` (1 a 2) ajusta únicamente el recorte de la miniatura. Se mantienen créditos y descargas públicas de posters si ya existen.
 
-`style-src 'unsafe-inline'` se conserva porque el portfolio usa variables CSS y estilos dinámicos. No se permite `unsafe-inline` en scripts. Al conectar Supabase, añadir **el dominio concreto del proyecto** a `connect-src`, sin abrirlo a cualquier destino. Los scripts del administrador deben servirse localmente o añadirse con una política explícita.
+### Producto
 
-`.vercelignore` excluye archivos de desarrollo, documentación y variables de entorno del despliegue. Las páginas del editor tienen `noindex`, que evita indexación pero **no restringe acceso**: actualmente no poseen capacidad de escritura remota.
+Agregar a `items` en el bin de Shop:
 
-Esto es una primera capa de protección, no una garantía de invulnerabilidad. Contact todavía usa FormSubmit: su protección contra spam depende también del proveedor; falta decidir si migrar a un endpoint propio con límites y verificación antiabuso.
+```json
+{
+  "id": "poster-print-01",
+  "title": "Poster Print 01",
+  "type": "prints",
+  "src": "https://i.ibb.co/REEMPLAZAR/print.jpg",
+  "thumbnail": "https://i.ibb.co/REEMPLAZAR/print-thumb.jpg",
+  "description": "Impresión de la colección.",
+  "price": 15000,
+  "currency": "ARS",
+  "year": "2026",
+  "soldOut": false
+}
+```
 
-## Criterios antes de producción
+Categorías admitidas: `mockups`, `fonts`, `prints`, `freebies`. `price` puede ser `null` para no mostrar precio. No agregar links de pago o archivos privados: esta etapa es solo de catálogo y el servidor descarta esos campos de productos.
 
-- Un visitante no puede leer borradores, escribir registros ni subir archivos, incluso llamando a la API directamente.
-- Un usuario autenticado que no sea administrador tampoco puede hacerlo.
-- Un administrador puede cargar, editar, publicar y despublicar; una sesión vencida deja de escribir.
-- Archivos inválidos, demasiado grandes y rutas manipuladas se rechazan en servidor/Storage.
-- No se exponen archivos pagos ni secretos en respuestas del catálogo.
-- Subidas fallidas y eventos repetidos no generan duplicados.
-- Poster grid, filtros, colecciones y Shop conservan su apariencia con los datos remotos.
-- Revisar cabeceras sobre el despliegue real y probar la restauración de una copia de seguridad.
+Los editores locales existentes siguen sirviendo para preparar JSON; no están conectados a JSONBin ni publican automáticamente.
 
-## Datos que hacen falta para conectar
+## Errores y límites
 
-Elegir plataforma y alcance comercial. Si se usa Supabase: crear el proyecto, definir el usuario administrador y configurar los secretos en Vercel, nunca pegarlos en el chat. La URL del proyecto y la clave publicable pueden configurarse en el cliente; las claves privilegiadas quedan exclusivamente en el servidor.
+- Sin ID configurado para un catálogo, se conserva su JSON local. Cada catálogo se puede conectar por separado.
+- Si un bin ya configurado falla o contiene datos inválidos, se muestra un error con reintento; no se sustituye silenciosamente por contenido viejo.
+- Se validan tipos, IDs, duplicados, colecciones, categorías, URLs y precios antes de entregar el catálogo.
+- El proxy admite hasta 1 MB de respuesta y 2.000 elementos por catálogo, sujeto también al límite de tu plan de JSONBin. Conviene usar miniaturas pequeñas para reducir tráfico de imágenes.
+- El caché reduce consultas; no reemplaza un límite de tráfico. Configurar alertas de consumo y revisar las reglas de firewall/rate limiting disponibles en la cuenta de Vercel antes de producción.
 
-## Documentación oficial
+## Seguridad aplicada y alcance
 
-- https://supabase.com/docs/guides/database/postgres/row-level-security
-- https://supabase.com/docs/guides/storage/security/access-control
-- https://supabase.com/docs/guides/getting-started/api-keys
+El endpoint solo acepta GET, dos catálogos conocidos y IDs de bin configurados en servidor. No admite destinos arbitrarios, redirecciones externas, uploads, login ni escrituras. Los errores no devuelven respuestas internas del proveedor. La Access Key sale únicamente en la petición del servidor a JSONBin.
+
+`vercel.json` agrega CSP, protección contra iframes, `nosniff`, política de referrer y restricciones de permisos. Se mantiene `style-src 'unsafe-inline'` porque el diseño usa estilos dinámicos; los scripts inline no están permitidos. FormSubmit conserva su acceso para Contact. Las cabeceras se aplican al desplegar y con `npm run dev`, no con el servidor Python antiguo.
+
+Contact sigue dependiendo de FormSubmit y de sus medidas contra spam. Esto no es una garantía contra cualquier ataque: quedan pendientes la verificación del despliegue real, configuración de la cuenta y alertas de consumo. No se ha creado ni conectado ningún bin desde este entorno.
+
+## Desarrollo y comprobación
+
+- `npm test`: validación de catálogos y pruebas del endpoint con respuestas simuladas, sin claves ni tráfico real.
+- `npm run dev`: sirve el sitio y su API en `http://localhost:8004`. Sin variables usa los datos locales. Para conectar localmente, copiar `.env.example` a `.env` y completar valores en tu equipo; `.env` no se publica ni se agrega a Git.
+- La web no requiere dependencias de npm para funcionar.
+
+## Referencias oficiales
+
+- https://jsonbin.io/api-reference/bins/read
+- https://jsonbin.io/api-reference/access-keys/list
 - https://vercel.com/docs/project-configuration/vercel-json

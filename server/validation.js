@@ -65,14 +65,3 @@ export function validateRecord(input) {
   }
   return {kind, id, published: input.published, sort_order, payload};
 }
-export function validateImage(mime, encoded) {
-  check(['image/jpeg','image/png','image/webp'].includes(mime), 'Only JPEG, PNG and WebP images are allowed.');
-  check(typeof encoded === 'string' && encoded.length <= 2800000 && /^[A-Za-z0-9+/]+={0,2}$/.test(encoded), 'Invalid image.');
-  const bytes = Buffer.from(encoded,'base64');
-  check(bytes.length > 12 && bytes.length <= 2097152, 'The optimized image must be smaller than 2 MB.');
-  const matches = mime === 'image/jpeg' ? bytes[0]===255 && bytes[1]===216 && bytes[2]===255
-    : mime === 'image/png' ? bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10]))
-    : bytes.toString('ascii',0,4)==='RIFF' && bytes.toString('ascii',8,12)==='WEBP';
-  check(matches, 'The file does not match its declared image type.');
-  return bytes;
-}

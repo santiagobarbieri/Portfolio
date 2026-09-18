@@ -1,3 +1,7 @@
+## Catálogos remotos: JSONBin (configuración actual)
+
+Posters y Shop pueden leer bins privados de JSONBin a través de una API de solo lectura en Vercel. No se utiliza Supabase ni un administrador conectado. Shop permanece como catálogo, sin pagos. Seguir [la guía de configuración](docs/CONTENT-PLATFORM.md). Para desarrollo con API y cabeceras de seguridad: `npm run dev` (puerto 8004). Las instrucciones antiguas de JSON locales siguen sirviendo para preparar contenido y para la vista previa sin bins configurados.
+
 # Portfolio — Santiago Barbieri
 
 Web estática, sin build ni dependencias de ejecución. Albert Sans e Inter se sirven localmente desde `assets/fonts/`, junto a sus licencias OFL.
